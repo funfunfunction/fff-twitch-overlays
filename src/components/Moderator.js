@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 
 function Moderator() {
   const db = window.firebase.firestore()
+  const auth = window.firebase.auth()
   const [ messages, setMessages ] = useState([])
   const [ topic, setTopic ] = useState({})
   const [ topicInputValue, setTopicInputValue ] = useState('')
-
+  const [ user, setUser ] = useState(null)
+  
   useEffect(() => {
     db
       .collection("spotlight")
@@ -36,7 +38,16 @@ function Moderator() {
         })))
       })
 
-  }, [db])
+      auth.onAuthStateChanged(function(user) {
+        console.log('authstate', user)
+        if (user) {
+          setUser(user)
+        } else {
+          setUser(null)
+        }
+    });
+
+  }, [db, auth])
 
   return (<div className="scene-moderator">
     <input type="text" value={topicInputValue} onChange={(evt) => {

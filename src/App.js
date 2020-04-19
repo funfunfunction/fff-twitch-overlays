@@ -7,6 +7,7 @@ import queryString  from 'query-string'
 
 import firebase  from "firebase/app";
 import "firebase/firestore";
+import "firebase/auth";
 import firebaseConfiguration from "./firebase.secret.json"
 import Moderator from './components/Moderator';
 
@@ -19,13 +20,11 @@ function App() {
   useEffect(function() {
     setQuery(queryString.parse(window.location.search))
   }, [])
-  
-
 
   return (
     <div className="App">
       {query.scene === 'soon' && <StartingSoon  /> }
-      {query.scene === 'answering' && <Spotlight /> }
+      {query.scene === 'spotlight' && <Spotlight /> }
       {query.scene === 'moderator' && <Moderator /> }
     </div>
   )
