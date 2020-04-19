@@ -1,38 +1,170 @@
-.App {
+html,body  {
+  font-size: 2rem;
+  font-family: Boogaloo;
+  margin: 0;
+  padding: 0;
+}
+.area-subscribers .streak {
+  color: yellow;
+}
+.header {
+  font-size: 4rem;
+}
+
+.scene-soon {
+  width: 1840px;
+  height: 1000px;
+  display: grid;
+  grid-template-rows: 1.2fr 5fr;
+  margin: 0rem;
+  background-color: #272537;
+  color: #f8f8f8;
+  padding: 40px;
+}
+
+.area-map {
+  position: relative;
+}
+
+.area-map .leaflet-container {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  border-radius: 1rem;
+}
+.leaflet-control-container {
+  display: none;
+}
+
+.area-map .checkin-info {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+.area-map .checkin-info .aligner {
+  position: absolute;
+  top: 55%;
   text-align: center;
+  width: 100%;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.area-map .checkin-info .aligner .box {
+  position: relative;
+  left: 0.5rem;
+  display: inline-block;
+  background-color: white;
+  color: black;
+  z-index: 2;
+  text-align: left;
+  padding-left: 1.25rem;
+  padding-top: 0.2rem;
+  padding-right: 1.25rem;
+  padding-bottom: 0.2rem;
+  text-align: center;
+  border-radius: .4em;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.area-map .checkin-info .aligner .box:after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 50%;
+	width: 0;
+	height: 0;
+	border: 20px solid transparent;
+	border-bottom-color: #ffffff;
+	border-top: 0;
+	border-left: 0;
+	margin-left: -10px;
+	margin-top: -20px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.area-map .checkin-info .aligner .box .profile .display-name {
+  font-size: 1.4rem;
+}
+.area-map .checkin-info .aligner .box .profile .location {
+  font-size: 1rem;
+  font-style: italic;
+}
+.area-map .checkin-info .aligner .box.subscriber {
+  background-color: yellow;
+  font-size: 1rem;
+  color: black;
+}
+.area-map .checkin-info .aligner .box.subscriber:after {
+  border-bottom-color: yellow;
+  font-size: 1rem;
+  color: black;
+}
+.area-map .checkin-info .aligner .box .display-name {
+  font-style: italic;
+  font-size: 1rem;
+}
+.area-map .checkin-info .aligner .box .display-name {
+  font-size: 2rem;
+}
+.area-map .checkin-info .aligner .box .status {
+  font-style: italic;
+  font-size: 2rem;
 }
 
-.App-link {
-  color: #61dafb;
+.area-counter {
+  width: 100%;
+  grid-template-rows: 1fr 3fr;
+  justify-content: left;
+}
+.area-counter .label {
+  font-size: 5rem;
+  font-weight: bold;
+}
+.area-counter .instructions {
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding-bottom: 0.2rem;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.area-counter .instructions .command {
+  color: yellow;
+}
+
+.area-counter .countdown {
+  font-size: 5rem;
+  font-weight: bold;
+  color: yellow;
+  display: inline;
+}
+
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+}
+
+.scene-spotlight {
+  width: 1920px;
+  height: 1080px;
+  position: relative;
+}
+.scene-spotlight .display-name {
+  font-size: 1rem;
+}
+
+.scene-spotlight .message-body {
+  font-size: 1.5rem;
+}
+
+.scene-spotlight .box {
+  position: absolute;
+  left: 1.2rem;
+  bottom: 1.2rem;
+  background-color: white;
+  border-radius: .3em;
+  padding: 0.4rem 0.8rem 0.4rem 0.8rem;
+  box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+}
+.scene-moderator .message.active{
+  color: red;
 }

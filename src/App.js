@@ -1,26 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
+import StartingSoon from './components/StartingSoon'
+import Spotlight from './components/Spotlight'
+import queryString  from 'query-string'
+
+import firebase  from "firebase/app";
+import "firebase/firestore";
+import firebaseConfiguration from "./firebase.secret.json"
+import Moderator from './components/Moderator';
+
+window.firebase = firebase
+firebase.initializeApp(firebaseConfiguration);
+
+
 function App() {
+  const [ query, setQuery ] = useState({})
+  useEffect(function() {
+    setQuery(queryString.parse(window.location.search))
+  }, [])
+  
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {query.scene === 'soon' && <StartingSoon  /> }
+      {query.scene === 'answering' && <Spotlight /> }
+      {query.scene === 'moderator' && <Moderator /> }
     </div>
-  );
+  )
+
+  
 }
+
+
 
 export default App;
