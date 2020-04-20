@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 
 function Moderator() {
   const db = window.firebase.firestore()
@@ -6,7 +6,7 @@ function Moderator() {
   const [ messages, setMessages ] = useState([])
   const [ topic, setTopic ] = useState({})
   const [ topicInputValue, setTopicInputValue ] = useState('')
-  const [ user, setUser ] = useState(null)
+  const [ authenticatedUser, setAuthenticatedUser ] = useState(null)
   
   useEffect(() => {
     db
@@ -38,41 +38,60 @@ function Moderator() {
         })))
       })
 
-      auth.onAuthStateChanged(function(user) {
-        console.log('authstate', user)
-        if (user) {
-          setUser(user)
-        } else {
-          setUser(null)
-        }
+      auth.onAuthStateChanged(async function({ uid }) {
+        const doc = await db.collection('twitch-users').doc(uid).get()
+        setAuthenticatedUser({
+          id: uid, // TODO can be removed later, added in firebasecreteuser
+          ...doc.data()
+        }) 
     });
 
   }, [db, auth])
 
+  const isEditorOrAdmin = 
+    authenticatedUser && (
+      authenticatedUser.isEditor || 
+      authenticatedUser.isOwner
+    )
+
   return (<div className="scene-moderator">
-    <input type="text" value={topicInputValue} onChange={(evt) => {
-      setTopicInputValue(evt.target.value)
-    }}></input>
-    <input type="button" value="Update" onClick={() => {
-      db.collection('spotlight')
-      .doc('topic')
-      .set({
-        label: topicInputValue
-      })
-    }}></input>
-    <div className="messages">
-    {messages.map(message => <div 
-      key={message.ts} 
-      className={message.ts === topic.ts ? 'message active' : 'message'} 
-      onClick={() => {
-        console.log(message)
+    {!authenticatedUser && <div>
+      You need to <a href="authenticate_popup.html" onClick={(e) => {
+        window.open('authenticate_popup.html', 'name', 'height=585,width=400')
+        e.preventDefault()
+      }}>Log in</a> with Twitch in order to see this view.
+    </div>}
+    {authenticatedUser && <div>
+        <div>Logged in as {authenticatedUser.displayName} 
+          <a href="http://validdomainthatreactdoesnotcompainabout.com" onClick={(e) => { auth.signOut() }}>Sign out</a></div>
+        {!isEditorOrAdmin && <div>You lack editor permissions for the Fun Fun Function channel on Twitch, 
+          which are required for this view. Ask MPJ to give you if you think this is in error.</div>}
+    </div>}
+    {isEditorOrAdmin && <div>
+      <input type="text" value={topicInputValue} onChange={(evt) => {
+        setTopicInputValue(evt.target.value)
+      }}></input>
+      <input type="button" value="Update" onClick={() => {
         db.collection('spotlight')
-          .doc('topic')
-          .set(message)
-      }}>
-      <strong>{message.displayName}</strong>: {message.message}
-    </div>)}  
-    </div>  
+        .doc('topic')
+        .set({
+          label: topicInputValue
+        })
+      }}></input>
+      <div className="messages">
+        {messages.map(message => <div 
+          key={message.ts} 
+          className={message.ts === topic.ts ? 'message active' : 'message'} 
+          onClick={() => {
+            console.log(message)
+            db.collection('spotlight')
+              .doc('topic')
+              .set(message)
+          }}>
+          <strong>{message.displayName}</strong>: {message.message}
+        </div>)}  
+      </div>  
+    </div>}
   </div>)
 }
 
