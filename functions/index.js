@@ -18,6 +18,9 @@ const tmi = require("tmi.js")
 
 const chat = new tmi.client()
 
+const {BigQuery} = require('@google-cloud/bigquery');
+const bigquery = new BigQuery();
+
 module.exports.chatEventLogger = functions
   .runWith({ 
     memory: '128MB',
@@ -161,7 +164,26 @@ exports.createCheckin = functions.firestore
       });
     
     })
+exports.streamIntoBigQuery = functions.firestore
+  .document('events3/{eventId}')
+  .onCreate(async (snap) => {
+    const bqDatasetId = 'collections';
+    const bqTableId = 'events3';
 
+    const event = snap.data();
+    const rows = [
+      event
+    ];
+    
+    return await bigquery
+      .dataset(bqDatasetId)
+      .table(bqTableId)
+      .insert(rows)
+      .catch(function(error) {
+        console.error("Error streaming document to BigQuery: ", error);
+      });
+    })
+  
 async function getLatLonFromLocationString(locationString) {
   const response = await 
     fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + locationString)
