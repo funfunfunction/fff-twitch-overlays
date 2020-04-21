@@ -5,7 +5,6 @@
     "serve": "firebase emulators:start --only functions",
     "shell": "firebase functions:shell",
     "start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
   "engines": {
@@ -18,7 +17,8 @@
     "firebase-functions": "^3.6.0",
     "node-fetch": "^2.6.0",
     "query-string": "^6.12.1",
-    "simple-oauth2": "^3.4.0"
+    "simple-oauth2": "^3.4.0",
+    "tmi.js": "^1.5.0"
   },
   "devDependencies": {
     "firebase-functions-test": "^0.2.0"

@@ -14,6 +14,116 @@ const TWITCH_CLIENT_SECRET = functions.config().twitch.client_secret
 
 const { createMarker, getUser, getEditors, getStreams, getTokensWithRefreshToken } = require('./twitch')
 
+const tmi = require("tmi.js")
+
+const chat = new tmi.client()
+
+module.exports.chatEventLogger = functions
+  .runWith({ 
+    memory: '128MB',
+    timeoutSeconds: 9 * 60 // max run time is 9 min
+  }).pubsub.schedule('every 1 minutes')
+  .onRun(async (context) => {
+
+    const ownerAccessToken = await getOwnerAccessToken()
+    if (!(await isStreaming(ownerAccessToken))) {
+      console.log('FFF is not live, no need to start up any logger')
+      return null
+    }
+
+    // As we want reliable logging of chat, we'll use a firestore
+    // document for each run of chatEventLogger to track run state
+    // by sending pulses every few seconds. If we have not 
+    // received live signs from an eventLogger for 25000 seconds,
+    // it is assumed to have died and we'll start up some more
+    // for redundancy
+    const assumedDeadTime = Number(Date.now()) - 25000
+    const snapshot = await db
+      .collection("event-logger-state")
+      .where('pulse', '>', assumedDeadTime)
+      .get()
+
+    if (snapshot.size > 1) {
+      console.log('Got '  + snapshot.size + ' chatEventLoggers running already, wont start another')
+      return null
+    } else {
+      console.log('Detected ' + snapshot.size + 'chatEventLoggers running, starting one instance now.')
+    }
+
+    // Clean up any expired event logger state
+    db.collection("event-logger-state")
+      .where('pulse', '<', assumedDeadTime)
+      .get()
+      .then(querySnapshot => querySnapshot.forEach(doc => doc.ref.delete()))
+
+    // Start watching chat
+    ;(async function() {
+      await chat.connect()
+      await chat.join('funfunfunction')
+      console.log('chatEventLogger joined channel')
+    
+      chat.on('chat', (channel, userstate, message) => 
+        logEvent('chat', userstate, { message }))
+    
+      chat.on("subscription", (channel, username, method, message, userstate) => 
+        logEvent("subscription", userstate, { method, message }))
+    
+      chat.on("resub", (channel, username, months, message, userstate, methods) => 
+        logEvent("resub", userstate, { months, message, methods }))
+      
+      chat.on("subgift", (channel, username, streakMonths, recipient, methods, userstate) => 
+        logEvent("subgift", userstate, { methods, recipient, streakMonths }))
+    
+      chat.on("submysterygift", async (channel, username, numbOfSubs, methods, userstate) =>
+        logEvent("submysterygift", userstate, { numbOfSubs, methods }))
+    
+      chat.on("cheer", async (channel, userstate, message) =>
+        logEvent("cheer", userstate, { message }))
+    
+      chat.on("action", async (channel, userstate, message, self) => 
+        logEvent("action", userstate, { message }))
+    
+    })().catch(async (error) => {
+      console.error(error)
+      process.exit(1)
+    })
+
+    // pulse every five seconds
+    const intervalId = setInterval(function() {
+      db.collection("event-logger-state").doc(context.eventId).set({
+        uid: context.eventId,
+        pulse: Number(Date.now())
+      })
+    }, 5000)
+    
+    // automatically die gracefully after 8 min, cloud functions will time out after 9 otherwise
+    return new Promise((resolve => {
+      setTimeout(function() {
+        console.log('Closing down chatEventLogger (lifespan ended)')
+        clearInterval(intervalId)
+        resolve()
+      }, 8 * 60 * 1000) 
+    }))
+  })
+
+async function logEvent(type, userstate, otherProps) {
+  try {
+    console.log('logging event', type, userstate, otherProps)
+    // Use Twitch message id as key so that we can do idempotent updates, running multiple cloud functions
+    const key = userstate["id"]
+    if (!key) {
+      throw new Error('No id on userstate')
+    }
+    await db.collection("events3").doc(key).set({
+      type,
+      ts: parseInt(userstate["tmi-sent-ts"]),
+      userstate,
+      ...otherProps
+    })
+  } catch(e) {
+    console.warn(`Failed writing ${type} event to database`, userstate, otherProps)
+  }
+}
 exports.createCheckin = functions.firestore
   .document('events3/{eventId}')
   .onCreate(async (snap) => {
@@ -57,32 +167,36 @@ async function getLatLonFromLocationString(locationString) {
   return [ likelyPlace.lat, likelyPlace.lon ]
 }
 
+async function getOwnerAccessToken() {
+  const ownerDocument = await admin.firestore()
+  .collection('twitch-users')
+  .doc('twitch:' + FFF_USER_ID)
+  .get()
+  const ownerData = ownerDocument.data()
+  const refreshToken = ownerData.refreshToken
+  const tokens = await getTokensWithRefreshToken(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET, refreshToken)
+  return tokens.access
+}
+
+async function isStreaming(ownerAccessToken) {
+  const streams = await getStreams(TWITCH_CLIENT_ID, ownerAccessToken, FFF_USER_ID)
+  return streams.data.length > 0
+}
+
 exports.createMarkerFromSpotlight = 
   functions.firestore
     .document('spotlight/topic')
       .onUpdate(async (change) => {
         const data = change.after.data()
 
-        const ownerDocument = await admin.firestore()
-          .collection('twitch-users')
-          .doc('twitch:' + FFF_USER_ID)
-          .get()
-        const ownerData = ownerDocument.data()
-        const refreshToken = ownerData.refreshToken
-        
-        console.log('refreshToken', refreshToken)
-        const tokens = await getTokensWithRefreshToken(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET, refreshToken)
-        console.log('tokens', tokens)
-        const streams = await getStreams(TWITCH_CLIENT_ID, tokens.access, FFF_USER_ID)
-        const isStreaming = streams.data.length > 0
-
-        if (!isStreaming) {
+        const ownerAccessToken = await getOwnerAccessToken()
+        if (!(await isStreaming(ownerAccessToken))) {
           console.log('Ignoring Spotlight topic update (Fun Fun Function is not live)')
           return null
         }
 
         const description = data.message || data.label
-        await createMarker(TWITCH_CLIENT_ID, tokens.access, FFF_USER_ID, description)
+        await createMarker(TWITCH_CLIENT_ID, ownerAccessToken, FFF_USER_ID, description)
         console.log('Created Twitch marker with description: ' + description)
         return null
       })
