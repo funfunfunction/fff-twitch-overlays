@@ -146,9 +146,24 @@ html,body  {
 .scene-spotlight {
   width: 1920px;
   height: 1080px;
-  position: relative;
+  position: absolute;
 }
-.scene-spotlight .display-name {
+
+.scene-moderator .topic-label {
+  display: inline-block;
+  padding: 0.5rem;
+  border: 1px solid grey;
+  margin: 0.5rem;
+}
+.scene-moderator .topic-label label {
+  display: block;
+}
+.scene-moderator .topic-label input {
+  font-size: 3rem;
+  margin-right: 0.3rem;
+  padding: 0.4rem;
+}
+.scene-moderator .display-name {
   font-size: 1rem;
 }
 
@@ -156,15 +171,36 @@ html,body  {
   font-size: 1.5rem;
 }
 
+.scene-spotlight .top-boxes {
+  padding: 1rem;
+}
+
 .scene-spotlight .box {
-  position: absolute;
-  left: 1.2rem;
-  bottom: 1.2rem;
   background-color: white;
   border-radius: .3em;
   padding: 0.4rem 0.8rem 0.4rem 0.8rem;
   box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+  float: left;
+  margin-right: 1rem;
+  max-width: 20rem;
+
 }
+.scene-spotlight .box .box-header {
+  font-size: 1rem;
+  color: grey;
+}
+.scene-spotlight .box .box-body {
+  font-size: 2rem;
+}
+.scene-spotlight .box.message {
+  min-width: 10rem;
+  max-width: 22rem;
+}
+
+.scene-spotlight .box.message .box-body {
+  font-size: 1rem;
+}
+
 .scene-moderator .message.active{
   color: red;
 }

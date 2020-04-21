@@ -27,7 +27,7 @@ function Moderator() {
       .collection("events3")
       .where('type', '==', 'chat')
       .orderBy("ts", "desc")
-      .limit(50)
+      .limit(100)
       .onSnapshot(function(querySnapshot) {
         const newMessages = []
         querySnapshot.docs.forEach(doc => newMessages.push(doc.data()))
@@ -68,26 +68,28 @@ function Moderator() {
         {!isEditorOrAdmin && <div>You lack editor permissions for the Fun Fun Function channel on Twitch, 
           which are required for this view. Ask MPJ to give you if you think this is in error.</div>}
     </div>}
-    {isEditorOrAdmin && <div>
-      <input type="text" value={topicInputValue} onChange={(evt) => {
-        setTopicInputValue(evt.target.value)
-      }}></input>
-      <input type="button" value="Update" onClick={() => {
-        db.collection('spotlight')
-        .doc('topic')
-        .set({
-          label: topicInputValue
-        })
-      }}></input>
+    {isEditorOrAdmin && <div className="gui">
+      <div className="topic-label">
+        <label for='topic-label'>Topic label</label>
+        <input name="topic-label" type="text" value={topicInputValue} onChange={(evt) => {
+          setTopicInputValue(evt.target.value)
+        }}></input>
+        <input type="button" value="Update" onClick={() => {
+          db.collection('spotlight')
+          .doc('topic')
+          .update({
+            label: topicInputValue
+          })
+        }}></input>
+      </div>
       <div className="messages">
         {messages.map(message => <div 
           key={message.ts} 
-          className={message.ts === topic.ts ? 'message active' : 'message'} 
+          className={message.ts === (topic.message && topic.message.ts) ? 'message active' : 'message'} 
           onClick={() => {
-            console.log(message)
             db.collection('spotlight')
               .doc('topic')
-              .set(message)
+              .update({ message })
           }}>
           <strong>{message.displayName}</strong>: {message.message}
         </div>)}  
