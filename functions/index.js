@@ -21,10 +21,11 @@ const chat = new tmi.client()
 module.exports.chatEventLogger = functions
   .runWith({ 
     memory: '128MB',
-    timeoutSeconds: 9 * 60 // max run time is 9 min
+    timeoutSeconds: 9 * 60 // max allowed run time for cloud functions is 9 min
   }).pubsub.schedule('every 1 minutes')
   .onRun(async (context) => {
 
+    // Only start logger if we're actually live on Twitch
     const ownerAccessToken = await getOwnerAccessToken()
     if (!(await isStreaming(ownerAccessToken))) {
       console.log('FFF is not live, no need to start up any logger')
@@ -44,13 +45,17 @@ module.exports.chatEventLogger = functions
       .get()
 
     if (snapshot.size > 1) {
-      console.log('Got '  + snapshot.size + ' chatEventLoggers running already, wont start another')
+      console.log(
+        'Got ' + snapshot.size + 
+        ' chatEventLoggers running already, wont start another')
       return null
     } else {
-      console.log('Detected ' + snapshot.size + 'chatEventLoggers running, starting one instance now.')
+      console.log(
+        'Detected ' + snapshot.size + 
+        ' chatEventLoggers running, starting one instance now.')
     }
 
-    // Clean up any expired event logger state
+    // Clean up any state of dead chatEventLoggers
     db.collection("event-logger-state")
       .where('pulse', '<', assumedDeadTime)
       .get()
