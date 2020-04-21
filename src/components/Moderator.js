@@ -38,10 +38,11 @@ function Moderator() {
         })))
       })
 
-      auth.onAuthStateChanged(async function({ uid }) {
-        const doc = await db.collection('twitch-users').doc(uid).get()
+      auth.onAuthStateChanged(async function(user) {
+        if (!user) return
+        const doc = await db.collection('twitch-users').doc(user.uid).get()
         setAuthenticatedUser({
-          id: uid, // TODO can be removed later, added in firebasecreteuser
+          id: user.uid, // TODO can be removed later, added in firebasecreteuser
           ...doc.data()
         }) 
     });
