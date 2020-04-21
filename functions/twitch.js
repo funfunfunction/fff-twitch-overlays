@@ -68,6 +68,7 @@ async function getEditors (
   accessToken,
   channelId
 ) {
+  // TODO: pagination!!
   const data = await krakenGet(clientId, accessToken, 'getEditors', "/channels/" + channelId + "/editors")
   return data.users.map(user => ({
     id: parseInt(user._id),
@@ -84,6 +85,20 @@ async function getUser (
     id: parseInt(data._id),
     displayName: data.display_name
   }
+}
+
+async function getModerators(clientId, accessToken, broadcasterId) {
+  // TODO: pagination!!
+  const data = helixGet(
+    clientId, 
+    accessToken, 
+    'getModerators', 
+    '/moderation/moderators?broadcaster_id=' + broadcasterId
+  )
+  return data.data.map(mod => ({
+    id: parseInt(mod.user_id),
+    displayName: mod.user_name
+  }))
 }
 
 // Not used generally, since we hardcode the FFF user id becuase it doesn't change
@@ -144,5 +159,6 @@ function parseResponseJSON(response) {
 module.exports.createMarker = createMarker
 module.exports.getUser = getUser
 module.exports.getEditors = getEditors
+module.exports.getModerators = getModerators
 module.exports.getStreams = getStreams
 module.exports.getTokensWithRefreshToken = getTokensWithRefreshToken

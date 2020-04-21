@@ -12,7 +12,7 @@ const FFF_USER_ID = 119879569
 const TWITCH_CLIENT_ID = functions.config().twitch.client_id
 const TWITCH_CLIENT_SECRET = functions.config().twitch.client_secret
 
-const { createMarker, getUser, getEditors, getStreams, getTokensWithRefreshToken } = require('./twitch')
+const { createMarker, getUser, getEditors, getModerators, getStreams, getTokensWithRefreshToken } = require('./twitch')
 
 const tmi = require("tmi.js")
 
@@ -208,7 +208,7 @@ exports.createMarkerFromSpotlight =
 
 const OAUTH_REDIRECT_URI = 
   `https://${process.env.GCLOUD_PROJECT}.web.app/authenticate_popup.html`;
-const OAUTH_SCOPES = 'user:edit:broadcast channel_read user_read';
+const OAUTH_SCOPES = 'user:edit:broadcast channel_read user_read moderation:read';
 
 /**
  * Creates a configured simple-oauth2 client for Twitch.
@@ -288,18 +288,27 @@ exports.token = functions.https.onRequest(async (req, res) => {
         accessToken)
 
       const isOwner = twitchUser.id === FFF_USER_ID
-      let isEditor
-      if(isOwner) {
-        isEditor = false
-      } else {
+
+      
+      const isEditor = (async function getIsEditor() {
         const twitchEditors = await getEditors(
-          functions.config().twitch.client_id, 
+          TWITCH_CLIENT_ID, 
           accessToken,
           FFF_USER_ID
         )
         const editorIds = twitchEditors.map(x => x.id)
-        isEditor = editorIds.includes(twitchUser.id)
-      }
+        return editorIds.includes(twitchUser.id)
+      })()
+
+      const isModerator = (async function getIsModerator() {
+        const data = await getModerators(
+          TWITCH_CLIENT_ID,
+          accessToken,
+          FFF_USER_ID
+        )
+        const moderatorIds = data.map(x => x.user_id)
+        return moderatorIds.includes(twitchUser.id)
+      })()
       
       // Create a Firebase account and get the Custom Auth Token.
       const firebaseToken = await 
@@ -308,6 +317,7 @@ exports.token = functions.https.onRequest(async (req, res) => {
           twitchUser.displayName, 
           isOwner,
           isEditor, 
+          isModerator, 
           results.refresh_token);
       // Serve an HTML page that signs the user in and updates the user profile.
       return res.jsonp({ token: firebaseToken});
