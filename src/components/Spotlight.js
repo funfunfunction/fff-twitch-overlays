@@ -23,7 +23,7 @@ function Spotlight() {
         </div>}
         {topic && topic.message && <div className="box message">
           <div className="box-header">{topic.message.displayName} says:</div>
-          <div className="box-body">{topic.message.message}</div>
+          <div className="box-body">{topic.message.message.substring(0, 380)}</div>
         </div>}
       </div>
     </div>

@@ -183,7 +183,7 @@ html,body  {
   float: left;
   margin-right: 1rem;
   max-width: 20rem;
-
+  max-height: 4rem;
 }
 .scene-spotlight .box .box-header {
   font-size: 1rem;
@@ -194,11 +194,12 @@ html,body  {
 }
 .scene-spotlight .box.message {
   min-width: 10rem;
-  max-width: 22rem;
+  max-width: 30rem;
+  
 }
 
 .scene-spotlight .box.message .box-body {
-  font-size: 1rem;
+  font-size: 0.65rem;
 }
 
 .scene-moderator .message.active{
