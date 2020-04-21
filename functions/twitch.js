@@ -1,0 +1,148 @@
+const fetch = require('node-fetch')
+const queryString = require('query-string')
+
+async function createMarker(clientId, accessToken, userId, description) {
+  const response = await helixPost(clientId, accessToken, "createMarker", "/streams/markers", { 
+    user_id: userId, 
+    description 
+  })
+  return response
+}
+
+function getStreams(clientId, accessToken, userId) {
+  return helixGet(clientId, accessToken, 'getStreams', '/streams?user_id=' + userId)
+}
+
+function helixPost(clientId, accessToken, functionLabel, endpoint, params) {
+  return fetch(
+    "https://api.twitch.tv/helix" + endpoint + "?" + queryString.stringify(params), 
+    {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        Accept: "application/vnd.twitchtv.v5+json",
+        "Client-ID": clientId,
+        Authorization: "Bearer " + accessToken
+      }
+    }
+  )
+  .then(createAssertResponseOK(functionLabel))
+  .then(parseResponseJSON)
+}
+
+function helixGet(clientId, accessToken, functionLabel, endpoint) {
+  return fetch(
+    "https://api.twitch.tv/helix" + endpoint,
+    {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        Accept: "application/vnd.twitchtv.v5+json",
+        "Client-ID": clientId,
+        Authorization: "Bearer " + accessToken
+      }
+    }
+  )
+  .then(createAssertResponseOK(functionLabel))
+  .then(parseResponseJSON)
+}
+
+function getTokensWithRefreshToken(clientId, clientSecret, refreshToken) {
+  return fetch(
+    "https://id.twitch.tv/oauth2/token?" +
+      queryString.stringify({
+        grant_type: "refresh_token",
+        client_id: clientId,
+        client_secret: clientSecret,
+        refresh_token: refreshToken
+      }),
+    { method: "POST" }
+  )
+    .then(createAssertResponseOK('getTokensWithRefreshToken'))
+    .then(parseResponseJSON)
+    .then(tokenSetFromResponseBody)
+}
+
+async function getEditors (
+  clientId,
+  accessToken,
+  channelId
+) {
+  const data = await krakenGet(clientId, accessToken, 'getEditors', "/channels/" + channelId + "/editors")
+  return data.users.map(user => ({
+    id: parseInt(user._id),
+    displayName: user.display_name
+  }))
+}
+
+async function getUser (
+  clientId,
+  accessToken
+) {
+  const data = await krakenGet(clientId, accessToken, 'getUser', '/user')
+  return {
+    id: parseInt(data._id),
+    displayName: data.display_name
+  }
+}
+
+// Not used generally, since we hardcode the FFF user id becuase it doesn't change
+// but let this be for future reference
+async function getChannelId (
+  clientId,
+  accessToken
+) {
+  const responseData = await krakenGet(clientId, accessToken, 'getChannelId', '/channel', )
+  return responseData._id
+}
+
+function krakenGet(clientId, accessToken, functionLabel, endpoint) {
+  return fetch("https://api.twitch.tv/kraken" + endpoint, {
+    credentials: "include",
+    headers: {
+      Accept: "application/vnd.twitchtv.v5+json",
+      "Client-ID": clientId,
+      Authorization: "OAuth " + accessToken
+    }
+  })
+  .then(createAssertResponseOK(functionLabel))
+  .then(parseResponseJSON)
+}
+
+function tokenSetFromResponseBody(body) {
+  if (
+    !body.access_token ||
+    !body.refresh_token ||
+    !Number.isInteger(body.expires_in)
+  ) {
+    throw new Error("Response body cannot be parsed as token set")
+  }
+  return {
+    expiresIn: body.expires_in,
+    access: body.access_token,
+    refresh: body.refresh_token
+  }
+}
+
+function createAssertResponseOK(label) {
+  return function assertResponseOK(response) {
+    if (response.status !== 200) {
+      return response.text().then(responseText => {
+        throw new Error(
+          label + ": Expected response status to have been 200 but was " + response.status + ': ' + responseText
+        )
+      })
+    }
+    return response
+  }
+}
+
+function parseResponseJSON(response) {
+  return response.json()
+} 
+
+module.exports.createMarker = createMarker
+module.exports.getUser = getUser
+module.exports.getEditors = getEditors
+module.exports.getStreams = getStreams
+module.exports.getTokensWithRefreshToken = getTokensWithRefreshToken
