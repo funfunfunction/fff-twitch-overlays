@@ -174,7 +174,16 @@ exports.streamIntoBigQuery = functions.firestore
     const {message, ts, type, userstate} = snap.data();
     let userstates = [];
     for (let key in userstate) {
-      userstates.push({key: key, value: JSON.stringify(userstate[key])});
+      let value = userstate[key];
+      // Stringify if object
+      if ((!!value) && (value.constructor === Object)) {
+        value = JSON.stringify(value);
+      }
+      // Stringify if array
+      if (Array.isArray(value)) {
+        value = JSON.stringify(value);
+      }
+      userstates.push({key: key, value: value});
     }
     const rows = [
       {
