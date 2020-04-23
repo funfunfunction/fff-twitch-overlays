@@ -179,7 +179,7 @@ exports.streamIntoBigQuery = functions.firestore
     const rows = [
       {
         message: message,
-        ts: ts,
+        ts: parseInt(ts, 10),
         type: type,
         userstate: userstates
       }
