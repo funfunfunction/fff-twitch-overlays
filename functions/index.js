@@ -116,7 +116,6 @@ module.exports.chatEventLogger = functions
 
 async function logEvent(type, userstate, otherProps) {
   try {
-    console.log('logging event', type, userstate, otherProps)
     // Use Twitch message id as key so that we can do idempotent updates, running multiple cloud functions
     const key = userstate["id"]
     if (!key) {
