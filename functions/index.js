@@ -170,9 +170,19 @@ exports.streamIntoBigQuery = functions.firestore
     const bqDatasetId = 'collections';
     const bqTableId = 'events3';
 
-    const event = snap.data();
+    // Save userstate as key-value repeated records.
+    const {message, ts, type, userstate} = snap.data();
+    let userstates = [];
+    for (let key in userstate) {
+      userstates.push({key: key, value: JSON.stringify(userstate[key])});
+    }
     const rows = [
-      event
+      {
+        message: message,
+        ts: ts,
+        type: type,
+        userstate: userstates
+      }
     ];
     
     return await bigquery
