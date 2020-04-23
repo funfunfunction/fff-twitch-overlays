@@ -89,7 +89,7 @@ async function getUser (
 
 async function getModerators(clientId, accessToken, broadcasterId) {
   // TODO: pagination!!
-  const data = helixGet(
+  const data = await helixGet(
     clientId, 
     accessToken, 
     'getModerators', 

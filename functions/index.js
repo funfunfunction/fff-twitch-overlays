@@ -322,7 +322,7 @@ exports.token = functions.https.onRequest(async (req, res) => {
       const isOwner = twitchUser.id === FFF_USER_ID
 
       
-      const isEditor = (async function getIsEditor() {
+      const isEditor = await (async function getIsEditor() {
         const twitchEditors = await getEditors(
           TWITCH_CLIENT_ID, 
           accessToken,
@@ -332,7 +332,7 @@ exports.token = functions.https.onRequest(async (req, res) => {
         return editorIds.includes(twitchUser.id)
       })()
 
-      const isModerator = (async function getIsModerator() {
+      const isModerator = await (async function getIsModerator() {
         const data = await getModerators(
           TWITCH_CLIENT_ID,
           accessToken,
@@ -348,8 +348,8 @@ exports.token = functions.https.onRequest(async (req, res) => {
           twitchUser.id, 
           twitchUser.displayName, 
           isOwner,
-          isEditor, 
           isModerator, 
+          isEditor, 
           results.refresh_token);
       // Serve an HTML page that signs the user in and updates the user profile.
       return res.jsonp({ token: firebaseToken});
@@ -369,7 +369,7 @@ exports.token = functions.https.onRequest(async (req, res) => {
  *
  * @returns {Promise<string>} The Firebase custom auth token in a promise.
  */
-async function createFirebaseAccount(twitchID, displayName, isOwner, isEditor, refreshToken) {
+async function createFirebaseAccount(twitchID, displayName, isOwner, isModerator, isEditor, refreshToken) {
 
   const uid = `twitch:${twitchID}`;
 
@@ -393,6 +393,7 @@ async function createFirebaseAccount(twitchID, displayName, isOwner, isEditor, r
       displayName,
       refreshToken,
       isOwner,
+      isModerator,
       isEditor
     });
 
