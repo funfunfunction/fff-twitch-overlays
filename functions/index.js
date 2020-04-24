@@ -1,4 +1,5 @@
 const functions = require('firebase-functions');
+const { FieldValue } = require('@google-cloud/firestore')
 
 const admin = require('firebase-admin');
 admin.initializeApp(); 
@@ -131,6 +132,45 @@ async function logEvent(type, userstate, otherProps) {
     console.warn(`Failed writing ${type} event to database`, userstate, otherProps)
   }
 }
+
+exports.uniqueChattersView = functions.firestore
+  .document('events3/{eventId}')
+  .onCreate(async (snap) => {
+
+    const event = snap.data();
+    if (event.type !== 'chat') return false  
+
+    const accessToken = await getOwnerAccessToken()
+    const streamsResponse = await getStreams(TWITCH_CLIENT_ID, accessToken)
+    const streams = streamsResponse.data
+    if (streams.length === 0) {
+      // not live, we don't care a about this chat message
+      return
+    }
+    const currentStream = streams[0]
+    const streamId = currentStream.id
+    const userId = event.userstate['user-id']
+
+    const viewRef = db.collection('views').doc('unique-chatters')
+    viewRef.set({
+      currentStreamId: streamId
+    }, { merge: true })
+
+    const streamRef = viewRef.collection('streams').doc(streamId)
+    
+    const userRef = streamRef.collection('chatters').doc(userId)
+    const userDoc = await userRef.get()
+    if (!userDoc.exists) {
+      userRef.set({
+        appeared: Number(Date.now())
+      })
+      streamRef.set({
+        uniqueChatters: FieldValue.increment(1)
+      }, { merge: true })
+    }
+
+  }) 
+
 exports.createCheckin = functions.firestore
   .document('events3/{eventId}')
   .onCreate(async (snap) => {
