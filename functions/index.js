@@ -152,9 +152,9 @@ exports.uniqueChattersView = functions.firestore
     const userId = event.userstate['user-id']
 
     const viewRef = db.collection('views').doc('unique-chatters')
-    viewRef.set({
-      currentStreamId: streamId
-    }, { merge: true })
+    viewRef.collection('properties').doc('current-stream-id').set({
+      value: streamId
+    })
 
     const streamRef = viewRef.collection('streams').doc(streamId)
     
@@ -164,8 +164,8 @@ exports.uniqueChattersView = functions.firestore
       userRef.set({
         appeared: Number(Date.now())
       })
-      streamRef.set({
-        uniqueChatters: FieldValue.increment(1)
+      streamRef.collection('properties').doc('num-chatters').set({
+        value: FieldValue.increment(1)
       }, { merge: true })
     }
 
