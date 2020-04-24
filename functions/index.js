@@ -13,7 +13,7 @@ const FFF_USER_ID = 119879569
 const TWITCH_CLIENT_ID = functions.config().twitch.client_id
 const TWITCH_CLIENT_SECRET = functions.config().twitch.client_secret
 
-const { createMarker, getUser, getEditors, getModerators, getStreams, getTokensWithRefreshToken } = require('./twitch')
+const { createMarker, getUser, getEditors, getModerators, getStreams, getTokensWithRefreshToken } = require('./helpers/twitch')
 
 const tmi = require("tmi.js")
 
