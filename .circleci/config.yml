@@ -28,6 +28,7 @@ jobs:
       - restore_cache:
           keys:
             - v3-dependencies-{{ checksum "functions/package-lock.json" }}
+      - run: npm install
       - run: npm run deploy --token "$FIREBASE_TOKEN"
 
 workflows:
