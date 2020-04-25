@@ -29,7 +29,7 @@ jobs:
           keys:
             - v3-dependencies-{{ checksum "functions/package-lock.json" }}
       - run: npm install
-      - run: npm run deploy --token "$FIREBASE_TOKEN"
+      - run: ./node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN"
 
 workflows:
   version: 2
