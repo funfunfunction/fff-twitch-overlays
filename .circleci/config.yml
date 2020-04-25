@@ -34,6 +34,7 @@ jobs:
           keys:
             - v4-dependencies-{{ checksum "package-lock.json" }}
             - v4-dependencies-{{ checksum "functions/package-lock.json" }}
+      - run: npm install
       - run: ./node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN"
 
 workflows:
