@@ -13,7 +13,7 @@
     "style:fix": "prettier --write \"src/**/*.ts\""
   },
   "engines": {
-    "node": "8"
+    "node": "10"
   },
   "prettier": {
     "semi": false
