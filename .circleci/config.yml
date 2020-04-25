@@ -42,7 +42,7 @@ jobs:
           command: cd functions && npm ci
       - run: 
           name: Deploy to Firebase (functions only for now)
-          command: ./node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN" --only functions
+          command: npx firebase deploy --token "$FIREBASE_TOKEN" --only functions
 
 workflows:
   version: 2
