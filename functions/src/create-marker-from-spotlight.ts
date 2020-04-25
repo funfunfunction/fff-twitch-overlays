@@ -7,6 +7,7 @@ import getTwitchCredentials from "../helpers/assorted/get-twitch-credentials"
 const createMarkerFromSpotlight = 
   functions.firestore.document('spotlight/topic').onUpdate(async (change) => {
     const data = change.after.data()
+    if (!data) throw new Error('No data on topic object')
     const credentials = getTwitchCredentials()
     
     const ownerAccessToken = await getOwnerAccessToken()
@@ -17,6 +18,7 @@ const createMarkerFromSpotlight =
       return null
     }
 
+    
     const description = data.message || data.label
     await createMarker(credentials.clientId, ownerAccessToken, getChannelOwnerUserId(), description)
     console.log('Created Twitch marker with description: ' + description)

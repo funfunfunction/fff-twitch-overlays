@@ -137,8 +137,8 @@ function tokenSetFromResponseBody(body) {
   }
   return {
     expiresIn: body.expires_in,
-    access: body.access_token,
-    refresh: body.refresh_token
+    access: body.access_token as string,
+    refresh: body.refresh_token as string
   }
 }
 

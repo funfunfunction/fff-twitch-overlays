@@ -9,9 +9,12 @@ const streamIntoBigQuery = functions.firestore
     const bqDatasetId = 'collections';
     const bqTableId = 'events3';
 
+    const data = snap.data() as any
+    if (!data) throw new Error('event document did not contain any data')
+
     // Save userstate as key-value repeated records.
-    const {message, ts, type, userstate} = snap.data();
-    const userstates = [];
+    const {message, ts, type, userstate} = data
+    const userstates = [] as Object[]
     for (const key in userstate) {
       let value = userstate[key];
       // Stringify if object
@@ -22,7 +25,7 @@ const streamIntoBigQuery = functions.firestore
       if (Array.isArray(value)) {
         value = JSON.stringify(value);
       }
-      userstates.push({key: key, value: value});
+      userstates.push({ key, value });
     }
     const rows = [
       {

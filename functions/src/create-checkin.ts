@@ -8,6 +8,7 @@ const createCheckin = functions.firestore
   .onCreate(async (snap) => {
 
     const event = snap.data();
+    if (!event) throw new Error('data did not exist on event')
     if (event.type !== 'chat') return false  
 
     const parsedMessage = 
