@@ -25,7 +25,7 @@ jobs:
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "functions/package-lock.json" }}
-      - run: ./node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN"
+      - run: npx firebase deploy --token "$FIREBASE_TOKEN" --only functions
 
 workflows:
   version: 2
