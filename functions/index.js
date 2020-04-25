@@ -1,19 +1,16 @@
-const functions = require('firebase-functions');
-const { FieldValue } = require('@google-cloud/firestore')
-
 const admin = require('firebase-admin');
 admin.initializeApp(); 
 const fetch = require('node-fetch')
 const db = admin.firestore();
+const functions = require('firebase-functions')
 
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 
-const FFF_USER_ID = 119879569
 const TWITCH_CLIENT_ID = functions.config().twitch.client_id
-const TWITCH_CLIENT_SECRET = functions.config().twitch.client_secret
 
-const { createMarker, getUser, getEditors, getModerators, getStreams, getTokensWithRefreshToken } = require('./helpers/twitch')
+const { createMarker, getUser, getEditors, getModerators } = require('./helpers/twitch')
+const { getChannelOwnerUserId, getOwnerAccessToken } = require('./helpers/assorted')
 
 const tmi = require("tmi.js")
 
@@ -133,43 +130,7 @@ async function logEvent(type, userstate, otherProps) {
   }
 }
 
-exports.uniqueChattersView = functions.firestore
-  .document('events3/{eventId}')
-  .onCreate(async (snap) => {
-
-    const event = snap.data();
-    if (event.type !== 'chat') return false  
-
-    const accessToken = await getOwnerAccessToken()
-    const streamsResponse = await getStreams(TWITCH_CLIENT_ID, accessToken)
-    const streams = streamsResponse.data
-    if (streams.length === 0) {
-      // not live, we don't care a about this chat message
-      return
-    }
-    const currentStream = streams[0]
-    const streamId = currentStream.id
-    const userId = event.userstate['user-id']
-
-    const viewRef = db.collection('views').doc('unique-chatters')
-    viewRef.collection('properties').doc('current-stream-id').set({
-      value: streamId
-    })
-
-    const streamRef = viewRef.collection('streams').doc(streamId)
-    
-    const userRef = streamRef.collection('chatters').doc(userId)
-    const userDoc = await userRef.get()
-    if (!userDoc.exists) {
-      userRef.set({
-        appeared: Number(Date.now())
-      })
-      streamRef.collection('properties').doc('num-chatters').set({
-        value: FieldValue.increment(1)
-      }, { merge: true })
-    }
-
-  }) 
+exports.uniqueChattersView = require('./views/unique-chatters')
 
 exports.createCheckin = functions.firestore
   .document('events3/{eventId}')
@@ -252,19 +213,8 @@ async function getLatLonFromLocationString(locationString) {
   return [ likelyPlace.lat, likelyPlace.lon ]
 }
 
-async function getOwnerAccessToken() {
-  const ownerDocument = await admin.firestore()
-  .collection('twitch-users')
-  .doc('twitch:' + FFF_USER_ID)
-  .get()
-  const ownerData = ownerDocument.data()
-  const refreshToken = ownerData.refreshToken
-  const tokens = await getTokensWithRefreshToken(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET, refreshToken)
-  return tokens.access
-}
-
 async function isStreaming(ownerAccessToken) {
-  const streams = await getStreams(TWITCH_CLIENT_ID, ownerAccessToken, FFF_USER_ID)
+  const streams = await getStreams(TWITCH_CLIENT_ID, ownerAccessToken, getChannelOwnerUserId())
   return streams.data.length > 0
 }
 
@@ -281,7 +231,7 @@ exports.createMarkerFromSpotlight =
         }
 
         const description = data.message || data.label
-        await createMarker(TWITCH_CLIENT_ID, ownerAccessToken, FFF_USER_ID, description)
+        await createMarker(TWITCH_CLIENT_ID, ownerAccessToken, getChannelOwnerUserId(), description)
         console.log('Created Twitch marker with description: ' + description)
         return null
       })
@@ -367,14 +317,14 @@ exports.token = functions.https.onRequest(async (req, res) => {
         functions.config().twitch.client_id, 
         accessToken)
 
-      const isOwner = twitchUser.id === FFF_USER_ID
+      const isOwner = twitchUser.id === getChannelOwnerUserId()
 
       
       const isEditor = await (async function getIsEditor() {
         const twitchEditors = await getEditors(
           TWITCH_CLIENT_ID, 
           accessToken,
-          FFF_USER_ID
+          getChannelOwnerUserId()
         )
         const editorIds = twitchEditors.map(x => x.id)
         return editorIds.includes(twitchUser.id)
@@ -384,7 +334,7 @@ exports.token = functions.https.onRequest(async (req, res) => {
         const data = await getModerators(
           TWITCH_CLIENT_ID,
           accessToken,
-          FFF_USER_ID
+          getChannelOwnerUserId()
         )
         const moderatorIds = data.map(x => x.user_id)
         return moderatorIds.includes(twitchUser.id)
