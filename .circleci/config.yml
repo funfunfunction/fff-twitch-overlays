@@ -9,20 +9,16 @@ jobs:
     working_directory: ~/tmp
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v4-deps-{{ checksum "package-lock.json" }}
-            - v4-deps-{{ checksum "functions/package-lock.json" }}
-      - run: npm install
-      - run: cd functions && npm install
       - save_cache:
+          key: v2-web-npm-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "functions/package-lock.json" }}
           paths:
-            - node_modules
-          key: v4-deps-{{ checksum "package-lock.json" }}
+            - /root/.npm
+      - run: npm ci
+      - run: cd functions && npm ci
       - save_cache:
+          key: v2-web-npm-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "functions/package-lock.json" }}
           paths:
-            - functions/node_modules
-          key: v4-deps-{{ checksum "functions/package-lock.json" }}
+            - /root/.npm
       - run: cd functions && npm run test
 
   firebase-deploy:
@@ -32,10 +28,9 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v4-deps-{{ checksum "package-lock.json" }}
-            - v4-deps-{{ checksum "functions/package-lock.json" }}
-      - run: npm install
-      - run: cd functions && npm install
+            - v2-web-npm-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "functions/package-lock.json" }}
+      - run: npm ci
+      - run: cd functions && npm ci
       - run: ./node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN --only functions"
 
 workflows:
