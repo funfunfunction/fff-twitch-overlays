@@ -11,24 +11,29 @@ jobs:
       - checkout
       - restore_cache:
           keys:
+            - v3-dependencies-{{ checksum "package-lock.json" }}
             - v3-dependencies-{{ checksum "functions/package-lock.json" }}
       - run: npm install
       - run: cd functions && npm install
       - save_cache:
           paths:
             - node_modules
+          key: v3-dependencies-dependencies-{{ checksum "package-lock.json" }}
+      - save_cache:
+          paths:
             - functions/node_modules
           key: v3-dependencies-dependencies-{{ checksum "functions/package-lock.json" }}
       - run: cd functions && npm run test
 
   firebase-deploy:
     <<: *defaults
+    working_directory: ~/tmp
     steps:
       - checkout
       - restore_cache:
           keys:
+            - v3-dependencies-{{ checksum "package-lock.json" }}
             - v3-dependencies-{{ checksum "functions/package-lock.json" }}
-      - run: npm install
       - run: ./node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN"
 
 workflows:
