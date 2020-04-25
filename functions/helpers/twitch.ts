@@ -1,7 +1,7 @@
 const fetch = require('node-fetch')
 const queryString = require('query-string')
 
-async function createMarker(clientId, accessToken, userId, description) {
+export async function createMarker(clientId, accessToken, userId, description) {
   const response = await helixPost(clientId, accessToken, "createMarker", "/streams/markers", { 
     user_id: userId, 
     description 
@@ -9,7 +9,7 @@ async function createMarker(clientId, accessToken, userId, description) {
   return response
 }
 
-function getStreams(clientId, accessToken, userId) {
+export function getStreams(clientId, accessToken, userId) {
   return helixGet(clientId, accessToken, 'getStreams', '/streams?user_id=' + userId)
 }
 
@@ -47,7 +47,8 @@ function helixGet(clientId, accessToken, functionLabel, endpoint) {
   .then(parseResponseJSON)
 }
 
-function getTokensWithRefreshToken(clientId, clientSecret, refreshToken) {
+
+export function getTokensWithRefreshToken(clientId, clientSecret, refreshToken) {
   return fetch(
     "https://id.twitch.tv/oauth2/token?" +
       queryString.stringify({
@@ -63,7 +64,7 @@ function getTokensWithRefreshToken(clientId, clientSecret, refreshToken) {
     .then(tokenSetFromResponseBody)
 }
 
-async function getEditors (
+export async function getEditors (
   clientId,
   accessToken,
   channelId
@@ -76,7 +77,7 @@ async function getEditors (
   }))
 }
 
-async function getUser (
+export async function getUser (
   clientId,
   accessToken
 ) {
@@ -87,7 +88,7 @@ async function getUser (
   }
 }
 
-async function getModerators(clientId, accessToken, broadcasterId) {
+export async function getModerators(clientId, accessToken, broadcasterId) {
   // TODO: pagination!!
   const data = await helixGet(
     clientId, 
@@ -103,7 +104,7 @@ async function getModerators(clientId, accessToken, broadcasterId) {
 
 // Not used generally, since we hardcode the FFF user id becuase it doesn't change
 // but let this be for future reference
-/* eslint-disable-next-line no-unused-vars */
+/*
 async function getChannelId (
   clientId,
   accessToken
@@ -111,6 +112,7 @@ async function getChannelId (
   const responseData = await krakenGet(clientId, accessToken, 'getChannelId', '/channel', )
   return responseData._id
 }
+*/
 
 function krakenGet(clientId, accessToken, functionLabel, endpoint) {
   return fetch("https://api.twitch.tv/kraken" + endpoint, {
@@ -157,9 +159,3 @@ function parseResponseJSON(response) {
   return response.json()
 } 
 
-module.exports.createMarker = createMarker
-module.exports.getUser = getUser
-module.exports.getEditors = getEditors
-module.exports.getModerators = getModerators
-module.exports.getStreams = getStreams
-module.exports.getTokensWithRefreshToken = getTokensWithRefreshToken
