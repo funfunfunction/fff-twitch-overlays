@@ -1,11 +1,12 @@
 const functions = require('firebase-functions')
 const firebaseAdmin = require('firebase-admin')
+// tslint:disable-next-line:no-implicit-dependencies
 const { FieldValue } = require('@google-cloud/firestore')
 
-const { getOwnerAccessToken } = require('../helpers/assorted')
+const { getOwnerAccessToken } = require('../helpers/assorted/get-owner-access-token')
 const { getStreams } = require('../helpers/twitch')
 
-module.exports = functions.firestore
+export default functions.firestore
   .document('events3/{eventId}')
   .onCreate(async (snap) => {
 
@@ -17,7 +18,7 @@ module.exports = functions.firestore
     const streams = streamsResponse.data
     if (streams.length === 0) {
       // not live, we don't care a about this chat message
-      return
+      return null
     }
     const currentStream = streams[0]
     const streamId = currentStream.id
@@ -40,5 +41,6 @@ module.exports = functions.firestore
         value: FieldValue.increment(1)
       }, { merge: true })
     }
+    return null
 
   }) 
