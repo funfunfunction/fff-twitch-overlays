@@ -41,8 +41,8 @@ jobs:
           name: Install cloud function dependencies
           command: cd functions && npm ci
       - run: 
-          name: Deploy to Firebase (functions only for now)
-          command: npx firebase deploy --token "$FIREBASE_TOKEN" --only functions
+          name: Deploy to Firebase
+          command: npx firebase deploy --token "$FIREBASE_TOKEN"
 
 workflows:
   version: 2
