@@ -12,13 +12,19 @@ jobs:
       - restore_cache:
           keys:
             - v2-web-npm-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "functions/package-lock.json" }}
-      - run: npm ci
-      - run: cd functions && npm ci
+      - run: 
+          name: Install web client dependencies
+          command: npm ci
+      - run: 
+          name: Install cloud function dependencies
+          command: cd functions && npm ci
       - save_cache:
           key: v2-web-npm-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "functions/package-lock.json" }}
           paths:
             - /root/.npm
-      - run: cd functions && npm run test
+      - run: 
+          name: Running test suite
+          command: cd functions && npm run test
 
   firebase-deploy:
     <<: *defaults
@@ -28,9 +34,15 @@ jobs:
       - restore_cache:
           keys:
             - v2-web-npm-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "functions/package-lock.json" }}
-      - run: npm ci
-      - run: cd functions && npm ci
-      - run: ./node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN" --only functions
+      - run: 
+          name: Install web client dependencies
+          command: npm ci
+      - run: 
+          name: Install cloud function dependencies
+          command: cd functions && npm ci
+      - run: 
+          name: Deploy to Firebase (functions only for now)
+          command: ./node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN" --only functions
 
 workflows:
   version: 2
