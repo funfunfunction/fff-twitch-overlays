@@ -1,7 +1,7 @@
-const functions = require("firebase-functions")
-const firebaseAdmin = require("firebase-admin")
+import * as functions from "firebase-functions"
+import firebaseAdmin from "firebase-admin"
 // tslint:disable-next-line:no-implicit-dependencies
-const { FieldValue } = require("@google-cloud/firestore")
+import { FieldValue } from "@google-cloud/firestore"
 
 const {
   getOwnerAccessToken
@@ -12,6 +12,7 @@ export default functions.firestore
   .document("events3/{eventId}")
   .onCreate(async snap => {
     const event = snap.data()
+    if (!event) throw new Error('Event document did not have data')
     if (event.type !== "chat") return false
 
     const accessToken = await getOwnerAccessToken()
@@ -32,11 +33,15 @@ export default functions.firestore
       .firestore()
       .collection("views")
       .doc("unique-chatters")
-    viewRef
+    
+      viewRef
       .collection("properties")
       .doc("current-stream-id")
       .set({
         value: streamId
+      })
+      .catch(error => {
+        console.error('failed setting current-stream-id', error)
       })
 
     const streamRef = viewRef.collection("streams").doc(streamId)
@@ -46,6 +51,8 @@ export default functions.firestore
     if (!userDoc.exists) {
       userRef.set({
         appeared: Number(Date.now())
+      }).catch(error => {
+        console.error('failed inserting chatter doc', error)
       })
       streamRef
         .collection("properties")
@@ -55,7 +62,9 @@ export default functions.firestore
             value: FieldValue.increment(1)
           },
           { merge: true }
-        )
+        ).catch(error => {
+          console.error('failed updating num-chatters', error)
+        })
     }
     return null
   })

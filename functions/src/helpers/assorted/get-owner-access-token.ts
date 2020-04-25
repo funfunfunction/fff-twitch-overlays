@@ -1,8 +1,8 @@
-const admin = require("firebase-admin")
-const functions = require("firebase-functions")
+import admin from "firebase-admin"
+import * as functions from "firebase-functions"
 
-const { getTokensWithRefreshToken } = require("../twitch")
-const getChannelOwnerUserId = require("./get-channel-owner-user-id")
+import { getTokensWithRefreshToken } from "../twitch"
+import getChannelOwnerUserId from "./get-channel-owner-user-id"
 
 export default async function getOwnerAccessToken() {
   const ownerDocument = await admin
@@ -11,6 +11,7 @@ export default async function getOwnerAccessToken() {
     .doc("twitch:" + getChannelOwnerUserId())
     .get()
   const ownerData = ownerDocument.data()
+  if (!ownerData) throw new Error("Data was not found in owner document")
   const refreshToken = ownerData.refreshToken
   const tokens = await getTokensWithRefreshToken(
     functions.config().twitch.client_id,

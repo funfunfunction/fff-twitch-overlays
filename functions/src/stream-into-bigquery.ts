@@ -1,5 +1,5 @@
 import * as functions from "firebase-functions"
-const { BigQuery } = require("@google-cloud/bigquery")
+import { BigQuery } from "@google-cloud/bigquery"
 
 const streamIntoBigQuery = functions.firestore
   .document("events3/{eventId}")
