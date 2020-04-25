@@ -36,7 +36,7 @@ jobs:
             - v4-deps-{{ checksum "functions/package-lock.json" }}
       - run: npm install
       - run: cd functions && npm install
-      - run: ./node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN"
+      - run: ./node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN --only functions"
 
 workflows:
   version: 2
