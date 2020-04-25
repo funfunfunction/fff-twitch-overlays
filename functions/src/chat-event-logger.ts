@@ -1,10 +1,10 @@
 import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
 
-import getOwnerAccessToken from '../helpers/assorted/get-owner-access-token'
-import getChannelOwnerUserId from '../helpers/assorted/get-channel-owner-user-id'
+import getOwnerAccessToken from './helpers/assorted/get-owner-access-token'
+import getChannelOwnerUserId from './helpers/assorted/get-channel-owner-user-id'
 
-import { getStreams } from '../helpers/twitch'
+import { getStreams } from './helpers/twitch'
 
 import tmi from "tmi.js"
 

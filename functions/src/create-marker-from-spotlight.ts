@@ -1,8 +1,8 @@
 import * as functions from 'firebase-functions'
-import getChannelOwnerUserId from '../helpers/assorted/get-channel-owner-user-id'
-import getOwnerAccessToken from '../helpers/assorted/get-owner-access-token'
-import { getStreams, createMarker } from '../helpers/twitch'
-import getTwitchCredentials from "../helpers/assorted/get-twitch-credentials"
+import getChannelOwnerUserId from './helpers/assorted/get-channel-owner-user-id'
+import getOwnerAccessToken from './helpers/assorted/get-owner-access-token'
+import { getStreams, createMarker } from './helpers/twitch'
+import getTwitchCredentials from "./helpers/assorted/get-twitch-credentials"
 
 const createMarkerFromSpotlight = 
   functions.firestore.document('spotlight/topic').onUpdate(async (change) => {

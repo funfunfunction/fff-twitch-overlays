@@ -1,13 +1,13 @@
 import * as functions from 'firebase-functions'
-import getTwitchCredentials from "../helpers/assorted/get-twitch-credentials"
+import getTwitchCredentials from "./helpers/assorted/get-twitch-credentials"
 import cookieParser from 'cookie-parser'
 import crypto from 'crypto'
 import * as admin from 'firebase-admin'
 import simpleOAuth from 'simple-oauth2'
 
 
-import getChannelOwnerUserId from '../helpers/assorted/get-channel-owner-user-id'
-import { getUser, getModerators, getEditors } from '../helpers/twitch'
+import getChannelOwnerUserId from './helpers/assorted/get-channel-owner-user-id'
+import { getUser, getModerators, getEditors } from './helpers/twitch'
 
 const OAUTH_REDIRECT_URI = 
   `https://${process.env.GCLOUD_PROJECT}.web.app/authenticate_popup.html`;
