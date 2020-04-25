@@ -13,10 +13,10 @@ jobs:
           keys:
             - v2-web-npm-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "functions/package-lock.json" }}
       - run: 
-          name: Install web client dependencies
+          name: Install dependencies (Web Client)
           command: npm ci
       - run: 
-          name: Install cloud function dependencies
+          name: Install dependencies (Cloud Functions)
           command: cd functions && npm ci
       - save_cache:
           key: v2-web-npm-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "functions/package-lock.json" }}
