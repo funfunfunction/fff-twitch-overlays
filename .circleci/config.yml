@@ -1,0 +1,19 @@
+version: 2
+defaults: &defaults
+  docker:
+    - image: circleci/node:10
+jobs:
+  functions-check:
+    <<: *defaults
+    working_directory: ~/tmp
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-backend-dependencies-{{ checksum "functions/package-lock.json" }}
+      - run: cd functions && npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-backend-dependencies-{{ checksum "functions/package-lock.json" }}
+      - run: cd functions && npm run test
