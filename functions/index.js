@@ -9,7 +9,7 @@ const crypto = require('crypto');
 
 const TWITCH_CLIENT_ID = functions.config().twitch.client_id
 
-const { createMarker, getUser, getEditors, getModerators } = require('./helpers/twitch')
+const { createMarker, getUser, getEditors, getModerators, getStreams } = require('./helpers/twitch')
 const { getChannelOwnerUserId, getOwnerAccessToken } = require('./helpers/assorted')
 
 const tmi = require("tmi.js")
