@@ -43,5 +43,5 @@
     "typescript": "^3.2.2"
   },
   "private": true,
-  "main": "lib/src/index.js"
+  "main": "lib/index.js"
 }
