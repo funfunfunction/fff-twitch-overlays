@@ -1,13 +1,10 @@
 const admin = require('firebase-admin')
 const functions = require('firebase-functions')
 
-const { getTokensWithRefreshToken } = require('./twitch')
+const { getTokensWithRefreshToken } = require('../twitch')
+const getChannelOwnerUserId = require('./get-channel-owner-user-id')
 
-function getChannelOwnerUserId() {
-  return 119879569 // user id for funfunfunction twitch user
-} 
-
-async function getOwnerAccessToken() {
+module.exports = async function getOwnerAccessToken() {
   const ownerDocument = await admin.firestore()
   .collection('twitch-users')
   .doc('twitch:' + getChannelOwnerUserId())
@@ -20,6 +17,3 @@ async function getOwnerAccessToken() {
     refreshToken)
   return tokens.access
 }
-
-module.exports.getOwnerAccessToken = getOwnerAccessToken
-module.exports.getChannelOwnerUserId = getChannelOwnerUserId
