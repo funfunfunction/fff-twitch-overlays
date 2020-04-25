@@ -10,16 +10,32 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-backend-dependencies-{{ checksum "functions/package-lock.json" }}
+            - v1-dependencies-{{ checksum "functions/package-lock.json" }}
       - run: cd functions && npm install
       - save_cache:
           paths:
             - node_modules
-          key: v1-backend-dependencies-{{ checksum "functions/package-lock.json" }}
+          key: v1-dependencies-dependencies-{{ checksum "functions/package-lock.json" }}
       - run: cd functions && npm run test
+
+  firebase-deploy:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "functions/package-lock.json" }}
+      - run: ./node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN"
 
 workflows:
   version: 2
   build-and-maybe-deploy:
     jobs:
       - functions-check
+
+      - firebase-deploy:
+          requires:
+            - functions-check
+          filters:
+            branches:
+              only: master
