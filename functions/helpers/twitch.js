@@ -103,6 +103,7 @@ async function getModerators(clientId, accessToken, broadcasterId) {
 
 // Not used generally, since we hardcode the FFF user id becuase it doesn't change
 // but let this be for future reference
+/* eslint-disable-next-line no-unused-vars */
 async function getChannelId (
   clientId,
   accessToken
