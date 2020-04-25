@@ -9,10 +9,9 @@ jobs:
     working_directory: ~/tmp
     steps:
       - checkout
-      - save_cache:
-          key: v2-web-npm-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "functions/package-lock.json" }}
-          paths:
-            - /root/.npm
+      - restore_cache:
+          keys:
+            - v2-web-npm-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "functions/package-lock.json" }}
       - run: npm ci
       - run: cd functions && npm ci
       - save_cache:
