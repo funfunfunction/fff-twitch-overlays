@@ -17,3 +17,9 @@ jobs:
             - node_modules
           key: v1-backend-dependencies-{{ checksum "functions/package-lock.json" }}
       - run: cd functions && npm run test
+
+workflows:
+  version: 2
+  build-and-maybe-deploy:
+    jobs:
+      - functions-check
