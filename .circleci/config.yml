@@ -31,7 +31,7 @@ jobs:
             - v2-web-npm-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "functions/package-lock.json" }}
       - run: npm ci
       - run: cd functions && npm ci
-      - run: ./node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN --only functions"
+      - run: ./node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN" --only functions
 
 workflows:
   version: 2
