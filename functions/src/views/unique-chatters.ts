@@ -12,7 +12,7 @@ export default functions.firestore
   .document("events3/{eventId}")
   .onCreate(async snap => {
     const event = snap.data()
-    if (!event) throw new Error('Event document did not have data')
+    if (!event) throw new Error("Event document did not have data")
     if (event.type !== "chat") return false
 
     const accessToken = await getOwnerAccessToken()
@@ -33,15 +33,15 @@ export default functions.firestore
       .firestore()
       .collection("views")
       .doc("unique-chatters")
-    
-      viewRef
+
+    viewRef
       .collection("properties")
       .doc("current-stream-id")
       .set({
         value: streamId
       })
       .catch(error => {
-        console.error('failed setting current-stream-id', error)
+        console.error("failed setting current-stream-id", error)
       })
 
     const streamRef = viewRef.collection("streams").doc(streamId)
@@ -49,11 +49,13 @@ export default functions.firestore
     const userRef = streamRef.collection("chatters").doc(userId)
     const userDoc = await userRef.get()
     if (!userDoc.exists) {
-      userRef.set({
-        appeared: Number(Date.now())
-      }).catch(error => {
-        console.error('failed inserting chatter doc', error)
-      })
+      userRef
+        .set({
+          appeared: Number(Date.now())
+        })
+        .catch(error => {
+          console.error("failed inserting chatter doc", error)
+        })
       streamRef
         .collection("properties")
         .doc("num-chatters")
@@ -62,8 +64,9 @@ export default functions.firestore
             value: FieldValue.increment(1)
           },
           { merge: true }
-        ).catch(error => {
-          console.error('failed updating num-chatters', error)
+        )
+        .catch(error => {
+          console.error("failed updating num-chatters", error)
         })
     }
     return null
