@@ -7,10 +7,15 @@
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
-    "logs": "firebase functions:log"
+    "logs": "firebase functions:log",
+    "style:check": "prettier --check \"src/**/*.ts\"",
+    "style:fix": "prettier --write \"src/**/*.ts\""
   },
   "engines": {
     "node": "8"
+  },
+  "prettier": {
+    "semi": false
   },
   "dependencies": {
     "@google-cloud/bigquery": "^4.7.0",
@@ -30,9 +35,10 @@
     "is-string": "^1.0.5"
   },
   "devDependencies": {
+    "firebase-functions-test": "^0.2.0",
+    "prettier": "^1.18.2",
     "tslint": "^5.12.0",
-    "typescript": "^3.2.2",
-    "firebase-functions-test": "^0.2.0"
+    "typescript": "^3.2.2"
   },
   "private": true,
   "main": "lib/src/index.js"

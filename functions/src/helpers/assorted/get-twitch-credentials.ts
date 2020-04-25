@@ -1,6 +1,6 @@
-import * as functions from 'firebase-functions'
-import isString from 'is-string'
-import assert from 'assert'
+import * as functions from "firebase-functions"
+import isString from "is-string"
+import assert from "assert"
 
 export default function getTwitchCredentials() {
   const clientId: string = functions.config().twitch.client_id
