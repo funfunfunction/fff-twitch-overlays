@@ -15,8 +15,8 @@ function StartingSoon() {
     statusMessage: 'Starting the live stream!'
   })
   const [ instructionsState, setInstructionsState ] = useState({
-    wasHidden: Number(Date.now()),
-    visible: false
+    wasShown: Number(Date.now()),
+    visible: true
   })
   const [ time, setTime ] = useState(Number(Date.now()))
   
