@@ -118,23 +118,35 @@ html,body  {
   justify-content: left;
 }
 .area-counter .label {
-  font-size: 5rem;
+  display: inline-block;
+  font-size: 3.4rem;
   font-weight: bold;
+  background-color: yellow;
+  color: black;
+  padding: 0.0rem 0.8rem 0.3rem 0.8rem;
+  position: relative;
+  transform: rotate(-2deg);
 }
-.area-counter .instructions {
-  font-size: 1.5rem;
+.checkin-instructions {
+  position: absolute;
+  right: 25%;
+  top: 25%;
+  font-size: 1rem;
   font-weight: bold;
   padding-bottom: 0.2rem;
+  max-width: 27rem;
+  background-color: black;
+  padding: 1rem 1rem 1rem 1rem;
+  z-index: 2;
+  transform: rotate(3deg);
 }
 
-.area-counter .instructions .command {
+.checkin-instructions .command {
   color: yellow;
+  display: block;
 }
 
 .area-counter .countdown {
-  font-size: 5rem;
-  font-weight: bold;
-  color: yellow;
   display: inline;
 }
 
@@ -195,7 +207,6 @@ html,body  {
 .scene-spotlight .box.message {
   min-width: 10rem;
   max-width: 30rem;
-  
 }
 
 .scene-spotlight .box.message .box-body {
