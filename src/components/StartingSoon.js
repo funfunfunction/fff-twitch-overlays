@@ -99,7 +99,7 @@ function StartingSoon() {
   return (
     <div className="scene scene-soon">
       <div className="area-counter">
-        <div className="label">Stream starting in <Countdown minutes={12} /></div>
+        <div className="label">Stream starting in <Countdown minutes={10} seconds={16} /></div>
       </div>
 
       <div className="area-map">

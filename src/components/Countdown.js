@@ -10,12 +10,15 @@ function Countdown(props) {
   
   useEffect(function startTicking() {
     setBootTime(new Date())
-    setStartTime(moment(new Date()).add(props.minutes, 'minutes'))
+    const t = moment(new Date())
+    if (props.minutes) t.add(props.minutes, 'minutes')
+    if (props.seconds) t.add(props.seconds, 'seconds')
+    setStartTime(t)
     const handle = setInterval(function tick() {
       setCurrentTime(new Date())
     }, 500)
     return () => { clearInterval(handle) }
-  }, [ props.minutes ])
+  }, [ props.minutes, props.seconds ])
 
   if (bootTime && currentTime) {
     var duration = moment.duration(moment(startTime).diff(currentTime));
