@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Countdown from './Countdown'
 import { Map, TileLayer, Marker } from 'react-leaflet'
+import { motion } from "framer-motion"
 
 const oneHourMS = 60 * 60 * 1000 
 
@@ -13,8 +14,35 @@ function StartingSoon() {
     coordinates: [ 59.325010, 18.070370 ],
     statusMessage: 'Starting the live stream!'
   })
+  const [ instructionsState, setInstructionsState ] = useState({
+    wasHidden: Number(Date.now()),
+    visible: false
+  })
+  const [ time, setTime ] = useState(Number(Date.now()))
+  
+  useEffect(() => { setInterval(() => { setTime(Number(Date.now())) }, 1000) }, [ ])
 
   useEffect(() => { setInterval(() => { setShouldRefresh(true) }, 200) }, [ ])
+
+  
+
+  useEffect(() => { 
+    if(!instructionsState.visible) {
+      if (instructionsState.wasHidden <  time - 15000) {
+        setInstructionsState({
+          visible: true,
+          wasShown: time
+        })
+      }
+    } else {
+      if(instructionsState.wasShown < time - 5000) {
+        setInstructionsState({
+          visible: false,
+          wasHidden: time
+        })
+      }
+    }
+  }, [ time, instructionsState ])
 
   useEffect(() => {
     if (!shouldRefresh || checkins.length === 0) return
@@ -54,11 +82,24 @@ function StartingSoon() {
     }
   }
 
+  const checkinAnimationVisibleVariant = {
+    scale: [0, 1.20, 1, 1.1, 1],
+    rotate: [0, 25, 0, -2, 1.3],
+    opacity: 1,
+    transition: { type: "spring", duration: 0.4 }
+  }
+
+  const checkinAnimationHiddenVariant = {
+    scale: [1, 0.2 ],
+    rotate: [0, -10 ],
+    opacity: 0,
+    transition: { ease: "easeIn", duration: 0.2 }
+  }
+
   return (
     <div className="scene scene-soon">
       <div className="area-counter">
         <div className="label">Stream starting in <Countdown minutes={12} /></div>
-        <div className="instructions">Check in by typing <span className="command">!checkin LOCATION -- WHATYOUAREDOING</span> in chat</div>
       </div>
 
       <div className="area-map">
@@ -70,6 +111,9 @@ function StartingSoon() {
           <Marker position={lastCheckin.coordinates}></Marker>
           
         </Map>
+        <motion.div 
+          animate={instructionsState.visible ? checkinAnimationVisibleVariant : checkinAnimationHiddenVariant} 
+          className="checkin-instructions">Check in by typing <span className="command">!checkin LOCATION -- WHATYOUAREDOING</span></motion.div>
         <div className="checkin-info">
           <div className="aligner">
             <div className={boxClassName}>
