@@ -13,7 +13,7 @@ function Moderator() {
       .collection("spotlight")
       .doc("topic")
       .onSnapshot(function(doc) {
-        const topic : any = doc.data()
+        const topic: any = doc.data()
 
         setTopic(topic)
         if (topic.label) {
@@ -65,7 +65,7 @@ function Moderator() {
     </div>}
     {authenticatedUser && <div>
         <div>Logged in as {authenticatedUser.displayName} 
-          <a href="http://validdomainthatreactdoesnotcompainabout.com" onClick={(e) => { auth.signOut() }}>Sign out</a></div>
+          <a href="http://validdomainthatreactdoesnotcompainabout.com" onClick={() => { auth.signOut() }}>Sign out</a></div>
         {!isEditorOrAdmin && <div>You lack editor permissions for the Fun Fun Function channel on Twitch, 
           which are required for this view. Ask MPJ to give you if you think this is in error.</div>}
     </div>}

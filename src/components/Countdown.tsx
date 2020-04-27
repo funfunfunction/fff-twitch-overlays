@@ -19,10 +19,11 @@ function Countdown(props) {
     }, 500)
     return () => { clearInterval(handle) }
   }, [ props.minutes, props.seconds ])
-
+  
+  let minutes
   if (bootTime && currentTime) {
-    var duration: any = moment.duration(moment(startTime).diff(currentTime));
-    var minutes = duration.format("mm:ss")
+    const duration: any = moment.duration(moment(startTime).diff(currentTime));
+    minutes = duration.format("mm:ss")
   }
   return <div className="countdown">{ minutes }</div>
 }
