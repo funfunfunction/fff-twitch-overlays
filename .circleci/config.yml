@@ -4,7 +4,7 @@ defaults: &defaults
     - image: circleci/node:8
   
 jobs:
-  functions-check:
+  check-all:
     <<: *defaults
     working_directory: ~/tmp
     steps:
@@ -23,7 +23,10 @@ jobs:
           paths:
             - /root/.npm
       - run: 
-          name: Running test suite
+          name: Build (Web Client)
+          command: npm run build
+      - run: 
+          name: Running test suite (functions)
           command: cd functions && npm run test
 
   firebase-deploy:
@@ -48,11 +51,11 @@ workflows:
   version: 2
   build-and-maybe-deploy:
     jobs:
-      - functions-check
+      - check-all
 
       - firebase-deploy:
           requires:
-            - functions-check
+            - check-all
           filters:
             branches:
               only: master
