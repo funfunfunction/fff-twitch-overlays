@@ -13,7 +13,7 @@ const streamIntoBigQuery = functions.firestore
 
     // Save userstate as key-value repeated records.
     const { message, ts, type, userstate } = data
-    const userstates = [] as Object[]
+    const userstates = [] as any[]
     for (const key in userstate) {
       let value = userstate[key]
       // Stringify if object

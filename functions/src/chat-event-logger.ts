@@ -104,7 +104,7 @@ const chatEventLogger = functions
         logEvent("cheer", userstate, { message })
       )
 
-      chat.on("action", async (channel, userstate, message, self) =>
+      chat.on("action", async (channel, userstate, message) =>
         logEvent("action", userstate, { message })
       )
     })().catch(async error => {
