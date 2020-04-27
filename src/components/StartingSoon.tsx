@@ -6,21 +6,21 @@ import { Map, TileLayer, Marker } from 'react-leaflet'
 const oneHourMS = 60 * 60 * 1000 
 
 function StartingSoon() {
-  const [ checkins, setCheckins ] = useState([])
-  const [ shouldRefresh, setShouldRefresh ] = useState(false)
-  const [ lastCheckin, setLastCheckin ] = useState({
+  const [ checkins, setCheckins ] = useState<any>([])
+  const [ shouldRefresh, setShouldRefresh ] = useState<any>(false)
+  const [ lastCheckin, setLastCheckin ] = useState<any>({
     displayName: 'mpj',
     location: 'Gamla stan, Stockholm',
     coordinates: [ 59.325010, 18.070370 ],
     statusMessage: 'Starting the live stream!'
   })
-  const [ instructionsState, setInstructionsState ] = useState({
+  const [ instructionsState, setInstructionsState ] = useState<any>({
     wasShown: Number(Date.now()),
     visible: true
   })
-  const [ time, setTime ] = useState(Number(Date.now()))
-  const [uniqueChatters, setUniqueChatters] = useState(0);
-  const [streamId, setStreamId] = useState(null);
+  const [ time, setTime ] = useState<any>(Number(Date.now()))
+  const [uniqueChatters, setUniqueChatters] = useState<any>(0);
+  const [streamId, setStreamId] = useState<any>(null);
   
   
   
@@ -58,7 +58,8 @@ function StartingSoon() {
   useEffect(() => {
     const db = window.firebase.firestore()
     db.doc('views/twitch-live-status').onSnapshot(async function(snap) {
-      setStreamId(snap.data() && snap.data().streamId)
+      const data: any = snap.data()
+      setStreamId(data && data.streamId)
     })
   }, [])
 
@@ -97,7 +98,7 @@ function StartingSoon() {
     ? 'box subscriber'
     : 'box'
 
-  let subscriberText = null
+  let subscriberText: any = null
   if (lastCheckin.subscriber) {
     if(lastCheckin.subscriber === 1) {
       subscriberText = 'Subscribed this month' 
@@ -114,7 +115,7 @@ function StartingSoon() {
       </div>
 
       
-      <PopNote className="unique-chatters">
+      <PopNote visible='true' className="unique-chatters">
         Chatting today: <span className="counter">{uniqueChatters}</span>
       </PopNote>
 
