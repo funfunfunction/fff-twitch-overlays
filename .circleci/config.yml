@@ -1,7 +1,7 @@
 version: 2
 defaults: &defaults
   docker:
-    - image: circleci/node:chakracore-10.13
+    - image: circleci/node:8
   
 jobs:
   check-all:
