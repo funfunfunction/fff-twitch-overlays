@@ -12,7 +12,8 @@ export default async function getOwnerAccessToken() {
     .doc(key)
     .get()
   const ownerData = ownerDocument.data()
-  if (!ownerData) throw new Error("Data was not found in owner document: " + key)
+  if (!ownerData)
+    throw new Error("Data was not found in owner document: " + key)
   const refreshToken = ownerData.refreshToken
   const tokens = await getTokensWithRefreshToken(
     functions.config().twitch.client_id,

@@ -12,9 +12,8 @@ const db = admin.firestore()
 
 const TWITCH_CLIENT_ID = functions.config().twitch.client_id
 
-
 // TODO can we get this to trigger on twitch-live-status updates by adding some lastupate,
-// (but be beware of triggering tons of updates) 
+// (but be beware of triggering tons of updates)
 // not sure if we can combine with runWith as we need the timeoutSeconds
 
 const chatEventLogger = functions
@@ -70,7 +69,7 @@ const chatEventLogger = functions
       const chat = tmi.Client({})
       await chat.connect()
       if (!functions.config().twitch.owner_username) {
-        throw new Error('twitch.owner_username not configured')
+        throw new Error("twitch.owner_username not configured")
       }
       await chat.join(functions.config().twitch.owner_username)
       console.log("chatEventLogger joined channel")

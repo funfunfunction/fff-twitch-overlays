@@ -119,11 +119,13 @@ export async function getModerators(clientId, accessToken, broadcasterId) {
 
 // Not used generally, since we hardcode the FFF user id becuase it doesn't change
 // but let this be for future reference
-export async function getUserId (
-  clientId,
-  accessToken
-) {
-  const responseData = await krakenGet(clientId, accessToken, 'getUserId', '/channel', )
+export async function getUserId(clientId, accessToken) {
+  const responseData = await krakenGet(
+    clientId,
+    accessToken,
+    "getUserId",
+    "/channel"
+  )
   return responseData._id
 }
 

@@ -5,7 +5,7 @@ service cloud.firestore {
     match /views/twitch-live-status {
       allow read;
     }
-		match /views/unique-chatters/chatter-counts/{document=**} {
+    match /views/unique-chatters/chatter-counts/{document=**} {
       allow read;
     }
     match /checkins/{document=**} {

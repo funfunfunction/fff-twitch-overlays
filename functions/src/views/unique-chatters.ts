@@ -6,14 +6,16 @@ import { FieldValue, FieldPath } from "@google-cloud/firestore"
 export default functions.firestore
   .document("events3/{eventId}")
   .onCreate(async snap => {
-
     const db = firebaseAdmin.firestore()
 
     const event = snap.data()
     if (!event) throw new Error("Event document did not have data")
     if (event.type !== "chat") return false
 
-    const liveStatusDoc = await firebaseAdmin.firestore().doc("views/twitch-live-status").get()
+    const liveStatusDoc = await firebaseAdmin
+      .firestore()
+      .doc("views/twitch-live-status")
+      .get()
     const liveStatus = liveStatusDoc.data()
 
     if (!liveStatus || !liveStatus.live) {
@@ -24,21 +26,24 @@ export default functions.firestore
     const userId = event.userstate["user-id"]
     const view = db.doc("views/unique-chatters")
 
-    const chatterQueryResult = await view.collection("chatters")
-      .where(FieldPath.documentId(), '==', streamId)
-      .where(userId, '==', true)
+    const chatterQueryResult = await view
+      .collection("chatters")
+      .where(FieldPath.documentId(), "==", streamId)
+      .where(userId, "==", true)
       .get()
-    
+
     const isChatterUnique = chatterQueryResult.size === 0
 
     if (!isChatterUnique) return null
-    
+
     await Promise.all([
       view
         .collection("chatters")
         .doc(streamId)
-        .set({ [userId]: true }, { merge: true})
-        .catch(error => { console.error("failed saving chatter doc", error) }),
+        .set({ [userId]: true }, { merge: true })
+        .catch(error => {
+          console.error("failed saving chatter doc", error)
+        }),
       view
         .collection("chatter-counts")
         .doc(streamId)

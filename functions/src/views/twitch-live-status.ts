@@ -1,10 +1,9 @@
 import * as functions from "firebase-functions"
 import firebaseAdmin from "firebase-admin"
 
-import  getOwnerAccessToken  from "../helpers/assorted/get-owner-access-token";
+import getOwnerAccessToken from "../helpers/assorted/get-owner-access-token"
 import { getStreams } from "../helpers/twitch"
-import getChannelOwnerUserId from "../helpers/assorted/get-channel-owner-user-id";
-
+import getChannelOwnerUserId from "../helpers/assorted/get-channel-owner-user-id"
 
 export default functions
   .runWith({
@@ -12,7 +11,6 @@ export default functions
   })
   .pubsub.schedule("every 1 minutes")
   .onRun(async () => {
-
     const accessToken = await getOwnerAccessToken()
     const streamsResponse = await getStreams(
       functions.config().twitch.client_id,
@@ -27,7 +25,7 @@ export default functions
     if (!isLive) {
       // Since this runs very often, be a bit economical with the writes
       const doc = await docRef.get()
-      if(doc.data()) await docRef.set({ live: false })
+      if (doc.data()) await docRef.set({ live: false })
       return null
     }
 
@@ -35,12 +33,14 @@ export default functions
     const streamId = currentStream.id
 
     return docRef
-      .set({ 
-        live: true, 
-        streamId
-      }, { merge: true })
+      .set(
+        {
+          live: true,
+          streamId
+        },
+        { merge: true }
+      )
       .catch(error => {
         console.error("stream doc could not be set", error)
       })
-
   })
