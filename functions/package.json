@@ -2,13 +2,13 @@
   "name": "functions",
   "description": "Cloud Functions for Firebase",
   "scripts": {
-    "lint": "eslint -c .eslintrc.js --ext .ts src",
+    "lint:check": "eslint -c .eslintrc.js --ext .ts src",
     "build": "tsc",
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
     "logs": "firebase functions:log",
-    "test": "npm-run-all build lint style:check",
+    "check-all": "npm-run-all build lint:check style:check",
     "style:check": "prettier --check \"src/**/*.ts\"",
     "style:fix": "prettier --write \"src/**/*.ts\""
   },
