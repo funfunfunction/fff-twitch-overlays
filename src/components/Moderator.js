@@ -39,6 +39,7 @@ function Moderator() {
       })
 
       auth.onAuthStateChanged(async function(user) {
+        console.log('onAuthStateChanged', user)
         if (!user) return
         const doc = await db.collection('twitch-users').doc(user.uid).get()
         setAuthenticatedUser({
@@ -77,9 +78,9 @@ function Moderator() {
         <input type="button" value="Update" onClick={() => {
           db.collection('spotlight')
           .doc('topic')
-          .update({
+          .set({
             label: topicInputValue
-          })
+          }, { merge: true})
         }}></input>
       </div>
       <div className="messages">
@@ -89,7 +90,7 @@ function Moderator() {
           onClick={() => {
             db.collection('spotlight')
               .doc('topic')
-              .update({ message })
+              .set({ message }, {merge: true })
           }}>
           <strong>{message.displayName}</strong>: {message.message}
         </div>)}  

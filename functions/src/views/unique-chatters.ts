@@ -1,73 +1,51 @@
 import * as functions from "firebase-functions"
 import firebaseAdmin from "firebase-admin"
 // tslint:disable-next-line:no-implicit-dependencies
-import { FieldValue } from "@google-cloud/firestore"
-
-const {
-  getOwnerAccessToken
-} = require("../helpers/assorted/get-owner-access-token")
-const { getStreams } = require("../helpers/twitch")
+import { FieldValue, FieldPath } from "@google-cloud/firestore"
 
 export default functions.firestore
   .document("events3/{eventId}")
   .onCreate(async snap => {
+
+    const db = firebaseAdmin.firestore()
+
     const event = snap.data()
     if (!event) throw new Error("Event document did not have data")
     if (event.type !== "chat") return false
 
-    const accessToken = await getOwnerAccessToken()
-    const streamsResponse = await getStreams(
-      functions.config().twitch.client_id,
-      accessToken
-    )
-    const streams = streamsResponse.data
-    if (streams.length === 0) {
-      // not live, we don't care a about this chat message
+    const liveStatusDoc = await firebaseAdmin.firestore().doc("views/twitch-live-status").get()
+    const liveStatus = liveStatusDoc.data()
+
+    if (!liveStatus || !liveStatus.live) {
+      // Don't log if we're not live
       return null
     }
-    const currentStream = streams[0]
-    const streamId = currentStream.id
+    const streamId = liveStatus.streamId
     const userId = event.userstate["user-id"]
+    const view = db.doc("views/unique-chatters")
 
-    const viewRef = firebaseAdmin
-      .firestore()
-      .collection("views")
-      .doc("unique-chatters")
+    const chatterQueryResult = await view.collection("chatters")
+      .where(FieldPath.documentId(), '==', streamId)
+      .where(userId, '==', true)
+      .get()
+    
+    const isChatterUnique = chatterQueryResult.size === 0
 
-    viewRef
-      .collection("properties")
-      .doc("current-stream-id")
-      .set({
-        value: streamId
-      })
-      .catch(error => {
-        console.error("failed setting current-stream-id", error)
-      })
-
-    const streamRef = viewRef.collection("streams").doc(streamId)
-
-    const userRef = streamRef.collection("chatters").doc(userId)
-    const userDoc = await userRef.get()
-    if (!userDoc.exists) {
-      userRef
-        .set({
-          appeared: Number(Date.now())
-        })
+    if (!isChatterUnique) return null
+    
+    await Promise.all([
+      view
+        .collection("chatters")
+        .doc(streamId)
+        .set({ [userId]: true }, { merge: true})
+        .catch(error => { console.error("failed saving chatter doc", error) }),
+      view
+        .collection("chatter-counts")
+        .doc(streamId)
+        .set({ unique: FieldValue.increment(1) }, { merge: true })
         .catch(error => {
-          console.error("failed inserting chatter doc", error)
+          console.error("failed incrementing chatter-count", error)
         })
-      streamRef
-        .collection("properties")
-        .doc("num-chatters")
-        .set(
-          {
-            value: FieldValue.increment(1)
-          },
-          { merge: true }
-        )
-        .catch(error => {
-          console.error("failed updating num-chatters", error)
-        })
-    }
+    ])
     return null
   })

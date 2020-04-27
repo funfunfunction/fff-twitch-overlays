@@ -19,6 +19,10 @@ function StartingSoon() {
     visible: true
   })
   const [ time, setTime ] = useState(Number(Date.now()))
+  const [uniqueChatters, setUniqueChatters] = useState(0);
+  const [streamId, setStreamId] = useState(null);
+  
+  
   
   useEffect(() => { setInterval(() => { setTime(Number(Date.now())) }, 1000) }, [ ])
 
@@ -51,8 +55,28 @@ function StartingSoon() {
     setCheckins(checkins)
   }, [checkins, shouldRefresh])
 
+  useEffect(() => {
+    const db = window.firebase.firestore()
+    db.doc('views/twitch-live-status').onSnapshot(async function(snap) {
+      setStreamId(snap.data() && snap.data().streamId)
+    })
+  }, [])
+
+  useEffect(() => {
+    const db = window.firebase.firestore()
+    db.doc('views/unique-chatters/chatter-counts/'+streamId).onSnapshot(async function(snap) {
+      const data = snap.data()
+      if (!data) 
+        setUniqueChatters(0)
+      else
+        setUniqueChatters(data.unique)
+    })
+    
+  }, [streamId])
+
   useEffect(() => {  
     const db = window.firebase.firestore()
+    
     db
     .collection("checkins")
       .orderBy("ts", "asc")
@@ -114,6 +138,9 @@ function StartingSoon() {
         <motion.div 
           animate={instructionsState.visible ? checkinAnimationVisibleVariant : checkinAnimationHiddenVariant} 
           className="checkin-instructions">Check in by typing <span className="command">!checkin LOCATION -- WHATYOUAREDOING</span></motion.div>
+        <div className="unique-chatters">
+          {uniqueChatters}
+        </div>
         <div className="checkin-info">
           <div className="aligner">
             <div className={boxClassName}>
