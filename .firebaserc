@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "fff-twitch-chat-log"
+    "default": "fff-twitch-chat-log-dev",
+    "production": "fff-twitch-chat-log"
   }
 }

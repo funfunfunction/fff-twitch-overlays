@@ -7,8 +7,10 @@ import simpleOAuth from "simple-oauth2"
 
 import getChannelOwnerUserId from "./helpers/assorted/get-channel-owner-user-id"
 import { getUser, getModerators, getEditors } from "./helpers/twitch"
+import getOwnerAccessToken from "./helpers/assorted/get-owner-access-token"
 
-const OAUTH_REDIRECT_URI = `https://${process.env.GCLOUD_PROJECT}.web.app/authenticate_popup.html`
+const authority = `https://${process.env.GCLOUD_PROJECT}.web.app`
+const OAUTH_REDIRECT_URI = authority + "/authenticate_popup.html"
 const OAUTH_SCOPES =
   "user:edit:broadcast channel_read user_read moderation:read"
 
@@ -63,20 +65,39 @@ export const token = functions.https.onRequest(async (req, res) => {
 
       const isOwner = twitchUser.id === getChannelOwnerUserId()
 
-      const isEditor = await (async function getIsEditor() {
-        const twitchEditors = await getEditors(
-          getTwitchCredentials().clientId,
-          accessToken,
-          getChannelOwnerUserId()
-        )
-        const editorIds = twitchEditors.map(x => x.id)
-        return editorIds.includes(twitchUser.id)
-      })()
+      let ownerAccessToken
+      try {
+        ownerAccessToken = await getOwnerAccessToken()
+      } catch (e) {
+        console.warn("Could not getownerAccessToken", e)
+        if (!isOwner) {
+          throw new Error(
+            "Did not find ownerAccessToken and you are trying to sign in with non-owner"
+          )
+        } else {
+          ownerAccessToken = accessToken
+        }
+      }
+
+      // No owner access token in the db yet, skip
+      // trying to get editor, this is probably the owner signing in
+
+      const isEditor =
+        ownerAccessToken &&
+        (await (async function getIsEditor() {
+          const twitchEditors = await getEditors(
+            getTwitchCredentials().clientId,
+            ownerAccessToken,
+            getChannelOwnerUserId()
+          )
+          const editorIds = twitchEditors.map(x => x.id)
+          return editorIds.includes(twitchUser.id)
+        })())
 
       const isModerator = await (async function getIsModerator() {
         const data = await getModerators(
           getTwitchCredentials().clientId,
-          accessToken,
+          ownerAccessToken,
           getChannelOwnerUserId()
         )
         const moderatorIds = data.map(x => x.user_id)

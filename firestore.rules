@@ -1,0 +1,27 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /views/twitch-live-status {
+      allow read;
+    }
+    match /views/unique-chatters/chatter-counts/{document=**} {
+      allow read;
+    }
+    match /checkins/{document=**} {
+      allow read;
+    }
+    match /events3/{document=**} {
+      allow read;
+    }
+    match /spotlight/{document=**} {
+      allow read;
+      allow write : if get(/databases/$(database)/documents/twitch-users/$(request.auth.uid)).data.isOwner == true
+      allow write : if get(/databases/$(database)/documents/twitch-users/$(request.auth.uid)).data.isEditor == true
+      allow write : if get(/databases/$(database)/documents/twitch-users/$(request.auth.uid)).data.isModerator == true
+    }
+    match /twitch-users/{userId} {
+      allow read: if request.auth.uid == userId;
+    }
+  }
+}

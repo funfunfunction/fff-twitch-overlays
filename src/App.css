@@ -127,6 +127,15 @@ html,body  {
   position: relative;
   transform: rotate(-2deg);
 }
+.unique-chatters {
+  font-size: 7rem;
+  z-index: 3;
+  color: red;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .checkin-instructions {
   position: absolute;
   right: 25%;
