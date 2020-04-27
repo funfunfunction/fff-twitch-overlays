@@ -29,5 +29,8 @@ module.exports = {
       "version": "detect"
     }
   },
-  "parser": "@typescript-eslint/parser"
+  "parser": "@typescript-eslint/parser",
+  parserOptions: {
+    ecmaVersion: 2017
+  },
 }
