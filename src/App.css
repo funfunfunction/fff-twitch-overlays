@@ -136,7 +136,8 @@ html,body  {
   left: 0;
 }
 
-.checkin-instructions {
+
+.pop-note {
   position: absolute;
   right: 25%;
   top: 25%;
