@@ -19,7 +19,7 @@ window.firebase = firebase
 
 if(
   window.location.hostname === 'fff-twitch-chat-log.web.app' ||
-  window.location.hostname === 'locahost'
+  window.location.hostname === 'localhost'
 ){
   firebase.initializeApp({
     "apiKey": "AIzaSyAFe44BtaxhhmoTjHVQpFfHbBNRPJ37pCw",
