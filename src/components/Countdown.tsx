@@ -4,9 +4,9 @@ import setupDurationFormat from 'moment-duration-format'
 setupDurationFormat(moment)
 
 function Countdown(props) {
-  const [ bootTime, setBootTime ] = useState(null)
-  const [ currentTime, setCurrentTime ] = useState(null)
-  const [ startTime, setStartTime ] = useState(null)
+  const [ bootTime, setBootTime ] = useState<any>(null)
+  const [ currentTime, setCurrentTime ] = useState<any>(null)
+  const [ startTime, setStartTime ] = useState<any>(null)
   
   useEffect(function startTicking() {
     setBootTime(new Date())
@@ -21,7 +21,7 @@ function Countdown(props) {
   }, [ props.minutes, props.seconds ])
 
   if (bootTime && currentTime) {
-    var duration = moment.duration(moment(startTime).diff(currentTime));
+    var duration: any = moment.duration(moment(startTime).diff(currentTime));
     var minutes = duration.format("mm:ss")
   }
   return <div className="countdown">{ minutes }</div>
