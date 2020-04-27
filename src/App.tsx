@@ -43,7 +43,7 @@ if(
 }
 
 function App() {
-  const [ query, setQuery ] = useState({})
+  const [ query, setQuery ] = useState<any>({})
   useEffect(function() {
     setQuery(queryString.parse(window.location.search))
   }, [])
