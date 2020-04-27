@@ -30,7 +30,7 @@ if(
     "storageBucket": "fff-twitch-chat-log-dev.appspot.com"
   })
 } else {
-  firebase.initializeApp({{
+  firebase.initializeApp({
     "apiKey": "AIzaSyDs6iKM4_vUe7GamT_3HAEX1zOYng0uHLk",
     "authDomain": "fff-twitch-chat-log.firebaseapp.com",
     "databaseURL": "https://fff-twitch-chat-log.firebaseio.com",
