@@ -3,6 +3,7 @@
   "description": "Cloud Functions for Firebase",
   "scripts": {
     "lint:check": "eslint -c .eslintrc.js --ext .ts src",
+    "lint:fix": "eslint --fix -c .eslintrc.js --ext .ts src",
     "build": "tsc",
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
