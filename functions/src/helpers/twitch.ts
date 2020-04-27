@@ -86,7 +86,8 @@ export async function getEditors(clientId, accessToken, channelId) {
     "getEditors",
     "/channels/" + channelId + "/editors"
   )
-  return data.users.map(user => ({
+  const editors = data.users || []
+  return editors.map(user => ({
     id: parseInt(user._id),
     displayName: user.display_name
   }))
@@ -108,7 +109,9 @@ export async function getModerators(clientId, accessToken, broadcasterId) {
     "getModerators",
     "/moderation/moderators?broadcaster_id=" + broadcasterId
   )
-  return data.data.map(mod => ({
+
+  const moderators = data.data || []
+  return moderators.map(mod => ({
     id: parseInt(mod.user_id),
     displayName: mod.user_name
   }))
@@ -116,15 +119,13 @@ export async function getModerators(clientId, accessToken, broadcasterId) {
 
 // Not used generally, since we hardcode the FFF user id becuase it doesn't change
 // but let this be for future reference
-/*
-async function getChannelId (
+export async function getUserId (
   clientId,
   accessToken
 ) {
-  const responseData = await krakenGet(clientId, accessToken, 'getChannelId', '/channel', )
+  const responseData = await krakenGet(clientId, accessToken, 'getUserId', '/channel', )
   return responseData._id
 }
-*/
 
 function krakenGet(clientId, accessToken, functionLabel, endpoint) {
   return fetch("https://api.twitch.tv/kraken" + endpoint, {
