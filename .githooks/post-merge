@@ -1,0 +1,3 @@
+#!/bin/bash
+npm i
+cd functions && npm i
