@@ -3,23 +3,23 @@ import React, { useState, useEffect } from 'react';
 function Moderator() {
   const db = window.firebase.firestore()
   const auth = window.firebase.auth()
-  const [ messages, setMessages ] = useState([])
-  const [ topic, setTopic ] = useState({})
+  const [ messages, setMessages ] = useState<any>([])
+  const [ topic, setTopic ] = useState<any>({})
   const [ topicInputValue, setTopicInputValue ] = useState('')
-  const [ authenticatedUser, setAuthenticatedUser ] = useState(null)
+  const [ authenticatedUser, setAuthenticatedUser ] = useState<any>(null)
   
   useEffect(() => {
     db
       .collection("spotlight")
       .doc("topic")
       .onSnapshot(function(doc) {
-        if (doc.data()) {
-          setTopic(doc.data())
-          if (doc.data().label) {
-            setTopicInputValue(doc.data().label)
-          } else {
-            setTopicInputValue('')
-          }
+        const topic : any = doc.data()
+
+        setTopic(topic)
+        if (topic.label) {
+          setTopicInputValue(topic.label)
+        } else {
+          setTopicInputValue('')
         }
       })
 
@@ -29,9 +29,9 @@ function Moderator() {
       .orderBy("ts", "desc")
       .limit(100)
       .onSnapshot(function(querySnapshot) {
-        const newMessages = []
+        const newMessages: any[] = []
         querySnapshot.docs.forEach(doc => newMessages.push(doc.data()))
-        setMessages(newMessages.map(message => ({
+        setMessages(newMessages.map((message) => ({
           ts: message.ts,
           message: message.message,
           displayName: message.userstate['display-name']
@@ -71,7 +71,7 @@ function Moderator() {
     </div>}
     {isEditorOrAdmin && <div className="gui">
       <div className="topic-label">
-        <label for='topic-label'>Topic label</label>
+        <label htmlFor='topic-label'>Topic label</label>
         <input name="topic-label" type="text" value={topicInputValue} onChange={(evt) => {
           setTopicInputValue(evt.target.value)
         }}></input>
