@@ -52,4 +52,3 @@ const streamIntoBigQuery = functions.firestore
   })
 
 export default streamIntoBigQuery
-gi
