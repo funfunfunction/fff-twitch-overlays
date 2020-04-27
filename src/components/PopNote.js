@@ -18,7 +18,7 @@ const animationVariants = {
 
 export default function PopNote({ visible, className, children }) {
   if (visible === undefined)
-    throw new Error('Must provide visible param')
+    visible = true
   return (
     <motion.div 
       animate={visible 

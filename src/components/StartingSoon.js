@@ -113,6 +113,11 @@ function StartingSoon() {
         <div className="label">Stream starting in <Countdown minutes={10} seconds={16} /></div>
       </div>
 
+      
+      <PopNote className="unique-chatters">
+        Chatting today: <span className="counter">{uniqueChatters}</span>
+      </PopNote>
+
       <div className="area-map">
         <Map center={lastCheckin.coordinates} zoom={6}>
           <TileLayer
@@ -124,9 +129,8 @@ function StartingSoon() {
         </Map>
         <PopNote visible={instructionsState.visible} className="checkin-instructions">Check in by typing:<span className="command">!checkin LOCATION -- WHATYOUAREDOING</span></PopNote>
 
-        <div className="unique-chatters">
-          {uniqueChatters}
-        </div>
+
+        
         <div className="checkin-info">
           <div className="aligner">
             <div className={boxClassName}>
