@@ -25,8 +25,8 @@ const streamIntoBigQuery = functions.firestore
         value = JSON.stringify(value)
       }
       // Stringify if boolean
-      if (value === true || value === false) {
-        value = value.toString();
+      if (value === true || value === false) {
+        value = value.toString()
       }
       userstates.push({ key, value })
     }
@@ -44,8 +44,12 @@ const streamIntoBigQuery = functions.firestore
       .table(bqTableId)
       .insert(rows)
       .catch(function(error) {
-        console.error("Error streaming document to BigQuery: ", JSON.stringify(error))
+        console.error(
+          "Error streaming document to BigQuery: ",
+          JSON.stringify(error)
+        )
       })
   })
 
 export default streamIntoBigQuery
+gi
