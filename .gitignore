@@ -28,3 +28,4 @@ firebase-debug.log
 
 .DS_Store
 firestore-debug.log
+src/react-app-env.d.ts
