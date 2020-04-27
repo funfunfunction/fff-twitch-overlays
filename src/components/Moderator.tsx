@@ -11,7 +11,7 @@ function Moderator() {
   useEffect(() => {
     db.collection("spotlight")
       .doc("topic")
-      .onSnapshot(function (doc) {
+      .onSnapshot(function(doc) {
         const topic: any = doc.data()
 
         setTopic(topic)
@@ -26,25 +26,28 @@ function Moderator() {
       .where("type", "==", "chat")
       .orderBy("ts", "desc")
       .limit(100)
-      .onSnapshot(function (querySnapshot) {
+      .onSnapshot(function(querySnapshot) {
         const newMessages: any[] = []
-        querySnapshot.docs.forEach((doc) => newMessages.push(doc.data()))
+        querySnapshot.docs.forEach(doc => newMessages.push(doc.data()))
         setMessages(
-          newMessages.map((message) => ({
+          newMessages.map(message => ({
             ts: message.ts,
             message: message.message,
-            displayName: message.userstate["display-name"],
+            displayName: message.userstate["display-name"]
           }))
         )
       })
 
-    auth.onAuthStateChanged(async function (user) {
+    auth.onAuthStateChanged(async function(user) {
       console.log("onAuthStateChanged", user)
       if (!user) return
-      const doc = await db.collection("twitch-users").doc(user.uid).get()
+      const doc = await db
+        .collection("twitch-users")
+        .doc(user.uid)
+        .get()
       setAuthenticatedUser({
         id: user.uid, // TODO can be removed later, added in firebasecreteuser
-        ...doc.data(),
+        ...doc.data()
       })
     })
   }, [db, auth])
@@ -60,7 +63,7 @@ function Moderator() {
           You need to{" "}
           <a
             href="authenticate_popup.html"
-            onClick={(e) => {
+            onClick={e => {
               window.open(
                 "authenticate_popup.html",
                 "name",
@@ -104,7 +107,7 @@ function Moderator() {
               name="topic-label"
               type="text"
               value={topicInputValue}
-              onChange={(evt) => {
+              onChange={evt => {
                 setTopicInputValue(evt.target.value)
               }}
             ></input>
@@ -112,17 +115,19 @@ function Moderator() {
               type="button"
               value="Update"
               onClick={() => {
-                db.collection("spotlight").doc("topic").set(
-                  {
-                    label: topicInputValue,
-                  },
-                  { merge: true }
-                )
+                db.collection("spotlight")
+                  .doc("topic")
+                  .set(
+                    {
+                      label: topicInputValue
+                    },
+                    { merge: true }
+                  )
               }}
             ></input>
           </div>
           <div className="messages">
-            {messages.map((message) => (
+            {messages.map(message => (
               <div
                 key={message.ts}
                 className={

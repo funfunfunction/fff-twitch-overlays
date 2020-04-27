@@ -6,14 +6,14 @@ const animationVariants = {
     scale: [0, 1.2, 1, 1.1, 1],
     rotate: [0, 25, 0, -2, 1.3],
     opacity: 1,
-    transition: { type: "spring", duration: 0.4 },
+    transition: { type: "spring", duration: 0.4 }
   },
   hide: {
     scale: [1, 0.2],
     rotate: [0, -10],
     opacity: 0,
-    transition: { ease: "easeIn", duration: 0.2 },
-  },
+    transition: { ease: "easeIn", duration: 0.2 }
+  }
 }
 
 export default function PopNote({ visible, className, children }) {

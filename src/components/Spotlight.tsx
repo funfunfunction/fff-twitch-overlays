@@ -8,7 +8,7 @@ function Spotlight() {
   useEffect(() => {
     db.collection("spotlight")
       .doc("topic")
-      .onSnapshot(function (doc) {
+      .onSnapshot(function(doc) {
         setTopic(doc.data())
       })
   }, [db])

@@ -12,11 +12,11 @@ function StartingSoon() {
     displayName: "mpj",
     location: "Gamla stan, Stockholm",
     coordinates: [59.32501, 18.07037],
-    statusMessage: "Starting the live stream!",
+    statusMessage: "Starting the live stream!"
   })
   const [instructionsState, setInstructionsState] = useState<any>({
     wasShown: Number(Date.now()),
-    visible: true,
+    visible: true
   })
   const [time, setTime] = useState<any>(Number(Date.now()))
   const [uniqueChatters, setUniqueChatters] = useState<any>(0)
@@ -39,14 +39,14 @@ function StartingSoon() {
       if (instructionsState.wasHidden < time - 15000) {
         setInstructionsState({
           visible: true,
-          wasShown: time,
+          wasShown: time
         })
       }
     } else {
       if (instructionsState.wasShown < time - 5000) {
         setInstructionsState({
           visible: false,
-          wasHidden: time,
+          wasHidden: time
         })
       }
     }
@@ -61,7 +61,7 @@ function StartingSoon() {
 
   useEffect(() => {
     const db = window.firebase.firestore()
-    db.doc("views/twitch-live-status").onSnapshot(async function (snap) {
+    db.doc("views/twitch-live-status").onSnapshot(async function(snap) {
       const data: any = snap.data()
       setStreamId(data && data.streamId)
     })
@@ -70,7 +70,7 @@ function StartingSoon() {
   useEffect(() => {
     const db = window.firebase.firestore()
     db.doc("views/unique-chatters/chatter-counts/" + streamId).onSnapshot(
-      async function (snap) {
+      async function(snap) {
         const data = snap.data()
         if (!data) setUniqueChatters(0)
         else setUniqueChatters(data.unique)
@@ -84,11 +84,11 @@ function StartingSoon() {
     db.collection("checkins")
       .orderBy("ts", "asc")
       .where("ts", ">", Number(Date.now()) - oneHourMS * 30)
-      .onSnapshot(async function (querySnapshot) {
-        querySnapshot.docChanges().forEach(async function (change) {
+      .onSnapshot(async function(querySnapshot) {
+        querySnapshot.docChanges().forEach(async function(change) {
           if (change.type !== "added") return
 
-          setCheckins((checkins) => checkins.concat(change.doc.data()))
+          setCheckins(checkins => checkins.concat(change.doc.data()))
         })
       })
   }, [])
