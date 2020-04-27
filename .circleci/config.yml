@@ -16,18 +16,18 @@ jobs:
           name: Install dependencies (Web Client)
           command: npm ci
       - run: 
-          name: Install dependencies (Cloud Functions)
+          name: Install dependencies (Cloud functions)
           command: cd functions && npm ci
       - save_cache:
           key: v2-web-npm-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "functions/package-lock.json" }}
           paths:
             - /root/.npm
       - run: 
-          name: Build (Web Client)
-          command: npm run build
+          name: Running checks (Web Client)
+          command: npm run check-all
       - run: 
-          name: Running test suite (functions)
-          command: cd functions && npm run test
+          name: Running checks (Cloud functions)
+          command: cd functions && npm run check-all
 
   firebase-deploy:
     <<: *defaults
