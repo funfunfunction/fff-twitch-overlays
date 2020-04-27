@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 function Spotlight() {
   const db = window.firebase.firestore()
 
-  const [ topic, setTopic ] = useState()
+  const [ topic, setTopic ] = useState<any>()
 
   useEffect(() => {
     db
