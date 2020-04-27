@@ -127,19 +127,10 @@ html,body  {
   position: relative;
   transform: rotate(-2deg);
 }
-.unique-chatters {
-  font-size: 7rem;
-  z-index: 3;
-  color: red;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
 
-.checkin-instructions {
-  position: absolute;
-  right: 25%;
-  top: 25%;
+
+.pop-note {
+  display: inline-block;
   font-size: 1rem;
   font-weight: bold;
   padding-bottom: 0.2rem;
@@ -148,6 +139,25 @@ html,body  {
   padding: 1rem 1rem 1rem 1rem;
   z-index: 2;
   transform: rotate(3deg);
+}
+
+.pop-note.checkin-instructions {
+  position: absolute;
+  right: 25%;
+  top: 25%;
+}
+
+.pop-note.unique-chatters {
+  font-size: 2rem;
+  z-index: 3;
+  position: absolute;
+  top: 4.2rem;
+  left: 42rem;
+  transform: rotate(-3deg);
+}
+
+.pop-note.unique-chatters .counter {
+  color: yellow;
 }
 
 .checkin-instructions .command {

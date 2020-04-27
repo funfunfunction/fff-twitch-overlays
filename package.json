@@ -25,7 +25,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "firebase deploy",
-    "emulate": "npm --prefix functions run build && npm run build && firebase emulators:start"
+    "emulate": "npm --prefix functions run build && npm run build && firebase emulators:start",
+    "postinstall": "git config --local core.hooksPath .githooks/"
   },
   "eslintConfig": {
     "extends": "react-app"

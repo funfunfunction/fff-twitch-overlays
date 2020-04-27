@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Countdown from './Countdown'
+import PopNote from './PopNote'
 import { Map, TileLayer, Marker } from 'react-leaflet'
-import { motion } from "framer-motion"
 
 const oneHourMS = 60 * 60 * 1000 
 
@@ -106,25 +106,17 @@ function StartingSoon() {
     }
   }
 
-  const checkinAnimationVisibleVariant = {
-    scale: [0, 1.20, 1, 1.1, 1],
-    rotate: [0, 25, 0, -2, 1.3],
-    opacity: 1,
-    transition: { type: "spring", duration: 0.4 }
-  }
-
-  const checkinAnimationHiddenVariant = {
-    scale: [1, 0.2 ],
-    rotate: [0, -10 ],
-    opacity: 0,
-    transition: { ease: "easeIn", duration: 0.2 }
-  }
-
+  
   return (
     <div className="scene scene-soon">
       <div className="area-counter">
         <div className="label">Stream starting in <Countdown minutes={10} seconds={16} /></div>
       </div>
+
+      
+      <PopNote className="unique-chatters">
+        Chatting today: <span className="counter">{uniqueChatters}</span>
+      </PopNote>
 
       <div className="area-map">
         <Map center={lastCheckin.coordinates} zoom={6}>
@@ -135,12 +127,10 @@ function StartingSoon() {
           <Marker position={lastCheckin.coordinates}></Marker>
           
         </Map>
-        <motion.div 
-          animate={instructionsState.visible ? checkinAnimationVisibleVariant : checkinAnimationHiddenVariant} 
-          className="checkin-instructions">Check in by typing <span className="command">!checkin LOCATION -- WHATYOUAREDOING</span></motion.div>
-        <div className="unique-chatters">
-          {uniqueChatters}
-        </div>
+        <PopNote visible={instructionsState.visible} className="checkin-instructions">Check in by typing:<span className="command">!checkin LOCATION -- WHATYOUAREDOING</span></PopNote>
+
+
+        
         <div className="checkin-info">
           <div className="aligner">
             <div className={boxClassName}>

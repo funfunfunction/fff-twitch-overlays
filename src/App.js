@@ -18,7 +18,7 @@ window.firebase = firebase
 })*/
 
 if(
-  window.location.hostname === 'fff-twitch-chat-log.web.app' ||
+  window.location.hostname === 'fff-twitch-chat-log-dev.web.app' ||
   window.location.hostname === 'localhost'
 ){
   firebase.initializeApp({
