@@ -8,6 +8,7 @@
     "sourceMap": true,
     "strict": true,
     "target": "es2017",
+    "typeRoots" : ["./node_modules/typings"],
     
     "esModuleInterop": true,
     "noImplicitAny": false
