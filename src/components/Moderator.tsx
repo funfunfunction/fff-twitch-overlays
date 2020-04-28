@@ -6,17 +6,16 @@ function Moderator() {
   const [topicInputValue, setTopicInputValue] = useState("")
   const [authenticatedUser, setAuthenticatedUser] = useState<any>(null)
   const [lastLabelUpdate, setLastLabelUpdate] = useState<number>(0)
-  const [time, setTime] = useState<number>(0);
+  const [time, setTime] = useState<number>(0)
 
   useEffect(() => {
     setInterval(() => {
       setTime(Number(Date.now()))
     }, 500)
   }, [])
-  
-  const wasLabelUpdateRecent = 
-    lastLabelUpdate > 0 && 
-    ((lastLabelUpdate + 3000) > time) 
+
+  const wasLabelUpdateRecent =
+    lastLabelUpdate > 0 && lastLabelUpdate + 3000 > time
   useEffect(() => {
     db.collection("spotlight")
       .doc("topic")
@@ -43,12 +42,12 @@ function Moderator() {
   }, [db, auth])
 
   const isAllowed =
-    authenticatedUser && (
-      authenticatedUser.isEditor || 
+    authenticatedUser &&
+    (authenticatedUser.isEditor ||
       authenticatedUser.isModerator ||
       authenticatedUser.isOwner)
 
-  async function saveLabel(){
+  async function saveLabel() {
     setLastLabelUpdate(Number(Date.now()))
     db.collection("spotlight")
       .doc("topic")
@@ -58,7 +57,6 @@ function Moderator() {
         },
         { merge: true }
       )
-    
   }
 
   return (
@@ -88,7 +86,7 @@ function Moderator() {
             Logged in as {authenticatedUser.displayName}
             <a
               href="http://validdomainthatreactdoesnotcompainabout.com"
-              onClick={(e) => {
+              onClick={e => {
                 auth.signOut()
                 e.preventDefault()
                 window.location.reload()
@@ -99,9 +97,9 @@ function Moderator() {
           </div>
           {!isAllowed && (
             <div>
-              You lack editor or moderator permissions for the Fun Fun Function channel on
-              Twitch, which are required for this view. Ask MPJ to give you if
-              you think this is in error.
+              You lack editor or moderator permissions for the Fun Fun Function
+              channel on Twitch, which are required for this view. Ask MPJ to
+              give you if you think this is in error.
             </div>
           )}
         </div>
@@ -114,9 +112,9 @@ function Moderator() {
               name="topic-label"
               type="text"
               value={topicInputValue}
-              onKeyUp={(evt) => {
+              onKeyUp={evt => {
                 const isEnter = evt.keyCode === 13
-                if(isEnter) saveLabel()
+                if (isEnter) saveLabel()
               }}
               onChange={evt => {
                 setTopicInputValue(evt.target.value)
@@ -124,7 +122,7 @@ function Moderator() {
             ></input>
             <input
               type="button"
-              value={wasLabelUpdateRecent ? 'UPDATED!' : 'Update'}
+              value={wasLabelUpdateRecent ? "UPDATED!" : "Update"}
               onClick={saveLabel}
             ></input>
           </div>
