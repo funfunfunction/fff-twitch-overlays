@@ -9,11 +9,27 @@ import getChannelOwnerUserId from "./helpers/assorted/get-channel-owner-user-id"
 import { getUser, getModerators, getEditors } from "./helpers/twitch"
 import getOwnerAccessToken from "./helpers/assorted/get-owner-access-token"
 
-const authority = `https://${process.env.GCLOUD_PROJECT}.web.app`
-const OAUTH_REDIRECT_URI = authority + "/authenticate_popup.html"
+
 const OAUTH_SCOPES =
   "user:edit:broadcast channel_read user_read moderation:read"
 
+function isLocalDev(req) {
+  return (
+    process.env.GCLOUD_PROJECT === 'fff-twitch-chat-log-dev' && 
+    req.get('Referrer') &&
+    req.get('Referrer').includes('http://localhost:3000/authenticate_popup.html')
+  )
+}
+
+function makeRedirectFor(req) {
+  const AUTHORITY_DEPLOYED = `https://${process.env.GCLOUD_PROJECT}.web.app`
+  const AUTHORITY_LOCAL_DEV = 'http://localhost:3000'
+  const PATH_POPUP = "/authenticate_popup.html"
+  return isLocalDev(req)
+    ? AUTHORITY_LOCAL_DEV + PATH_POPUP
+    : AUTHORITY_DEPLOYED + PATH_POPUP
+}
+  
 export const redirect = functions.https.onRequest((req, res) => {
   const oauth2 = twitchOAuth2Client()
 
@@ -25,7 +41,7 @@ export const redirect = functions.https.onRequest((req, res) => {
       httpOnly: true
     })
     const redirectUri = oauth2.authorizationCode.authorizeURL({
-      redirect_uri: OAUTH_REDIRECT_URI,
+      redirect_uri: makeRedirectFor(req),
       scope: OAUTH_SCOPES,
       state: state
     })
@@ -44,18 +60,26 @@ export const token = functions.https.onRequest(async (req, res) => {
 
   try {
     return cookieParser()(req, res, async () => {
-      if (!req.cookies.state) {
-        throw new Error(
-          "State cookie not set or expired. Maybe you took too long to authorize. Please try again."
-        )
-      } else if (req.cookies.state !== req.query.state) {
-        throw new Error("State validation failed")
+      if(!isLocalDev(req)) { // cant set cookies on localhost
+        if (!req.cookies.state) {
+          throw new Error(
+            "State cookie not set or expired. Maybe you took too long to authorize. Please try again."
+          )
+        } else if (req.cookies.state !== req.query.state) {
+          throw new Error("State validation failed")
+        }
       }
 
-      const results = await oauth2.authorizationCode.getToken({
-        code: req.query.code as string,
-        redirect_uri: OAUTH_REDIRECT_URI
-      })
+      let results
+      try {
+        results = await oauth2.authorizationCode.getToken({
+          code: req.query.code as string,
+          redirect_uri: makeRedirectFor(req),
+        })
+      } catch(err) {
+        console.error('Failed getting auth code', err)
+        throw err
+      }
 
       const accessToken = results.access_token
       const twitchUser = await getUser(
@@ -69,7 +93,6 @@ export const token = functions.https.onRequest(async (req, res) => {
       try {
         ownerAccessToken = await getOwnerAccessToken()
       } catch (e) {
-        console.warn("Could not getownerAccessToken", e)
         if (!isOwner) {
           throw new Error(
             "Did not find ownerAccessToken and you are trying to sign in with non-owner"
