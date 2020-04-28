@@ -35,7 +35,7 @@
     "lint:fix": "eslint --fix -c .eslintrc.js --ext .ts --ext .tsx src",
     "style:check": "prettier --check \"src/**/*.ts*\"",
     "style:fix": "prettier --write \"src/**/*.ts*\"",
-    "check-all": "npm-run-all build lint:check style:check"
+    "check-all": "npm-run-all build lint:check style:check && npm audit"
   },
   "eslintConfig": {
     "extends": "react-app"
