@@ -31,11 +31,11 @@
     "eject": "react-scripts eject",
     "deploy": "firebase deploy",
     "postinstall": "git config --local core.hooksPath .githooks/",
-    "lint:check": "eslint -c .eslintrc.js --ext .ts --ext .tsx src",
+    "lint:check": "eslint --max-warnings 0 -c .eslintrc.js --ext .ts --ext .tsx src",
     "lint:fix": "eslint --fix -c .eslintrc.js --ext .ts --ext .tsx src",
     "style:check": "prettier --check \"src/**/*.ts*\"",
     "style:fix": "prettier --write \"src/**/*.ts*\"",
-    "check-all": "npm-run-all build lint:check style:check && npm audit"
+    "check-all": "CI=true npm-run-all build lint:check style:check && npm audit"
   },
   "eslintConfig": {
     "extends": "react-app"

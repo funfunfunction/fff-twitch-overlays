@@ -30,7 +30,7 @@ function Spotlight() {
   const [bigLabelText, setBigLabelText] = useState<string | null>(null)
   const [isRevealPending, setIsRevealPending] = useState(false)
   const controls = useAnimation()
-  
+
   useEffect(() => {
     async function handleIsRevealPending() {
       if (!isRevealPending) return
@@ -62,7 +62,7 @@ function Spotlight() {
       })
     }
     handleIsRevealPending()
-  }, [isRevealPending])
+  }, [isRevealPending, controls])
 
   useEffect(() => {
     async function handleWaitingLabel() {
