@@ -29,7 +29,8 @@ function Spotlight() {
   const [waitingLabel, setWaitingLabel] = useState<string | null>(null)
   const [bigLabelText, setBigLabelText] = useState<string | null>(null)
   const [isRevealPending, setIsRevealPending] = useState(false)
-
+  const controls = useAnimation()
+  
   useEffect(() => {
     async function handleIsRevealPending() {
       if (!isRevealPending) return
@@ -93,9 +94,8 @@ function Spotlight() {
       setIsRevealPending(true)
     }
     handleWaitingLabel()
-  }, [waitingLabel])
+  }, [waitingLabel, controls, bigLabelText])
 
-  const controls = useAnimation()
   useEffect(() => {
     subscribeToTopic(topic => {
       setWaitingLabel(topic.label)
