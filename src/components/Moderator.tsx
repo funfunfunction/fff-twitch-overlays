@@ -22,7 +22,7 @@ function Moderator() {
       .doc("topic")
       .onSnapshot(function(doc) {
         const topic: any = doc.data()
-        if (topic.label) {
+        if (topic && topic.label) {
           setTopicInputValue(topic.label)
         } else {
           setTopicInputValue("")
@@ -88,8 +88,10 @@ function Moderator() {
             Logged in as {authenticatedUser.displayName}
             <a
               href="http://validdomainthatreactdoesnotcompainabout.com"
-              onClick={() => {
+              onClick={(e) => {
                 auth.signOut()
+                e.preventDefault()
+                window.location.reload()
               }}
             >
               Sign out
