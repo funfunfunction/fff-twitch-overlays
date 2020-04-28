@@ -3,18 +3,25 @@ import React, { useState, useEffect } from "react"
 function Moderator() {
   const db = window.firebase.firestore()
   const auth = window.firebase.auth()
-  const [messages, setMessages] = useState<any>([])
-  const [topic, setTopic] = useState<any>({})
   const [topicInputValue, setTopicInputValue] = useState("")
   const [authenticatedUser, setAuthenticatedUser] = useState<any>(null)
+  const [lastLabelUpdate, setLastLabelUpdate] = useState<number>(0)
+  const [time, setTime] = useState<number>(0);
 
+  useEffect(() => {
+    setInterval(() => {
+      setTime(Number(Date.now()))
+    }, 500)
+  }, [])
+  
+  const wasLabelUpdateRecent = 
+    lastLabelUpdate > 0 && 
+    ((lastLabelUpdate + 3000) > time) 
   useEffect(() => {
     db.collection("spotlight")
       .doc("topic")
       .onSnapshot(function(doc) {
         const topic: any = doc.data()
-
-        setTopic(topic)
         if (topic.label) {
           setTopicInputValue(topic.label)
         } else {
@@ -22,24 +29,7 @@ function Moderator() {
         }
       })
 
-    db.collection("events3")
-      .where("type", "==", "chat")
-      .orderBy("ts", "desc")
-      .limit(100)
-      .onSnapshot(function(querySnapshot) {
-        const newMessages: any[] = []
-        querySnapshot.docs.forEach(doc => newMessages.push(doc.data()))
-        setMessages(
-          newMessages.map(message => ({
-            ts: message.ts,
-            message: message.message,
-            displayName: message.userstate["display-name"]
-          }))
-        )
-      })
-
     auth.onAuthStateChanged(async function(user) {
-      console.log("onAuthStateChanged", user)
       if (!user) return
       const doc = await db
         .collection("twitch-users")
@@ -52,9 +42,24 @@ function Moderator() {
     })
   }, [db, auth])
 
-  const isEditorOrAdmin =
-    authenticatedUser &&
-    (authenticatedUser.isEditor || authenticatedUser.isOwner)
+  const isAllowed =
+    authenticatedUser && (
+      authenticatedUser.isEditor || 
+      authenticatedUser.isModerator ||
+      authenticatedUser.isOwner)
+
+  async function saveLabel(){
+    setLastLabelUpdate(Number(Date.now()))
+    db.collection("spotlight")
+      .doc("topic")
+      .set(
+        {
+          label: topicInputValue
+        },
+        { merge: true }
+      )
+    
+  }
 
   return (
     <div className="scene-moderator">
@@ -90,16 +95,16 @@ function Moderator() {
               Sign out
             </a>
           </div>
-          {!isEditorOrAdmin && (
+          {!isAllowed && (
             <div>
-              You lack editor permissions for the Fun Fun Function channel on
+              You lack editor or moderator permissions for the Fun Fun Function channel on
               Twitch, which are required for this view. Ask MPJ to give you if
               you think this is in error.
             </div>
           )}
         </div>
       )}
-      {isEditorOrAdmin && (
+      {isAllowed && (
         <div className="gui">
           <div className="topic-label">
             <label htmlFor="topic-label">Topic label</label>
@@ -107,43 +112,19 @@ function Moderator() {
               name="topic-label"
               type="text"
               value={topicInputValue}
+              onKeyUp={(evt) => {
+                const isEnter = evt.keyCode === 13
+                if(isEnter) saveLabel()
+              }}
               onChange={evt => {
                 setTopicInputValue(evt.target.value)
               }}
             ></input>
             <input
               type="button"
-              value="Update"
-              onClick={() => {
-                db.collection("spotlight")
-                  .doc("topic")
-                  .set(
-                    {
-                      label: topicInputValue
-                    },
-                    { merge: true }
-                  )
-              }}
+              value={wasLabelUpdateRecent ? 'UPDATED!' : 'Update'}
+              onClick={saveLabel}
             ></input>
-          </div>
-          <div className="messages">
-            {messages.map(message => (
-              <div
-                key={message.ts}
-                className={
-                  message.ts === (topic.message && topic.message.ts)
-                    ? "message active"
-                    : "message"
-                }
-                onClick={() => {
-                  db.collection("spotlight")
-                    .doc("topic")
-                    .set({ message }, { merge: true })
-                }}
-              >
-                <strong>{message.displayName}</strong>: {message.message}
-              </div>
-            ))}
           </div>
         </div>
       )}
