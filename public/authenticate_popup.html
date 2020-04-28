@@ -7,14 +7,27 @@
 </head>
 <body>
 
-Please wait... 
+<h2>Please wait... </h2>
 
-<!-- Import and configure the Firebase SDK -->
-<!-- These scripts are made available when the app is served or deployed on Firebase Hosting -->
-<!-- If you do not serve/host your project using Firebase Hosting see https://firebase.google.com/docs/web/setup -->
-<script src="/__/firebase/7.13.2/firebase-app.js"></script>
-<script src="/__/firebase/7.13.2/firebase-auth.js"></script>
+</body>
+<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-auth.js"></script>
+
+<!-- this is available on firebase hosting -->
 <script src="/__/firebase/init.js"></script>
+<script>
+  // fall back to hardcoded when not hosted
+  if(window.location.hostname === 'localhost') {
+    firebase.initializeApp({
+      "apiKey": "AIzaSyAFe44BtaxhhmoTjHVQpFfHbBNRPJ37pCw",
+      "authDomain": "fff-twitch-chat-log-dev.firebaseapp.com",
+      "databaseURL": "https://fff-twitch-chat-log-dev.firebaseio.com",
+      "messagingSenderId": "601247741319",
+      "projectId": "fff-twitch-chat-log-dev",
+      "storageBucket": "fff-twitch-chat-log-dev.appspot.com"
+    })
+  }
+</script>
 
 <script>
   /**

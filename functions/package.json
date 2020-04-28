@@ -9,7 +9,7 @@
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
     "logs": "firebase functions:log",
-    "check-all": "CI=true npm-run-all build lint:check style:check && npm audit",
+    "check-all": "CI=true npm-run-all build lint:check style:check",
     "style:check": "prettier --check \"src/**/*.ts\"",
     "style:fix": "prettier --write \"src/**/*.ts\""
   },
