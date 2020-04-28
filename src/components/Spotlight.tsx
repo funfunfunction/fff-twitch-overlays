@@ -13,9 +13,19 @@ const boxShadowFrames = [
   "0 1px 1px -1px rgba(0, 0, 0, 0.0)",
   "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
 ]
-function Spotlight() {
-  const db = window.firebase.firestore()
 
+function subscribeToTopic(callback) {
+  window.firebase
+    .firestore()
+    .collection("spotlight")
+    .doc("topic")
+    .onSnapshot(async function(doc) {
+      const data: { label: string } = doc.data() as { label: string }
+      callback(data)
+    })
+}
+
+function Spotlight() {
   const [waitingLabel, setWaitingLabel] = useState<string | null>(null)
   const [bigLabelText, setBigLabelText] = useState<string | null>(null)
   const [isRevealPending, setIsRevealPending] = useState(false)
@@ -87,16 +97,10 @@ function Spotlight() {
 
   const controls = useAnimation()
   useEffect(() => {
-    ;(async () => {
-      db.collection("spotlight")
-        .doc("topic")
-        .onSnapshot(async function(doc) {
-          const data: any = doc.data()
-          setWaitingLabel(data.label)
-        })
-      return
-    })()
-  }, [db])
+    subscribeToTopic(topic => {
+      setWaitingLabel(topic.label)
+    })
+  }, [])
 
   return (
     <div className="scene-spotlight">
