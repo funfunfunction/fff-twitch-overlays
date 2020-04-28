@@ -16,6 +16,7 @@ module.exports = {
     "@typescript-eslint/no-use-before-define": 0,
     "@typescript-eslint/no-unused-vars": 2,
     "@typescript-eslint/camelcase": 0,
+    "@typescript-eslint/ban-ts-ignore": 0,
 
     "@typescript-eslint/no-var-requires": 0,
     
@@ -29,5 +30,8 @@ module.exports = {
       "version": "detect"
     }
   },
-  "parser": "@typescript-eslint/parser"
+  "parser": "@typescript-eslint/parser",
+  parserOptions: {
+    ecmaVersion: 2017
+  },
 }

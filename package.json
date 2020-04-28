@@ -10,6 +10,7 @@
     "@types/jest": "^25.2.1",
     "@types/node": "^13.13.4",
     "@types/react-dom": "^16.9.6",
+    "delay": "^4.3.0",
     "firebase": "^7.14.2",
     "framer-motion": "^1.10.3",
     "leaflet": "^1.6.0",
@@ -30,11 +31,11 @@
     "eject": "react-scripts eject",
     "deploy": "firebase deploy",
     "postinstall": "git config --local core.hooksPath .githooks/",
-    "lint:check": "eslint -c .eslintrc.js --ext .ts --ext .tsx src",
+    "lint:check": "eslint --max-warnings 0 -c .eslintrc.js --ext .ts --ext .tsx src",
     "lint:fix": "eslint --fix -c .eslintrc.js --ext .ts --ext .tsx src",
     "style:check": "prettier --check \"src/**/*.ts*\"",
     "style:fix": "prettier --write \"src/**/*.ts*\"",
-    "check-all": "npm-run-all build lint:check style:check"
+    "check-all": "CI=true npm-run-all build lint:check style:check && npm audit"
   },
   "eslintConfig": {
     "extends": "react-app"

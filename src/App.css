@@ -180,6 +180,20 @@ html,body  {
   position: absolute;
 }
 
+.scene-spotlight .big-topic {
+  background-color: yellow;
+  color: black;
+  font-size: 3rem;
+  position: absolute;
+  left: -2rem;
+  top: 2.10rem;
+  padding-left: 3.2rem;
+  padding-right: 1rem;
+  clip-path: polygon(0 0, 1% 0, 1% 100%, 0% 100%);
+  transform-origin: 0%;
+  white-space: nowrap;
+}
+
 .scene-moderator .topic-label {
   display: inline-block;
   padding: 0.5rem;

@@ -2,14 +2,14 @@
   "name": "functions",
   "description": "Cloud Functions for Firebase",
   "scripts": {
-    "lint:check": "eslint -c .eslintrc.js --ext .ts src",
+    "lint:check": "eslint --max-warnings 0 -c .eslintrc.js --ext .ts src",
     "lint:fix": "eslint --fix -c .eslintrc.js --ext .ts src",
     "build": "tsc",
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
     "logs": "firebase functions:log",
-    "check-all": "npm-run-all build lint:check style:check",
+    "check-all": "CI=true npm-run-all build lint:check style:check && npm audit",
     "style:check": "prettier --check \"src/**/*.ts\"",
     "style:fix": "prettier --write \"src/**/*.ts\""
   },
@@ -38,6 +38,7 @@
     "tmi.js": "^1.5.0"
   },
   "devDependencies": {
+    "@types/node": "^13.13.4",
     "@typescript-eslint/eslint-plugin": "^2.29.0",
     "@typescript-eslint/parser": "^2.29.0",
     "eslint": "^6.8.0",

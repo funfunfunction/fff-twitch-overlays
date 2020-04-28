@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "lib": [ "es2017" ],
     "module": "commonjs",
     "noImplicitReturns": true,
     "noUnusedLocals": true,
@@ -7,6 +8,7 @@
     "sourceMap": true,
     "strict": true,
     "target": "es2017",
+    "typeRoots" : ["./node_modules/typings"],
     
     "esModuleInterop": true,
     "noImplicitAny": false
