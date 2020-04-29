@@ -78,7 +78,11 @@ export function getTokensWithRefreshToken(
     .then(tokenSetFromResponseBody)
 }
 
-export async function getEditors(clientId, accessToken, channelId) : Promise<SimpleUser[]>  {
+export async function getEditors(
+  clientId,
+  accessToken,
+  channelId
+): Promise<SimpleUser[]> {
   // TODO: pagination!!
   const data = await krakenGet(
     clientId,
@@ -88,9 +92,9 @@ export async function getEditors(clientId, accessToken, channelId) : Promise<Sim
   )
   const editors = data.users || []
 
-  return editors.map(function parseSimpleUser(data) : SimpleUser {
-    if (!isEditorUserData(data))  {
-      throw new Error('Could not parse SimpleUser:' + JSON.stringify(data))
+  return editors.map(function parseSimpleUser(data): SimpleUser {
+    if (!isEditorUserData(data)) {
+      throw new Error("Could not parse SimpleUser:" + JSON.stringify(data))
     }
     return {
       id: data.user_id,
@@ -98,11 +102,10 @@ export async function getEditors(clientId, accessToken, channelId) : Promise<Sim
     }
   })
 
-  function isEditorUserData(data): data is { user_id: number, display_name: string } {
-    return (
-      Number.isInteger(data._id) && 
-      typeof data.display_name === 'string'
-    )
+  function isEditorUserData(
+    data
+  ): data is { user_id: number; display_name: string } {
+    return Number.isInteger(data._id) && typeof data.display_name === "string"
   }
 }
 
@@ -119,7 +122,11 @@ type SimpleUser = {
   displayName: string
 }
 
-export async function getModerators(clientId, accessToken, broadcasterId) : Promise<SimpleUser[]> {
+export async function getModerators(
+  clientId,
+  accessToken,
+  broadcasterId
+): Promise<SimpleUser[]> {
   // TODO: pagination!!
   const data = await helixGet(
     clientId,
@@ -128,10 +135,10 @@ export async function getModerators(clientId, accessToken, broadcasterId) : Prom
     "/moderation/moderators?broadcaster_id=" + broadcasterId
   )
 
-  const moderators = (data.data || [])
-  return moderators.map(function parseSimpleUser(data) : SimpleUser {
-    if (!isModeratorUserData(data))  {
-      throw new Error('Could not parse SimpleUser:' + JSON.stringify(data))
+  const moderators = data.data || []
+  return moderators.map(function parseSimpleUser(data): SimpleUser {
+    if (!isModeratorUserData(data)) {
+      throw new Error("Could not parse SimpleUser:" + JSON.stringify(data))
     }
     return {
       id: data.user_id,
@@ -139,11 +146,10 @@ export async function getModerators(clientId, accessToken, broadcasterId) : Prom
     }
   })
 
-  function isModeratorUserData(data): data is { user_id: number, user_name: string } {
-    return (
-      Number.isInteger(data.user_id) && 
-      typeof data.user_name === 'string'
-    )
+  function isModeratorUserData(
+    data
+  ): data is { user_id: number; user_name: string } {
+    return Number.isInteger(data.user_id) && typeof data.user_name === "string"
   }
 }
 
