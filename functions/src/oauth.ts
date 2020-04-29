@@ -125,7 +125,7 @@ export const token = functions.https.onRequest(async (req, res) => {
           ownerAccessToken,
           getChannelOwnerUserId()
         )
-        const moderatorIds = data.map(x => x.user_id)
+        const moderatorIds = data.map(x => x.id)
         return moderatorIds.includes(twitchUser.id)
       })()
 

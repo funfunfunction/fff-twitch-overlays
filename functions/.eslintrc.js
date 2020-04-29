@@ -24,5 +24,14 @@ module.exports = {
       "@typescript-eslint/explicit-function-return-type": 0,
       "@typescript-eslint/camelcase": 0,
       "eslint@typescript-eslint/ban-ts-ignore": 0,
+      "@typescript-eslint/member-delimiter-style": [2, {
+        "multiline": {
+          "delimiter": "none"
+        },
+        "singleline": {
+          "delimiter": "semi",
+          "requireLast": false
+        }
+      }]
     },
-  };
+  }

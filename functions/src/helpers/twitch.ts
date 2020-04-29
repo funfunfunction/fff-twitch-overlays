@@ -78,7 +78,11 @@ export function getTokensWithRefreshToken(
     .then(tokenSetFromResponseBody)
 }
 
-export async function getEditors(clientId, accessToken, channelId) {
+export async function getEditors(
+  clientId,
+  accessToken,
+  channelId
+): Promise<SimpleUser[]> {
   // TODO: pagination!!
   const data = await krakenGet(
     clientId,
@@ -87,10 +91,22 @@ export async function getEditors(clientId, accessToken, channelId) {
     "/channels/" + channelId + "/editors"
   )
   const editors = data.users || []
-  return editors.map(user => ({
-    id: parseInt(user._id),
-    displayName: user.display_name
-  }))
+
+  return editors.map(function parseSimpleUser(data): SimpleUser {
+    if (!isEditorUserData(data)) {
+      throw new Error("Could not parse SimpleUser:" + JSON.stringify(data))
+    }
+    return {
+      id: data.user_id,
+      displayName: data.display_name
+    }
+  })
+
+  function isEditorUserData(
+    data
+  ): data is { user_id: number; display_name: string } {
+    return Number.isInteger(data._id) && typeof data.display_name === "string"
+  }
 }
 
 export async function getUser(clientId, accessToken) {
@@ -101,7 +117,16 @@ export async function getUser(clientId, accessToken) {
   }
 }
 
-export async function getModerators(clientId, accessToken, broadcasterId) {
+type SimpleUser = {
+  id: number
+  displayName: string
+}
+
+export async function getModerators(
+  clientId,
+  accessToken,
+  broadcasterId
+): Promise<SimpleUser[]> {
   // TODO: pagination!!
   const data = await helixGet(
     clientId,
@@ -111,10 +136,21 @@ export async function getModerators(clientId, accessToken, broadcasterId) {
   )
 
   const moderators = data.data || []
-  return moderators.map(mod => ({
-    id: parseInt(mod.user_id),
-    displayName: mod.user_name
-  }))
+  return moderators.map(function parseSimpleUser(data): SimpleUser {
+    if (!isModeratorUserData(data)) {
+      throw new Error("Could not parse SimpleUser:" + JSON.stringify(data))
+    }
+    return {
+      id: data.user_id,
+      displayName: data.user_name
+    }
+  })
+
+  function isModeratorUserData(
+    data
+  ): data is { user_id: number; user_name: string } {
+    return Number.isInteger(data.user_id) && typeof data.user_name === "string"
+  }
 }
 
 // Not used generally, since we hardcode the FFF user id becuase it doesn't change
