@@ -75,8 +75,10 @@ interface SubscriberNotificationData {
 }
 
 export default function SubscriberNotification({
+  style,
   data: { displayName, months, message }
 }: {
+  style: any
   data: SubscriberNotificationData
 }) {
   const controlCardBack = useAnimation()
@@ -207,7 +209,10 @@ export default function SubscriberNotification({
   }, [message, displayName, months])
 
   return (
-    <div className="subscriber-notification" style={styleContainer}>
+    <div className="subscriber-notification" style={{
+      styleContainer,
+      ...style
+    }}>
       <motion.div
         className="card-back"
         style={styleCardBack}
