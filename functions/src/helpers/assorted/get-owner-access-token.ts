@@ -4,7 +4,7 @@ import * as functions from "firebase-functions"
 import { getTokensWithRefreshToken } from "../twitch"
 import getChannelOwnerUserId from "./get-channel-owner-user-id"
 
-export default async function getOwnerAccessToken() {
+export default async function getOwnerAccessToken(): Promise<string> {
   const key = "twitch:" + getChannelOwnerUserId()
   const ownerDocument = await admin
     .firestore()

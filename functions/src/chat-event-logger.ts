@@ -1,12 +1,14 @@
 import * as functions from "firebase-functions"
 import * as admin from "firebase-admin"
 
+import getOwnerUsername from "./helpers/assorted/get-owner-username"
 import getOwnerAccessToken from "./helpers/assorted/get-owner-access-token"
 import getChannelOwnerUserId from "./helpers/assorted/get-channel-owner-user-id"
 
 import { getStreams } from "./helpers/twitch"
 
 import tmi from "tmi.js"
+
 
 const db = admin.firestore()
 
@@ -66,13 +68,20 @@ const chatEventLogger = functions
 
     // Start watching chat
     ;(async function() {
-      const chat = tmi.Client({})
-      await chat.connect()
-      if (!functions.config().twitch.owner_username) {
-        throw new Error("twitch.owner_username not configured")
+      const accessToken = await getOwnerAccessToken()
+      if(!accessToken) {
+        console.error('Could not get owner access token, shutting down.')
+        process.exit(1)
       }
-      await chat.join(functions.config().twitch.owner_username)
-      console.log("chatEventLogger joined channel")
+      const chat = tmi.Client({
+        identity: {
+          username: getOwnerUsername(),
+          password: "oauth:" + accessToken
+        },
+      })
+      await chat.connect()
+      await chat.join(getOwnerUsername())
+      console.log("chatEventLogger joined channel of ", getOwnerUsername())
 
       chat.on("chat", (channel, userstate, message) =>
         logEvent("chat", userstate, { message })
@@ -143,6 +152,7 @@ async function isStreaming(ownerAccessToken) {
 }
 
 async function logEvent(type, userstate, otherProps) {
+  console.log('logevent', type, userstate, otherProps)
   try {
     // Use Twitch message id as key so that we can do idempotent updates, running multiple cloud functions
     const key = userstate["id"]
