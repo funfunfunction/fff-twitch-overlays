@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { motion, useAnimation } from "framer-motion"
 import delay from "delay"
+import SubscriberNotification from "./cards/SubscriberNotification"
 
 // This is the clipping box keyframes that causes the
 // tape-like reveal of the box
@@ -30,6 +31,9 @@ function Spotlight() {
   const [bigLabelText, setBigLabelText] = useState<string | null>(null)
   const [isRevealPending, setIsRevealPending] = useState(false)
   const controls = useAnimation()
+
+  
+  
 
   useEffect(() => {
     async function handleIsRevealPending() {
@@ -96,21 +100,35 @@ function Spotlight() {
     handleWaitingLabel()
   }, [waitingLabel, controls, bigLabelText])
 
+
+
   useEffect(() => {
     subscribeToTopic(topic => {
       setWaitingLabel(topic.label)
     })
+
+ 
   }, [])
+
+  
 
   return (
     <div className="scene-spotlight">
       <motion.div
-        initial={{ rotate: 90 }}
+        style={{ display: "none" }}
         animate={controls}
         className="big-topic"
       >
         {bigLabelText}
       </motion.div>
+
+      <SubscriberNotification
+        data={{
+          displayName: "underscorefunk",
+          months: 8,
+          message: "omgsjdkh kjdj hjhd jasdhdjk hdajk ajks"
+        }}
+      ></SubscriberNotification>
     </div>
   )
 }
