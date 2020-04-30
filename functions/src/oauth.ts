@@ -10,7 +10,7 @@ import { getUser, getModerators, getEditors } from "./helpers/twitch"
 import getOwnerAccessToken from "./helpers/assorted/get-owner-access-token"
 
 const OAUTH_SCOPES =
-  "user:edit:broadcast channel_read user_read moderation:read"
+  "user:edit:broadcast channel_read user_read moderation:read chat:read channel_subscriptions channel_check_subscription channel_editor"
 
 function isLocalDev(req) {
   return (
