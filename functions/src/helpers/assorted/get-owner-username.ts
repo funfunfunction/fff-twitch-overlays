@@ -1,4 +1,3 @@
-
 import * as functions from "firebase-functions"
 import isString from "is-string"
 

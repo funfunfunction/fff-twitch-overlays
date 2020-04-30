@@ -78,7 +78,11 @@ export function getTokensWithRefreshToken(
     .then(tokenSetFromResponseBody)
 }
 
-export async function getEditors(clientId, accessToken, channelId) : Promise<SimpleUser[]>  {
+export async function getEditors(
+  clientId,
+  accessToken,
+  channelId
+): Promise<SimpleUser[]> {
   // TODO: pagination!!
   const data = await krakenGet(
     clientId,
@@ -87,7 +91,6 @@ export async function getEditors(clientId, accessToken, channelId) : Promise<Sim
     "/channels/" + channelId + "/editors"
   )
   const editors = data.users || []
-
 
   return editors.map(function parseSimpleUser(data): SimpleUser {
     if (!isEditorUserData(data)) {
@@ -98,11 +101,10 @@ export async function getEditors(clientId, accessToken, channelId) : Promise<Sim
       displayName: data.display_name
     }
   })
-  function isEditorUserData(data): data is { user_id: number, display_name: string } {
-    return (
-      Number.isInteger(data._id) && 
-      typeof data.display_name === 'string'
-    )
+  function isEditorUserData(
+    data
+  ): data is { user_id: number; display_name: string } {
+    return Number.isInteger(data._id) && typeof data.display_name === "string"
   }
 }
 
@@ -146,7 +148,9 @@ export async function getModerators(
   function isModeratorUserData(
     data
   ): data is { user_id: string; user_name: string } {
-    return typeof data.user_id === "string" && typeof data.user_name === "string"
+    return (
+      typeof data.user_id === "string" && typeof data.user_name === "string"
+    )
   }
 }
 

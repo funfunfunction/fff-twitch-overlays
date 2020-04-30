@@ -9,7 +9,6 @@ import { getStreams } from "./helpers/twitch"
 
 import tmi from "tmi.js"
 
-
 const db = admin.firestore()
 
 const TWITCH_CLIENT_ID = functions.config().twitch.client_id
@@ -69,15 +68,15 @@ const chatEventLogger = functions
     // Start watching chat
     ;(async function() {
       const accessToken = await getOwnerAccessToken()
-      if(!accessToken) {
-        console.error('Could not get owner access token, shutting down.')
+      if (!accessToken) {
+        console.error("Could not get owner access token, shutting down.")
         process.exit(1)
       }
       const chat = tmi.Client({
         identity: {
           username: getOwnerUsername(),
           password: "oauth:" + accessToken
-        },
+        }
       })
       await chat.connect()
       await chat.join(getOwnerUsername())
@@ -152,7 +151,7 @@ async function isStreaming(ownerAccessToken) {
 }
 
 async function logEvent(type, userstate, otherProps) {
-  console.log('logevent', type, userstate, otherProps)
+  console.log("logevent", type, userstate, otherProps)
   try {
     // Use Twitch message id as key so that we can do idempotent updates, running multiple cloud functions
     const key = userstate["id"]

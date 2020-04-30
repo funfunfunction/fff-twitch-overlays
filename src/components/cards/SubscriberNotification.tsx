@@ -1,8 +1,7 @@
 import React, { useEffect, useRef } from "react"
 import { motion, useAnimation, AnimationControls } from "framer-motion"
 import delay from "delay"
-import CSS from 'csstype'
-
+import CSS from "csstype"
 
 const styleContainer: CSS.Properties = {
   display: "inline-block",
@@ -11,48 +10,48 @@ const styleContainer: CSS.Properties = {
   left: "1.5rem"
 }
 const styleCardBack: CSS.Properties = {
-  display: 'flex',
-  flexDirection: 'column',
-  backgroundColor: 'black',
-  padding: '0.8rem 0.8rem 0.8rem 0.8rem',
-  justifyContent: 'center',
-  alignItems: 'center',
-  color: 'white',
-  maxWidth: '18rem',
-  position: 'relative',
+  display: "flex",
+  flexDirection: "column",
+  backgroundColor: "black",
+  padding: "0.8rem 0.8rem 0.8rem 0.8rem",
+  justifyContent: "center",
+  alignItems: "center",
+  color: "white",
+  maxWidth: "18rem",
+  position: "relative",
   opacity: 0
-} 
+}
 
 const styleDisplayName: CSS.Properties = {
-  'color': '#FFF203',
-  'fontSize': '1.5rem',
-  'position': 'relative',
-  'top': '0.5rem'
+  color: "#FFF203",
+  fontSize: "1.5rem",
+  position: "relative",
+  top: "0.5rem"
 }
 
 const styleStreakText: CSS.Properties = {
-  display: 'inline-block',
-  fontSize: '1.8rem',
-  lineHeight: '2rem',
+  display: "inline-block",
+  fontSize: "1.8rem",
+  lineHeight: "2rem"
 }
 const styleStreakTextSubscribed: CSS.Properties = {
   ...styleStreakText,
-  marginRight: '0.4rem'
+  marginRight: "0.4rem"
 }
 const styleStreakTextFor: CSS.Properties = {
   ...styleStreakText,
-  marginRight: '0.4rem'
+  marginRight: "0.4rem"
 }
 const styleStreakTextCounter: CSS.Properties = {
   ...styleStreakText,
-  fontSize: '2.2rem',
-  color: '#FFF203',
-  marginRight: '0.4rem'
+  fontSize: "2.2rem",
+  color: "#FFF203",
+  marginRight: "0.4rem"
 }
 
 const messageStyle: CSS.Properties = {
-  fontSize: '1.1rem',
-  marginTop: '0.8rem',
+  fontSize: "1.1rem",
+  marginTop: "0.8rem",
   textAlign: "center"
 }
 
@@ -76,41 +75,39 @@ interface SubscriberNotificationData {
 }
 
 export default function SubscriberNotification({
-  data: {displayName, months, message} 
-}: { data: SubscriberNotificationData }) {
-
-  
+  data: { displayName, months, message }
+}: {
+  data: SubscriberNotificationData
+}) {
   const controlCardBack = useAnimation()
   const controlDisplayName = useAnimation()
   const controlStreakTextSubcribed = useAnimation()
-  const controlStreakTextFor= useAnimation()
-  const controlStreakTextCounter= useAnimation()
-  const controlStreakTextMonths= useAnimation()
+  const controlStreakTextFor = useAnimation()
+  const controlStreakTextCounter = useAnimation()
+  const controlStreakTextMonths = useAnimation()
   const controlMessage = useAnimation()
 
   const refStreakTextCounter = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     async function animateSubscriberBox() {
-      
       // Set up the scene
       controlCardBack.set({
         opacity: 0,
         scale: 0,
         rotate: 50
       })
-      
+
       controlDisplayName.set({
         scale: 1.3,
         top: "2rem"
       })
-
-      ;[controlStreakTextMonths,
+      ;[
+        controlStreakTextMonths,
         controlStreakTextCounter,
         controlStreakTextSubcribed,
         controlStreakTextFor
-      ].forEach(control =>
-        control.set({ opacity: 0, scale: 0.7 }))
+      ].forEach(control => control.set({ opacity: 0, scale: 0.7 }))
 
       controlMessage.set({
         opacity: 0
@@ -164,7 +161,7 @@ export default function SubscriberNotification({
 
       showStreakText(controlStreakTextFor)
       await delay(300)
-      
+
       const elem = refStreakTextCounter.current
       if (!isDiv(elem)) throw new Error("could not find months element")
 
@@ -207,19 +204,44 @@ export default function SubscriberNotification({
       })
     }
     animateSubscriberBox()
-  }, [ message, displayName, months])
+  }, [message, displayName, months])
 
   return (
     <div className="subscriber-notification" style={styleContainer}>
-      <motion.div className='card-back' style={styleCardBack} animate={controlCardBack}>
-        <motion.div className='display-name' style={styleDisplayName} animate={controlDisplayName} >
+      <motion.div
+        className="card-back"
+        style={styleCardBack}
+        animate={controlCardBack}
+      >
+        <motion.div
+          className="display-name"
+          style={styleDisplayName}
+          animate={controlDisplayName}
+        >
           {displayName}
         </motion.div>
 
         <motion.div className="streak">
-          <motion.div className="text-subscribed" style={styleStreakTextSubscribed} animate={controlStreakTextSubcribed}>subscribed</motion.div>
-          <motion.div className="text-for" style={styleStreakTextFor} animate={controlStreakTextFor} >for</motion.div>
-          <motion.div className="text-counter" style={styleStreakTextCounter} animate={controlStreakTextCounter} ref={refStreakTextCounter}>
+          <motion.div
+            className="text-subscribed"
+            style={styleStreakTextSubscribed}
+            animate={controlStreakTextSubcribed}
+          >
+            subscribed
+          </motion.div>
+          <motion.div
+            className="text-for"
+            style={styleStreakTextFor}
+            animate={controlStreakTextFor}
+          >
+            for
+          </motion.div>
+          <motion.div
+            className="text-counter"
+            style={styleStreakTextCounter}
+            animate={controlStreakTextCounter}
+            ref={refStreakTextCounter}
+          >
             {months}
           </motion.div>
           <motion.div
@@ -230,7 +252,11 @@ export default function SubscriberNotification({
             months!
           </motion.div>
         </motion.div>
-        <motion.div className="message" style={messageStyle} animate={controlMessage}>
+        <motion.div
+          className="message"
+          style={messageStyle}
+          animate={controlMessage}
+        >
           {message.substring(0, 125)}
         </motion.div>
       </motion.div>
@@ -238,8 +264,7 @@ export default function SubscriberNotification({
   )
 }
 
-
 function isDiv(element): element is HTMLDivElement {
-  const isDiv = element && element.tagName === 'DIV'
+  const isDiv = element && element.tagName === "DIV"
   return isDiv
 }

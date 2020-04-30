@@ -24,12 +24,13 @@ function subscribeToTopic(callback) {
       const data: { label: string } = doc.data() as { label: string }
       callback(data)
     })
-console.log('querying firestore')
-  window.firebase.firestore()
-    .collection('events2')
-    .where('type', '==', 'subscription')
-    .onSnapshot(async function(querySnapshot) { 
-      console.log('snap', querySnapshot.size)
+  console.log("querying firestore")
+  window.firebase
+    .firestore()
+    .collection("events2")
+    .where("type", "==", "subscription")
+    .onSnapshot(async function(querySnapshot) {
+      console.log("snap", querySnapshot.size)
       for (const doc of querySnapshot.docs) {
         const data = doc.data()
         console.log(data)
@@ -108,17 +109,11 @@ function Spotlight() {
     handleWaitingLabel()
   }, [waitingLabel, controls, bigLabelText])
 
-
-
   useEffect(() => {
     subscribeToTopic(topic => {
       setWaitingLabel(topic.label)
     })
-
- 
   }, [])
-
-  
 
   return (
     <div className="scene-spotlight">
