@@ -17,12 +17,22 @@ module.exports = {
     "@typescript-eslint/no-unused-vars": 2,
     "@typescript-eslint/camelcase": 0,
     "@typescript-eslint/ban-ts-ignore": 0,
+    "@typescript-eslint/member-delimiter-style": [2, {
+      "multiline": {
+        "delimiter": "none"
+      },
+      "singleline": {
+        "delimiter": "semi",
+        "requireLast": false
+      }
+    }],
 
     "@typescript-eslint/no-var-requires": 0,
     
     "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/explicit-function-return-type": 0,
-    "react/prop-types": 0
+    "react/prop-types": 0,
+    "react-hooks/exhaustive-deps": 0
   },
   "settings": {
     "react": {
