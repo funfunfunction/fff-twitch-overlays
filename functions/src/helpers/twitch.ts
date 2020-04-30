@@ -91,7 +91,7 @@ export async function getEditors(clientId, accessToken, channelId) : Promise<Sim
 
   return editors.map(function parseSimpleUser(data): SimpleUser {
     if (!isEditorUserData(data)) {
-      throw new Error("Could not parse SimpleUser:" + JSON.stringify(data))
+      throw new Error("Failed isEditorUserData:" + JSON.stringify(data))
     }
     return {
       id: data.user_id,
@@ -135,18 +135,18 @@ export async function getModerators(
   const moderators = data.data || []
   return moderators.map(function parseSimpleUser(data): SimpleUser {
     if (!isModeratorUserData(data)) {
-      throw new Error("Could not parse SimpleUser:" + JSON.stringify(data))
+      throw new Error("isModeratorUserData failed:" + JSON.stringify(data))
     }
     return {
-      id: data.user_id,
+      id: parseInt(data.user_id),
       displayName: data.user_name
     }
   })
 
   function isModeratorUserData(
     data
-  ): data is { user_id: number; user_name: string } {
-    return Number.isInteger(data.user_id) && typeof data.user_name === "string"
+  ): data is { user_id: string; user_name: string } {
+    return typeof data.user_id === "string" && typeof data.user_name === "string"
   }
 }
 
