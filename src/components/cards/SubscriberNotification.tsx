@@ -209,10 +209,13 @@ export default function SubscriberNotification({
   }, [message, displayName, months])
 
   return (
-    <div className="subscriber-notification" style={{
-      styleContainer,
-      ...style
-    }}>
+    <div
+      className="subscriber-notification"
+      style={{
+        styleContainer,
+        ...style
+      }}
+    >
       <motion.div
         className="card-back"
         style={styleCardBack}

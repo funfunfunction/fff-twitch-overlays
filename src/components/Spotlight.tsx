@@ -117,28 +117,20 @@ function Spotlight() {
 
   return (
     <div className="scene-spotlight">
-      <motion.div
-        animate={controls}
-        className="big-topic"
-      >
+      <motion.div animate={controls} className="big-topic">
         {bigLabelText}
       </motion.div>
 
       <SubscriberNotification
-        style={{ display: 'none'}}
+        style={{ display: "none" }}
         data={{
           displayName: "underscorefunk",
           months: 8,
           message: "omgsjdkh kjdj hjhd jasdhdjk hdajk ajks"
         }}
       ></SubscriberNotification>
-
     </div>
   )
 }
-
-
-  
-  
 
 export default Spotlight
