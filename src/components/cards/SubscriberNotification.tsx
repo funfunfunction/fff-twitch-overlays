@@ -35,10 +35,19 @@ const styleStreakText: CSS.Properties = {
   fontSize: '1.8rem',
   lineHeight: '2rem',
 }
+const styleStreakTextSubscribed: CSS.Properties = {
+  ...styleStreakText,
+  marginRight: '0.4rem'
+}
+const styleStreakTextFor: CSS.Properties = {
+  ...styleStreakText,
+  marginRight: '0.4rem'
+}
 const styleStreakTextCounter: CSS.Properties = {
   ...styleStreakText,
   fontSize: '2.2rem',
-  color: '#FFF203'
+  color: '#FFF203',
+  marginRight: '0.4rem'
 }
 
 const messageStyle: CSS.Properties = {
@@ -183,12 +192,12 @@ export default function SubscriberNotification({
               damping: 4
             }
           })
-          await delay(200)
+          await delay(175)
         }
       })()
 
       // last part of streak text "... months!"
-      await delay((months % 10) * (200 + 50))
+      await delay((months % 10) * (175 + 100))
       showStreakText(controlStreakTextMonths)
 
       // and finally fade in the message
@@ -208,8 +217,8 @@ export default function SubscriberNotification({
         </motion.div>
 
         <motion.div className="streak">
-          <motion.div className="text-subscribed" style={styleStreakText} animate={controlStreakTextSubcribed}>subscribed</motion.div>
-          <motion.div className="text-for" style={styleStreakText} animate={controlStreakTextFor} >for</motion.div>
+          <motion.div className="text-subscribed" style={styleStreakTextSubscribed} animate={controlStreakTextSubcribed}>subscribed</motion.div>
+          <motion.div className="text-for" style={styleStreakTextFor} animate={controlStreakTextFor} >for</motion.div>
           <motion.div className="text-counter" style={styleStreakTextCounter} animate={controlStreakTextCounter} ref={refStreakTextCounter}>
             {months}
           </motion.div>
