@@ -1,6 +1,28 @@
 import * as functions from "firebase-functions"
 import { BigQuery } from "@google-cloud/bigquery"
 
+const makeKeyValuePairs = function(obj) {
+  const pairs = [] as any[]
+
+  for (const key in obj) {
+    let value = obj[key]
+    // Stringify if object
+    if (!!value && value.constructor === Object) {
+      value = JSON.stringify(value)
+    }
+    // Stringify if array
+    if (Array.isArray(value)) {
+      value = JSON.stringify(value)
+    }
+    // Stringify if boolean
+    if (value === true || value === false) {
+      value = value.toString()
+    }
+    pairs.push({ key, value })
+  }
+  return pairs
+}
+
 const streamIntoBigQuery = functions.firestore
   .document("events3/{eventId}")
   .onCreate(async snap => {
@@ -13,23 +35,8 @@ const streamIntoBigQuery = functions.firestore
 
     // Save userstate as key-value repeated records.
     const { message, ts, type, userstate } = data
-    const userstates = [] as any[]
-    for (const key in userstate) {
-      let value = userstate[key]
-      // Stringify if object
-      if (!!value && value.constructor === Object) {
-        value = JSON.stringify(value)
-      }
-      // Stringify if array
-      if (Array.isArray(value)) {
-        value = JSON.stringify(value)
-      }
-      // Stringify if boolean
-      if (value === true || value === false) {
-        value = value.toString()
-      }
-      userstates.push({ key, value })
-    }
+    const userstates = makeKeyValuePairs(userstate)
+
     const rows = [
       {
         message: message,
