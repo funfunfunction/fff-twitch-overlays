@@ -151,7 +151,7 @@ async function isStreaming(ownerAccessToken) {
 }
 
 async function logEvent(type, userstate, otherProps) {
-  console.log("logevent", type, userstate, otherProps)
+  console.log("logEvent triggered:", type, userstate, otherProps)
   try {
     // Use Twitch message id as key so that we can do idempotent updates, running multiple cloud functions
     const key = userstate["id"]
