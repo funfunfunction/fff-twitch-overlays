@@ -73,6 +73,10 @@ const chatEventLogger = functions
         process.exit(1)
       }
       const chat = tmi.Client({
+        connection: {
+          reconnect: true,
+          secure: true
+        },
         identity: {
           username: getOwnerUsername(),
           password: "oauth:" + accessToken
