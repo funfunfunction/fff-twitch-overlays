@@ -5,7 +5,7 @@ import tmi from "tmi.js"
 import whileTwitchLive from "../helpers/assorted/while-twitch-live"
 import { isString } from "util"
 
-const chatEventLogger = whileTwitchLive("chat-event-logger", async function() {
+const chatEventLogger = whileTwitchLive("tmi-raw", async function() {
   const accessToken = await getOwnerAccessToken()
   if (!accessToken) {
     console.error("Could not get owner access token, shutting down.")
@@ -90,7 +90,7 @@ async function logRawChatEvent(
     }
     await admin
       .firestore()
-      .collection("views/twitch-tmi-raw/events")
+      .collection("views/tmi-raw/events")
       .doc(key)
       .set(data)
   } catch (e) {
