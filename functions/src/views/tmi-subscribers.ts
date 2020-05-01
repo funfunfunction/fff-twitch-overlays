@@ -1,9 +1,9 @@
 import * as functions from "firebase-functions"
 import firebaseAdmin from "firebase-admin"
-import { SubscriptionTMIRawEvent } from "./tmi-raw"
+import { SubscriptionTMIRawEvent, eventCollectionFirebasePath as tmiRawPath } from "./tmi-raw"
 
 export default functions.firestore
-  .document("views/tmi-raw/events/{eventId}")
+  .document(tmiRawPath + "/{eventId}")
   .onCreate((snap, context) => {
     const db = firebaseAdmin.firestore()
 
