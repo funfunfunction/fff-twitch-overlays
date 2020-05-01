@@ -1,6 +1,10 @@
 import * as functions from "firebase-functions"
 import firebaseAdmin from "firebase-admin"
-import { SubscriptionTMIRawEvent, eventCollectionFirebasePath as tmiRawPath } from "./tmi-raw"
+import {
+  SubscriptionTMIRawEvent,
+  eventCollectionFirebasePath as tmiRawPath
+} from "./tmi-raw"
+import OffendingPropError from "../helpers/assorted/offending-prop-error"
 
 export default functions.firestore
   .document(tmiRawPath + "/{eventId}")
@@ -19,22 +23,15 @@ export default functions.firestore
     const cumulativeMonths = parseInt(event.userstate[
       "msg-param-cumulative-months"
     ] as any)
+
     if (isNaN(cumulativeMonths))
-      throw new Error(
-        "Could not parse cumulative months from event:" + JSON.stringify(event)
-      )
+      throw OffendingPropError("cumulativeMonths", event)
 
-    if (typeof event.userstate["display-name"] !== "string") {
-      throw new Error(
-        "Could not parse display name from event:" + JSON.stringify(event)
-      )
-    }
+    if (typeof event.userstate["display-name"] !== "string")
+      throw OffendingPropError("display-name", event)
 
-    if (typeof event.userstate["user-id"] !== "string") {
-      throw new Error(
-        "Could not parse user id from event:" + JSON.stringify(event)
-      )
-    }
+    if (typeof event.userstate["user-id"] !== "string")
+      throw OffendingPropError("user-id", event)
 
     // re-use key from raw events - which is in turn using
     // the id from userstate
