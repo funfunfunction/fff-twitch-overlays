@@ -33,7 +33,7 @@ export default function whileTwitchLive(
       // Only start logger if we're actually live on Twitch
       const ownerAccessToken = await getOwnerAccessToken()
       if (!(await isStreaming(ownerAccessToken))) {
-        console.log("FFF is not live, no need to start up any logger")
+        console.log("Owner channel is NOT live, no need to start up any logger")
         return null
       }
 
@@ -77,8 +77,7 @@ export default function whileTwitchLive(
 
       // pulse every five seconds
       const intervalId = setInterval(async function() {
-        await db
-          .collection("event-logger-state")
+        await stateCollection
           .doc(context.eventId)
           .set({
             uid: context.eventId,
