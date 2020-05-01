@@ -26,25 +26,40 @@ const makeKeyValuePairs = function(obj) {
 }
 
 const streamIntoBigQuery = functions.firestore
-  .document("events3/{eventId}")
+  .document("events4/{eventId}")
   .onCreate(async snap => {
     const bigquery = new BigQuery()
     const bqDatasetId = "collections"
-    const bqTableId = "events3"
+    const bqTableId = "events4"
 
     const data = snap.data() as any
     if (!data) throw new Error("event document did not contain any data")
 
     // Save userstate as key-value repeated records.
-    const { message, ts, type, userstate } = data
-    const userstates = makeKeyValuePairs(userstate)
-
+    const { message,
+      ts,
+      type,
+      userstate,
+      method,
+      methods,
+      recipient,
+      numbOfSubs,
+      months,
+      streakMonths } = data
     const rows = [
       {
-        message: message,
+        date: new Date(parseInt(ts, 10)).toISOString().substr(0,10),
         ts: parseInt(ts, 10),
+        display_name: userstate["display-name"],
         type: type,
-        userstate: userstates
+        message: message,
+        userstate: makeKeyValuePairs(userstate),
+        method: makeKeyValuePairs(method),
+        methods: makeKeyValuePairs(methods),
+        recipient: recipient,
+        numb_of_subs: parseInt(numbOfSubs, 10),
+        months: parseInt(months, 10),
+        streak_months: parseInt(streakMonths, 10)
       }
     ]
 
