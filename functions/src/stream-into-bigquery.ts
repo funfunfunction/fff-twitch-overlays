@@ -26,11 +26,11 @@ const makeKeyValuePairs = function(obj) {
 }
 
 const streamIntoBigQuery = functions.firestore
-  .document("events4/{eventId}")
+  .document("views/tmi-raw/events/{eventId}")
   .onCreate(async snap => {
     const bigquery = new BigQuery()
     const bqDatasetId = "collections"
-    const bqTableId = "events4"
+    const bqTableId = "tmi_events"
 
     const data = snap.data() as any
     if (!data) throw new Error("event document did not contain any data")
