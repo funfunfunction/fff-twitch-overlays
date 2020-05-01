@@ -8,7 +8,7 @@ import whileTwitchLive from "./helpers/assorted/while-twitch-live"
 
 const db = admin.firestore()
 
-const chatEventLogger = whileTwitchLive('chat-event-logger', async function() {
+const chatEventLogger = whileTwitchLive("chat-event-logger", async function() {
   const accessToken = await getOwnerAccessToken()
   if (!accessToken) {
     console.error("Could not get owner access token, shutting down.")
@@ -36,10 +36,8 @@ const chatEventLogger = whileTwitchLive('chat-event-logger', async function() {
     logEvent("subscription", userstate, { method, message })
   )
 
-  chat.on(
-    "resub",
-    (channel, username, months, message, userstate, methods) =>
-      logEvent("resub", userstate, { months, message, methods })
+  chat.on("resub", (channel, username, months, message, userstate, methods) =>
+    logEvent("resub", userstate, { months, message, methods })
   )
 
   chat.on(

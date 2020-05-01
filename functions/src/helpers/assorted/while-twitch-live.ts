@@ -17,8 +17,13 @@ const db = admin.firestore()
  * @param id A unique string to identify the callback in the database.
  * @param callback Function that will be executed every minute while live.
  */
-export default async function whileTwitchLive(id: string, callback: () => Promise<any>) {
-  const stateCollection = db.collection(`state/while-twitch-live/wrappers/${id}`)
+export default async function whileTwitchLive(
+  id: string,
+  callback: () => Promise<any>
+) {
+  const stateCollection = db.collection(
+    `state/while-twitch-live/wrappers/${id}`
+  )
   return functions
     .runWith({
       memory: "128MB",
