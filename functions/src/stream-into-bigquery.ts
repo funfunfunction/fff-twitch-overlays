@@ -54,6 +54,7 @@ const streamIntoBigQuery = functions.firestore
         type: type,
         message: message,
         userstate: makeKeyValuePairs(userstate),
+        badges: makeKeyValuePairs(userstate.badges),
         method: makeKeyValuePairs(method),
         methods: makeKeyValuePairs(methods),
         recipient: recipient,
