@@ -77,12 +77,10 @@ export default function whileTwitchLive(
 
       // pulse every five seconds
       const intervalId = setInterval(async function() {
-        await stateCollection
-          .doc(context.eventId)
-          .set({
-            uid: context.eventId,
-            pulse: Number(Date.now())
-          })
+        await stateCollection.doc(context.eventId).set({
+          uid: context.eventId,
+          pulse: Number(Date.now())
+        })
       }, 5000)
 
       // automatically die gracefully after 8 min, cloud functions will time out after 9 otherwise
