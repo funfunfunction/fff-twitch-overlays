@@ -133,30 +133,31 @@ export async function getModerators(
   broadcasterId
 ): Promise<SimpleUser[]> {
   // TODO: pagination!!
-  
+
   function getPage(after: string | null) {
     return helixGet(
       clientId,
       accessToken,
       "getModerators",
-      "/moderation/moderators?broadcaster_id=" + broadcasterId +
-      (after ? "?after=" + after : "")
+      "/moderation/moderators?broadcaster_id=" +
+        broadcasterId +
+        (after ? "?after=" + after : "")
     )
   }
 
   let items: any = []
   let cursor = null
   // eslint-disable-next-line no-constant-condition
-  while(true) {
+  while (true) {
     const page = await getPage(cursor)
     cursor = null
     if (!page.data) break
     items = items.concat(page.data)
     cursor = page.pagination && page.pagination.cursor
-    if(cursor) continue
+    if (cursor) continue
     break
   }
-  
+
   return items.map(function parseSimpleUser(data): SimpleUser {
     if (!isModeratorUserData(data)) {
       throw new Error("isModeratorUserData failed:" + JSON.stringify(data))
