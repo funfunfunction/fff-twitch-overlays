@@ -22,9 +22,7 @@ export default function whileTwitchLive(
   id: string,
   callback: () => Promise<any>
 ): CloudFunction<unknown> {
-  const stateCollection = db.collection(
-    `state/while-twitch-live/wrappers/${id}`
-  )
+  const stateCollection = db.collection(`state/while-twitch-live/${id}`)
   return functions
     .runWith({
       memory: "128MB",
@@ -46,8 +44,7 @@ export default function whileTwitchLive(
       // it is assumed to have died and we'll start up some more
       // for redundancy
       const assumedDeadTime = Number(Date.now()) - 25000
-      const snapshot = await db
-        .collection("event-logger-state")
+      const snapshot = await stateCollection
         .where("pulse", ">", assumedDeadTime)
         .get()
 
