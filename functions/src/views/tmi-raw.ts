@@ -1,14 +1,9 @@
 import * as admin from "firebase-admin"
-
 import getOwnerUsername from "../helpers/assorted/get-owner-username"
 import getOwnerAccessToken from "../helpers/assorted/get-owner-access-token"
-
 import tmi from "tmi.js"
 import whileTwitchLive from "../helpers/assorted/while-twitch-live"
-
 import { isString } from "util"
-
-const db = admin.firestore()
 
 const chatEventLogger = whileTwitchLive("chat-event-logger", async function() {
   const accessToken = await getOwnerAccessToken()
@@ -28,7 +23,7 @@ const chatEventLogger = whileTwitchLive("chat-event-logger", async function() {
   })
   await chat.connect()
   await chat.join(getOwnerUsername())
-  console.log("chatEventLogger joined channel of ", getOwnerUsername())
+  console.log("tmiRaw logger joined channel of ", getOwnerUsername())
 
   chat.on("chat", (channel, userstate, message) =>
     logRawChatEvent("chat", userstate, message)
@@ -93,7 +88,7 @@ async function logRawChatEvent(
       userstate,
       message
     }
-    await db
+    await admin.firestore()
       .collection("views/twitch-tmi-raw/events")
       .doc(key)
       .set(data)
