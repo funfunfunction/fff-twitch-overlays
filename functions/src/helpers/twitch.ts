@@ -139,10 +139,12 @@ export async function getModerators(
     if (!isModeratorUserData(data)) {
       throw new Error("isModeratorUserData failed:" + JSON.stringify(data))
     }
-    return {
+    const moderators = {
       id: parseInt(data.user_id),
       displayName: data.user_name
     }
+    console.log('getModerators returning', moderators)
+    return moderators
   })
 
   function isModeratorUserData(
