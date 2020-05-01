@@ -2,6 +2,8 @@ import * as functions from "firebase-functions"
 import { BigQuery } from "@google-cloud/bigquery"
 
 const makeKeyValuePairs = function(obj) {
+  if (!obj) return null
+
   const pairs = [] as any[]
 
   for (const key in obj) {
