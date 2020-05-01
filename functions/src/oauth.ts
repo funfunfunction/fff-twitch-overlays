@@ -85,9 +85,10 @@ export const token = functions.https.onRequest(async (req, res) => {
 
       const accessToken = results.access_token
       const twitchUser = await getUser(
-        functions.config().twitch.client_id,
+        getTwitchCredentials().clientId,
         accessToken
       )
+      console.log("twitchUser", twitchUser)
 
       const isOwner = twitchUser.id === getChannelOwnerUserId()
 
