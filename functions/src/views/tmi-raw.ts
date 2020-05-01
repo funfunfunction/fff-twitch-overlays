@@ -124,4 +124,9 @@ interface TMIRawEvent {
   message: string | undefined
 }
 
+export interface SubscriptionTMIRawEvent extends TMIRawEvent {
+  type: "subscription"
+  userstate: tmi.SubUserstate & LoggableUserstate
+}
+
 export default chatEventLogger
