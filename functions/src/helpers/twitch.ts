@@ -141,7 +141,7 @@ export async function getModerators(
       "getModerators",
       "/moderation/moderators?broadcaster_id=" +
         broadcasterId +
-        (after ? "?after=" + after : "")
+        (after ? "&after=" + after : "")
     )
   }
 
