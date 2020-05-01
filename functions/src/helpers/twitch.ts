@@ -143,7 +143,7 @@ export async function getModerators(
       id: parseInt(data.user_id),
       displayName: data.user_name
     }
-    console.log('getModerators returning', moderators)
+    console.log("getModerators returning", moderators)
     return moderators
   })
 
