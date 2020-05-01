@@ -8,10 +8,6 @@ import whileTwitchLive from "./helpers/assorted/while-twitch-live"
 
 const db = admin.firestore()
 
-// TODO can we get this to trigger on twitch-live-status updates by adding some lastupate,
-// (but be beware of triggering tons of updates)
-// not sure if we can combine with runWith as we need the timeoutSeconds
-
 const chatEventLogger = whileTwitchLive('chat-event-logger', async function() {
   const accessToken = await getOwnerAccessToken()
   if (!accessToken) {
