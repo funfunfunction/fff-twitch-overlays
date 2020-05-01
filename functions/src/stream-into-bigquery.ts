@@ -36,7 +36,8 @@ const streamIntoBigQuery = functions.firestore
     if (!data) throw new Error("event document did not contain any data")
 
     // Save userstate as key-value repeated records.
-    const { message,
+    const {
+      message,
       ts,
       type,
       userstate,
@@ -45,10 +46,11 @@ const streamIntoBigQuery = functions.firestore
       recipient,
       numbOfSubs,
       months,
-      streakMonths } = data
+      streakMonths
+    } = data
     const rows = [
       {
-        date: new Date(parseInt(ts, 10)).toISOString().substr(0,10),
+        date: new Date(parseInt(ts, 10)).toISOString().substr(0, 10),
         ts: parseInt(ts, 10),
         display_name: userstate["display-name"],
         type: type,
