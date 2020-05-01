@@ -88,7 +88,8 @@ async function logRawChatEvent(
       userstate,
       message
     }
-    await admin.firestore()
+    await admin
+      .firestore()
       .collection("views/twitch-tmi-raw/events")
       .doc(key)
       .set(data)
