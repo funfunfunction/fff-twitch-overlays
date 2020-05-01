@@ -5,6 +5,8 @@ import tmi from "tmi.js"
 import whileTwitchLive from "../helpers/assorted/while-twitch-live"
 import { isString } from "util"
 
+export const eventCollectionFirebasePath = "views/tmi-raw/events"
+
 const chatEventLogger = whileTwitchLive("tmi-raw", async function() {
   const accessToken = await getOwnerAccessToken()
   if (!accessToken) {
@@ -90,7 +92,7 @@ async function logRawChatEvent(
     }
     await admin
       .firestore()
-      .collection("views/tmi-raw/events")
+      .collection(eventCollectionFirebasePath)
       .doc(key)
       .set(data)
   } catch (e) {
@@ -122,6 +124,11 @@ interface TMIRawEvent {
   ts: number
   userstate: tmi.CommonUserstate & LoggableUserstate
   message: string | undefined
+}
+
+export interface SubscriptionTMIRawEvent extends TMIRawEvent {
+  type: "subscription"
+  userstate: tmi.SubUserstate & LoggableUserstate
 }
 
 export default chatEventLogger
