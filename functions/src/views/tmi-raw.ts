@@ -78,9 +78,12 @@ async function logRawChatEvent(
       )
 
     const ts: number = parseInt(userstate["tmi-sent-ts"])
-    if(isNaN(ts)) 
-      throw new Error("Userstate had value that parsed as NaN:" + JSON.stringify({ userstate }))
-    
+    if (isNaN(ts))
+      throw new Error(
+        "Userstate had value that parsed as NaN:" +
+          JSON.stringify({ userstate })
+      )
+
     // Use Twitch message id as key so that we can do
     // idempotent updates, running multiple cloud functions
     const key: string = userstate.id
