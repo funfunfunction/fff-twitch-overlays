@@ -15,7 +15,13 @@ export async function createMarker(clientId, accessToken, userId, description) {
   return response
 }
 
-export function getStreams(clientId, accessToken, userId) {
+export function getStreams(
+  clientId,
+  accessToken,
+  userId
+): Promise<{
+  data: { id: string }[]
+}> {
   return helixGet(
     clientId,
     accessToken,
@@ -134,17 +140,16 @@ export async function getModerators(
     "/moderation/moderators?broadcaster_id=" + broadcasterId
   )
 
+  console.log("getModerators response data", data)
   const moderators = data.data || []
   return moderators.map(function parseSimpleUser(data): SimpleUser {
     if (!isModeratorUserData(data)) {
       throw new Error("isModeratorUserData failed:" + JSON.stringify(data))
     }
-    const moderators = {
+    return {
       id: parseInt(data.user_id),
       displayName: data.user_name
     }
-    console.log("getModerators returning", moderators)
-    return moderators
   })
 
   function isModeratorUserData(
