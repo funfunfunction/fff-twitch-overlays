@@ -5,6 +5,7 @@ import getOwnerAccessToken from "../assorted/get-owner-access-token"
 import getChannelOwnerUserId from "../assorted/get-channel-owner-user-id"
 import { getStreams } from "../twitch"
 import getTwitchCredentials from "./get-twitch-credentials"
+import { CloudFunction } from "firebase-functions"
 
 const db = admin.firestore()
 
@@ -17,10 +18,10 @@ const db = admin.firestore()
  * @param id A unique string to identify the callback in the database.
  * @param callback Function that will be executed every minute while live.
  */
-export default async function whileTwitchLive(
+export default function whileTwitchLive(
   id: string,
   callback: () => Promise<any>
-) {
+): CloudFunction<unknown> {
   const stateCollection = db.collection(
     `state/while-twitch-live/wrappers/${id}`
   )
