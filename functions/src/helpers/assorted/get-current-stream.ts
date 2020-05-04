@@ -3,7 +3,7 @@ import getChannelOwnerUserId from "./get-channel-owner-user-id"
 import getTwitchCredentials from "./get-twitch-credentials"
 import getOwnerAccessToken from "./get-owner-access-token"
 
-export default async function getCurrentStream() : Promise<{
+export default async function getCurrentStream(): Promise<{
   id: number
 }> {
   const streamsResponse = await getStreams(
@@ -16,7 +16,6 @@ export default async function getCurrentStream() : Promise<{
   if (streams.length === 0) return null
   const stream = streams[0]
   const id = parseInt(stream.id)
-  if (isNaN(id))
-    throw Error("Could not parse id as a number")
+  if (isNaN(id)) throw Error("Could not parse id as a number")
   return { id }
 }

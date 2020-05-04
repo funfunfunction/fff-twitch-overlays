@@ -6,22 +6,25 @@ import {
 } from "../tmi-raw"
 import OffendingPropError from "../../helpers/assorted/offending-prop-error"
 import getCurrentStream from "../../helpers/assorted/get-current-stream"
-import { streamDocPath, TMISubscriberNotificaton, notificationsCollectionPath } from "./shared"
+import {
+  streamDocPath,
+  TMISubscriberNotificaton,
+  notificationsCollectionPath
+} from "./shared"
 
 const db = firebaseAdmin.firestore()
 
 export default functions.firestore
   .document(tmiRawPath + "/{notificationId}")
   .onCreate(async (snap, context) => {
-
     const currentStream = await getCurrentStream()
     if (!currentStream) {
-      // This should not happen as subscribe notification should 
+      // This should not happen as subscribe notification should
       // be listened to when live
-      console.warn('Could not find current stream')
+      console.warn("Could not find current stream")
       return
     }
-    
+
     const data = snap.data()
     if (!data) throw new Error("no document data")
     if (data.type !== "subscription") return false
@@ -46,11 +49,13 @@ export default functions.firestore
 
     // Store timestamp for last event, so that
     // we can prune these views later
-    await db.doc(streamDocPath(currentStream.id))
-      .set({
+    await db.doc(streamDocPath(currentStream.id)).set(
+      {
         tsLastNotification: notification.ts
-      }, { merge: true })
-    
+      },
+      { merge: true }
+    )
+
     // re-use key from raw events - which is in turn using
     // the id from userstate
     const key = context.params.notificationId
@@ -68,8 +73,3 @@ export default functions.firestore
       .doc(key)
       .set(doc)
   })
-
-
-
-
-
