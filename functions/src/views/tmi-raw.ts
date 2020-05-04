@@ -88,17 +88,18 @@ async function logRawChatEvent(
       type,
       ts,
       userstate,
-      message
+      message: message || null
     }
     await admin
       .firestore()
       .collection(eventCollectionFirebasePath)
       .doc(key)
       .set(data)
-  } catch (e) {
-    throw new Error(
-      `Failed writing ${type} event to database:` +
-        JSON.stringify({ userstate, message })
+  } catch (error) {
+    console.error(
+      `Failed writing ${type} event to database:`,
+      { userstate, message },
+      error
     )
   }
 }
@@ -123,7 +124,7 @@ interface TMIRawEvent {
     | "action"
   ts: number
   userstate: tmi.CommonUserstate & LoggableUserstate
-  message: string | undefined
+  message: string | null
 }
 
 export interface SubscriptionTMIRawEvent extends TMIRawEvent {
