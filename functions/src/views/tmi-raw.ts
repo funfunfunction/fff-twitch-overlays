@@ -32,11 +32,11 @@ const chatEventLogger = whileTwitchLive("tmi-raw", async function() {
   )
 
   chat.on("subscription", (channel, username, method, message, userstate) =>
-    logRawChatEvent("subscription", userstate)
+    logRawChatEvent("subscription", userstate, message)
   )
 
   chat.on("resub", (channel, username, months, message, userstate) =>
-    logRawChatEvent("resub", userstate)
+    logRawChatEvent("resub", userstate, message)
   )
 
   chat.on(
@@ -96,10 +96,14 @@ async function logRawChatEvent(
       .doc(key)
       .set(data)
   } catch (error) {
+    
     console.error(
       `Failed writing ${type} event to database:`,
       { userstate, message },
-      error
+      error)
+    throw new Error(
+       +
+        JSON.stringify()
     )
   }
 }
