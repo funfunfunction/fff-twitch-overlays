@@ -96,15 +96,12 @@ async function logRawChatEvent(
       .doc(key)
       .set(data)
   } catch (error) {
-    
     console.error(
       `Failed writing ${type} event to database:`,
       { userstate, message },
-      error)
-    throw new Error(
-       +
-        JSON.stringify()
+      error
     )
+    throw new Error(+JSON.stringify())
   }
 }
 
