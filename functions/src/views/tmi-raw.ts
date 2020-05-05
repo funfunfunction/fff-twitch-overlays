@@ -32,11 +32,11 @@ const chatEventLogger = whileTwitchLive("tmi-raw", async function() {
   )
 
   chat.on("subscription", (channel, username, method, message, userstate) =>
-    logRawChatEvent("subscription", userstate)
+    logRawChatEvent("subscription", userstate, message)
   )
 
   chat.on("resub", (channel, username, months, message, userstate) =>
-    logRawChatEvent("resub", userstate)
+    logRawChatEvent("resub", userstate, message)
   )
 
   chat.on(
@@ -88,18 +88,20 @@ async function logRawChatEvent(
       type,
       ts,
       userstate,
-      message
+      message: message || null
     }
     await admin
       .firestore()
       .collection(eventCollectionFirebasePath)
       .doc(key)
       .set(data)
-  } catch (e) {
-    throw new Error(
-      `Failed writing ${type} event to database:` +
-        JSON.stringify({ userstate, message })
+  } catch (error) {
+    console.error(
+      `Failed writing ${type} event to database:`,
+      { userstate, message },
+      error
     )
+    throw new Error("Could not process event")
   }
 }
 
@@ -123,7 +125,7 @@ interface TMIRawEvent {
     | "action"
   ts: number
   userstate: tmi.CommonUserstate & LoggableUserstate
-  message: string | undefined
+  message: string | null
 }
 
 export interface SubscriptionTMIRawEvent extends TMIRawEvent {

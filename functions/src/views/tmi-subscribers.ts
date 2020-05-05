@@ -57,5 +57,5 @@ export interface TMISubscriberEvent {
   userId: string
   displayName: string
   cumulativeMonths: number
-  message?: string
+  message: string | null
 }
