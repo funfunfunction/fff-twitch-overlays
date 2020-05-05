@@ -101,7 +101,7 @@ async function logRawChatEvent(
       { userstate, message },
       error
     )
-    throw new Error(+JSON.stringify())
+    throw new Error("Could not process event")
   }
 }
 
