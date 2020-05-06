@@ -3,13 +3,25 @@ import firebaseAdmin from "firebase-admin"
 import {
   SubscriptionTMIRawEvent,
   eventCollectionFirebasePath as tmiRawPath
-} from "./tmi-raw"
-import OffendingPropError from "../helpers/assorted/offending-prop-error"
+} from "../tmi-raw"
+import OffendingPropError from "../../helpers/assorted/offending-prop-error"
+import getCurrentStream from "../../helpers/assorted/get-current-stream"
+import {
+  streamDocPath,
+  notificationsCollectionPath,
+  SubscriberChatNotificationData
+} from "./shared"
 
 export default functions.firestore
   .document(tmiRawPath + "/{eventId}")
-  .onCreate((snap, context) => {
-    const db = firebaseAdmin.firestore()
+  .onCreate(async (snap, context) => {
+    const currentStream = await getCurrentStream()
+    if (!currentStream) {
+      // This should not happen as subscribe notification should
+      // be listened to when live
+      console.warn("Could not find current stream")
+      return
+    }
 
     const data = snap.data()
     if (!data) throw new Error("no document data")
@@ -33,10 +45,21 @@ export default functions.firestore
     if (typeof event.userstate["user-id"] !== "string")
       throw OffendingPropError("user-id", event)
 
+    const db = firebaseAdmin.firestore()
+
+    // Store timestamp for last event, so that
+    // we can prune these views later
+    await db.doc(streamDocPath(currentStream.id)).set(
+      {
+        tsLastNotification: event.ts
+      },
+      { merge: true }
+    )
+
     // re-use key from raw events - which is in turn using
     // the id from userstate
     const key = context.params.eventId
-    const doc: TMISubscriberEvent = {
+    const doc: SubscriberChatNotificationData = {
       id: context.params.eventId,
       ts: event.ts,
       userId: event.userstate["user-id"],
@@ -45,17 +68,9 @@ export default functions.firestore
       message: event.message
     }
 
-    return db
-      .collection("views/tmi-subscribers/events")
+    return firebaseAdmin
+      .firestore()
+      .collection(notificationsCollectionPath(currentStream.id))
       .doc(key)
       .set(doc)
   })
-
-export interface TMISubscriberEvent {
-  id: string
-  ts: number
-  userId: string
-  displayName: string
-  cumulativeMonths: number
-  message: string | null
-}

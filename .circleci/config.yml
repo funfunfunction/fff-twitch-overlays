@@ -45,7 +45,7 @@ jobs:
           command: cd functions && npm ci
       - run: 
           name: Deploy to Firebase
-          command: npx firebase deploy -P production --token "$FIREBASE_TOKEN"
+          command: npx firebase deploy -P production --token "$FIREBASE_TOKEN" --force
 
 workflows:
   version: 2
