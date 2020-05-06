@@ -1,3 +1,7 @@
+// Types, helpers and constants that is shared with 
+// consumers of the view. Is free from firebase references so
+// that it can be easily used by the web client
+
 export const streamDocPath = (streamId: number) =>
   `views/tmi-subscribers/streams/${streamId}`
 export const notificationsCollectionPath = (streamId: number) =>
