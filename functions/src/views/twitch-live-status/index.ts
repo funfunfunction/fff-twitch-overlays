@@ -1,9 +1,9 @@
 import * as functions from "firebase-functions"
 import firebaseAdmin from "firebase-admin"
 
-import getOwnerAccessToken from "../helpers/assorted/get-owner-access-token"
-import { getStreams } from "../helpers/twitch"
-import getChannelOwnerUserId from "../helpers/assorted/get-channel-owner-user-id"
+import getOwnerAccessToken from "../../helpers/assorted/get-owner-access-token"
+import { getStreams } from "../../helpers/twitch"
+import getChannelOwnerUserId from "../../helpers/assorted/get-channel-owner-user-id"
 
 export default functions
   .runWith({
