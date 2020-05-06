@@ -14,6 +14,7 @@ export function subscribeToSubscriberNotifications(
   const unsubscribe: UnsubscribeFunc = window.firebase
     .firestore()
     .collection(notificationsCollectionPath(streamId))
+    .orderBy("ts")
     .onSnapshot(async function(querySnapshot) {
       for (const change of querySnapshot.docChanges()) {
         if (change.type !== "added") {
