@@ -5,11 +5,24 @@ import {
   eventCollectionFirebasePath as tmiRawPath
 } from "../tmi-raw"
 import OffendingPropError from "../../helpers/assorted/offending-prop-error"
+import getCurrentStream from "../../helpers/assorted/get-current-stream";
+
+const streamDocPath = (streamId: number) =>
+  `views/tmi-subscribers/streams/${streamId}`
+const notificationsCollectionPath = (streamId: number) =>
+  `${streamDocPath(streamId)}/notifications`
 
 export default functions.firestore
   .document(tmiRawPath + "/{eventId}")
-  .onCreate((snap, context) => {
-    const db = firebaseAdmin.firestore()
+  .onCreate(async (snap, context) => {
+
+    const currentStream = await getCurrentStream()
+    if (!currentStream) {
+      // This should not happen as subscribe notification should
+      // be listened to when live
+      console.warn("Could not find current stream")
+      return
+    }
 
     const data = snap.data()
     if (!data) throw new Error("no document data")
@@ -45,8 +58,9 @@ export default functions.firestore
       message: event.message
     }
 
-    return db
-      .collection("views/tmi-subscribers/events")
+    return firebaseAdmin
+      .firestore()
+      .collection(notificationsCollectionPath(currentStream.id))
       .doc(key)
       .set(doc)
   })
