@@ -46,6 +46,17 @@ export default functions.firestore
     if (typeof event.userstate["user-id"] !== "string")
       throw OffendingPropError("user-id", event)
 
+    const db = firebaseAdmin.firestore()
+
+    // Store timestamp for last event, so that
+    // we can prune these views later
+    await db.doc(streamDocPath(currentStream.id)).set(
+      {
+        tsLastNotification: event.ts
+      },
+      { merge: true }
+    )
+
     // re-use key from raw events - which is in turn using
     // the id from userstate
     const key = context.params.eventId
