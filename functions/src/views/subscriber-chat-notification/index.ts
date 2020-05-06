@@ -8,7 +8,7 @@ import OffendingPropError from "../../helpers/assorted/offending-prop-error"
 import getCurrentStream from "../../helpers/assorted/get-current-stream";
 
 const streamDocPath = (streamId: number) =>
-  `views/tmi-subscribers/streams/${streamId}`
+  `views/subscriber-chat-notification/streams/${streamId}`
 const notificationsCollectionPath = (streamId: number) =>
   `${streamDocPath(streamId)}/notifications`
 
@@ -60,7 +60,7 @@ export default functions.firestore
     // re-use key from raw events - which is in turn using
     // the id from userstate
     const key = context.params.eventId
-    const doc: TMISubscriberEvent = {
+    const doc: SubscriberChatNotificationData = {
       id: context.params.eventId,
       ts: event.ts,
       userId: event.userstate["user-id"],
@@ -76,7 +76,7 @@ export default functions.firestore
       .set(doc)
   })
 
-export interface TMISubscriberEvent {
+export interface SubscriberChatNotificationData {
   id: string
   ts: number
   userId: string
