@@ -18,11 +18,11 @@ export function subscribeToCurrentStreamId(
         return
       }
 
-      if (data.live !== false) {
+      if (data.live === false) {
         callback(null)
         return
       }
-      
+
       // streamId should really be a number in the database,
       // but not going to fix this now as more stuff relies 
       // this view
