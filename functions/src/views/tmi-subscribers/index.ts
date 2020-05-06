@@ -3,8 +3,8 @@ import firebaseAdmin from "firebase-admin"
 import {
   SubscriptionTMIRawEvent,
   eventCollectionFirebasePath as tmiRawPath
-} from "./tmi-raw"
-import OffendingPropError from "../helpers/assorted/offending-prop-error"
+} from "../tmi-raw"
+import OffendingPropError from "../../helpers/assorted/offending-prop-error"
 
 export default functions.firestore
   .document(tmiRawPath + "/{eventId}")
