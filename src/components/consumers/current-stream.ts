@@ -1,6 +1,4 @@
-import {
-  twitchLiveStatusDocumentPath
-} from "@functions/src/views/twitch-live-status/shared"
+import { twitchLiveStatusDocumentPath } from "@functions/src/views/twitch-live-status/shared"
 
 type UnsubscribeFunc = () => void
 
@@ -12,8 +10,8 @@ export function subscribeToCurrentStreamId(
     .doc(twitchLiveStatusDocumentPath)
     .onSnapshot(async function(snapshot) {
       const data = snapshot.data()
-      if(!data) {
-        console.log('No live data')
+      if (!data) {
+        console.log("No live data")
         callback(null)
         return
       }
@@ -24,12 +22,12 @@ export function subscribeToCurrentStreamId(
       }
 
       // streamId should really be a number in the database,
-      // but not going to fix this now as more stuff relies 
+      // but not going to fix this now as more stuff relies
       // this view
-      if (typeof data.streamId === 'string') {
+      if (typeof data.streamId === "string") {
         callback(parseInt(data.streamId))
       } else {
-        console.error('data was wrong', data)
+        console.error("data was wrong", data)
       }
     })
   return unsubscribe

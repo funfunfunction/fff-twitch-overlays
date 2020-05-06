@@ -1,30 +1,41 @@
 import React, { useEffect, useState } from "react"
 import SubscriberNotification from "./cards/SubscriberNotification"
 import { subscribeToSubscriberNotifications } from "./consumers/subcriber-notifications"
-import { SubscriberChatNotificationData } from "../../functions/src/views/subscriber-chat-notification/shared";
-import { subscribeToCurrentStreamId } from "./consumers/current-stream";
+import { SubscriberChatNotificationData } from "../../functions/src/views/subscriber-chat-notification/shared"
+import { subscribeToCurrentStreamId } from "./consumers/current-stream"
 
 export function CardCarousel() {
-  const [subscriberNotificationQueue, setSubscriberNotificationQueue] = useState<SubscriberChatNotificationData[]>([]);
-  const [currentStreamId, setCurrentStreamId] = useState<number | null>(null);
+  const [
+    subscriberNotificationQueue,
+    setSubscriberNotificationQueue
+  ] = useState<SubscriberChatNotificationData[]>([])
+  const [currentStreamId, setCurrentStreamId] = useState<number | null>(null)
   const [time, setTime] = useState(Date.now())
-  const [lastDisplay, setLastDisplay] = useState(0);
-  const [subscriberNotificationIndex, setSubscriberNotificationIndex] = useState(-1);
-  
+  const [lastDisplay, setLastDisplay] = useState(0)
+  const [
+    subscriberNotificationIndex,
+    setSubscriberNotificationIndex
+  ] = useState(-1)
+
   useEffect(function tick() {
     setInterval(() => {
       setTime(Date.now())
     }, 100)
   }, [])
-  
-  useEffect(() => { subscribeToCurrentStreamId(setCurrentStreamId) }, [])
 
-  useEffect(function queueSubscriberNotifications() {
-    if (currentStreamId == null) return
-    subscribeToSubscriberNotifications(currentStreamId, (notification) => {
-      setSubscriberNotificationQueue(x => x.concat(notification))
-    })
-  }, [currentStreamId])
+  useEffect(() => {
+    subscribeToCurrentStreamId(setCurrentStreamId)
+  }, [])
+
+  useEffect(
+    function queueSubscriberNotifications() {
+      if (currentStreamId == null) return
+      subscribeToSubscriberNotifications(currentStreamId, notification => {
+        setSubscriberNotificationQueue(x => x.concat(notification))
+      })
+    },
+    [currentStreamId]
+  )
 
   useEffect(() => {
     const timeSinceLastDisplay = time - lastDisplay
@@ -36,16 +47,19 @@ export function CardCarousel() {
         setLastDisplay(Date.now())
       }
     }
-  }, [ time, subscriberNotificationIndex, lastDisplay ])
+  }, [time, subscriberNotificationIndex, lastDisplay])
 
-  const subNotification = subscriberNotificationQueue.length &&
+  const subNotification =
+    subscriberNotificationQueue.length &&
     subscriberNotificationQueue[subscriberNotificationIndex]
-  if(!subNotification) return null
-  return <SubscriberNotification
-    data={{
-      displayName: subNotification.displayName,
-      months: subNotification.cumulativeMonths,
-      message: subNotification.message || ''
-    }}
-  ></SubscriberNotification>
+  if (!subNotification) return null
+  return (
+    <SubscriberNotification
+      data={{
+        displayName: subNotification.displayName,
+        months: subNotification.cumulativeMonths,
+        message: subNotification.message || ""
+      }}
+    ></SubscriberNotification>
+  )
 }
