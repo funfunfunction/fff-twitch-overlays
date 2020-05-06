@@ -5,13 +5,16 @@ import {
   eventCollectionFirebasePath as tmiRawPath
 } from "../tmi-raw"
 import OffendingPropError from "../../helpers/assorted/offending-prop-error"
-import getCurrentStream from "../../helpers/assorted/get-current-stream";
-import { streamDocPath, notificationsCollectionPath, SubscriberChatNotificationData } from "./shared";
+import getCurrentStream from "../../helpers/assorted/get-current-stream"
+import {
+  streamDocPath,
+  notificationsCollectionPath,
+  SubscriberChatNotificationData
+} from "./shared"
 
 export default functions.firestore
   .document(tmiRawPath + "/{eventId}")
   .onCreate(async (snap, context) => {
-
     const currentStream = await getCurrentStream()
     if (!currentStream) {
       // This should not happen as subscribe notification should
@@ -71,4 +74,3 @@ export default functions.firestore
       .doc(key)
       .set(doc)
   })
-

@@ -1,4 +1,4 @@
-// Types, helpers and constants that is shared with 
+// Types, helpers and constants that is shared with
 // consumers of the view. Is free from firebase references so
 // that it can be easily used by the web client
 
@@ -15,7 +15,7 @@ export interface SubscriberChatNotificationData {
   cumulativeMonths: number
   message: string | null
 }
-  
+
 export function isTMISubscriberNotification(
   x: any
 ): x is SubscriberChatNotificationData {
