@@ -24,7 +24,6 @@ function subscribeToTopic(callback) {
       const data: { label: string } = doc.data() as { label: string }
       callback(data)
     })
-
 }
 
 function Spotlight() {
@@ -111,7 +110,6 @@ function Spotlight() {
       </motion.div>
 
       <CardCarousel></CardCarousel>
-      
     </div>
   )
 }
