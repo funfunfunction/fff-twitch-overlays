@@ -3,7 +3,7 @@
 // that it can be easily used by the web client
 
 export const streamDocPath = (streamId: number) =>
-  `views/tmi-subscribers/streams/${streamId}`
+  `views/subscriber-chat-notification/streams/${streamId}`
 export const notificationsCollectionPath = (streamId: number) =>
   `${streamDocPath(streamId)}/notifications`
 
