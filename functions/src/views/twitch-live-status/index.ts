@@ -4,6 +4,7 @@ import firebaseAdmin from "firebase-admin"
 import getOwnerAccessToken from "../../helpers/assorted/get-owner-access-token"
 import { getStreams } from "../../helpers/twitch"
 import getChannelOwnerUserId from "../../helpers/assorted/get-channel-owner-user-id"
+import { twitchLiveStatusDocumentPath } from "./shared"
 
 export default functions
   .runWith({
@@ -20,7 +21,7 @@ export default functions
     const streams = streamsResponse.data
     const isLive = streams.length > 0
 
-    const docRef = firebaseAdmin.firestore().doc("views/twitch-live-status")
+    const docRef = firebaseAdmin.firestore().doc(twitchLiveStatusDocumentPath)
 
     if (!isLive) {
       // Since this runs very often, be a bit economical with the writes
