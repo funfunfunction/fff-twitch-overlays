@@ -6,11 +6,7 @@ import {
 } from "../tmi-raw"
 import OffendingPropError from "../../helpers/assorted/offending-prop-error"
 import getCurrentStream from "../../helpers/assorted/get-current-stream";
-
-const streamDocPath = (streamId: number) =>
-  `views/subscriber-chat-notification/streams/${streamId}`
-const notificationsCollectionPath = (streamId: number) =>
-  `${streamDocPath(streamId)}/notifications`
+import { streamDocPath, notificationsCollectionPath, SubscriberChatNotificationData } from "./shared";
 
 export default functions.firestore
   .document(tmiRawPath + "/{eventId}")
@@ -76,11 +72,3 @@ export default functions.firestore
       .set(doc)
   })
 
-export interface SubscriberChatNotificationData {
-  id: string
-  ts: number
-  userId: string
-  displayName: string
-  cumulativeMonths: number
-  message: string | null
-}
