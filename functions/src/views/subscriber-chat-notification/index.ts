@@ -28,8 +28,7 @@ export default functions.firestore
     if (data.type !== "subscription" && data.type !== "resub") return false
     const event: SubscriptionTMIRawEvent = snap.data() as SubscriptionTMIRawEvent
 
-
-    // Even with types in place from tmi.js, the twitch API 
+    // Even with types in place from tmi.js, the twitch API
     // responses are so dynamic and messy that we need some checks below
     // order to make sure that the event data actually contains
     // the properties we need in the format we need:
