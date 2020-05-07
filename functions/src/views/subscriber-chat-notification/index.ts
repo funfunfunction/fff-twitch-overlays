@@ -25,7 +25,7 @@ export default functions.firestore
 
     const data = snap.data()
     if (!data) throw new Error("no document data")
-    if (data.type !== "subscription") return false
+    if (data.type !== "subscription" && data.type !== "resub") return false
     const event: SubscriptionTMIRawEvent = snap.data() as SubscriptionTMIRawEvent
 
     // Docs for these events are here, we're logging them as

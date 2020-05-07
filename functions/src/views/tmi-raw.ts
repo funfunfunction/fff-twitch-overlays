@@ -129,7 +129,7 @@ interface TMIRawEvent {
 }
 
 export interface SubscriptionTMIRawEvent extends TMIRawEvent {
-  type: "subscription"
+  type: "subscription" | "resub"
   userstate: tmi.SubUserstate & LoggableUserstate
 }
 
