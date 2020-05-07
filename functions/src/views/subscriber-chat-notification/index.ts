@@ -25,7 +25,7 @@ export default functions.firestore
 
     const data = snap.data()
     if (!data) throw new Error("no document data")
-    if (data.type !== "subscription") return false
+    if (data.type !== "subscription" && data.type !== "resub") return false
     const event: SubscriptionTMIRawEvent = snap.data() as SubscriptionTMIRawEvent
 
 
@@ -38,12 +38,21 @@ export default functions.firestore
     // raw as possible from TMI.js (it does some processing though)
     // https://dev.twitch.tv/docs/irc/tags
 
-    const cumulativeMonths = parseInt(event.userstate[
-      "msg-param-cumulative-months"
-    ] as any)
+    const cumulativeMonthsRaw = event.userstate["msg-param-cumulative-months"]
 
-    if (isNaN(cumulativeMonths))
+    let cumulativeMonths
+    if (cumulativeMonthsRaw === true) {
+      // Because of faulty twitch tag parsing logic,
+      // TMI.js parses 1 as true and 0 as false.
+      // See: https://github.com/tmijs/tmi.js/blob/v1.6.0/lib/client.js#L99
+      cumulativeMonths = 1
+    } else if (typeof cumulativeMonthsRaw === "string") {
+      cumulativeMonths = parseInt(cumulativeMonthsRaw)
+      if (isNaN(cumulativeMonths))
+        throw OffendingPropError("cumulativeMonths", event)
+    } else {
       throw OffendingPropError("cumulativeMonths", event)
+    }
 
     if (typeof event.userstate["display-name"] !== "string")
       throw OffendingPropError("display-name", event)
