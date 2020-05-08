@@ -25,7 +25,11 @@ const createMarkerFromSpotlight = functions.firestore
       return null
     }
 
-    const description = data.message || data.label
+    const description = data.label
+    if (!description) {
+      console.log("No label found, probably a message update")
+      return
+    }
     await createMarker(
       credentials.clientId,
       ownerAccessToken,
