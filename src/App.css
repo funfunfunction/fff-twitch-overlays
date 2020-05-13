@@ -246,6 +246,13 @@ html,body  {
   font-size: 0.65rem;
 }
 
+.scene-spotlight .subscriber-notification {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 2rem;
+}
+
 .scene-moderator .message.active{
   color: red;
 }
+

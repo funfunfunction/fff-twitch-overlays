@@ -1,7 +1,9 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-
+    match /views/subscriber-chat-notification/{document=**} {
+      allow read;
+    }
     match /views/twitch-live-status {
       allow read;
     }

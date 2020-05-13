@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { motion, useAnimation } from "framer-motion"
 import delay from "delay"
-import SubscriberNotification from "./cards/SubscriberNotification"
+import { CardCarousel } from "./CardCarousel"
 
 // This is the clipping box keyframes that causes the
 // tape-like reveal of the box
@@ -23,18 +23,6 @@ function subscribeToTopic(callback) {
     .onSnapshot(async function(doc) {
       const data: { label: string } = doc.data() as { label: string }
       callback(data)
-    })
-  console.log("querying firestore")
-  window.firebase
-    .firestore()
-    .collection("events2")
-    .where("type", "==", "subscription")
-    .onSnapshot(async function(querySnapshot) {
-      console.log("snap", querySnapshot.size)
-      for (const doc of querySnapshot.docs) {
-        const data = doc.data()
-        console.log(data)
-      }
     })
 }
 
@@ -121,14 +109,7 @@ function Spotlight() {
         {bigLabelText}
       </motion.div>
 
-      <SubscriberNotification
-        style={{ display: "none" }}
-        data={{
-          displayName: "underscorefunk",
-          months: 8,
-          message: "omgsjdkh kjdj hjhd jasdhdjk hdajk ajks"
-        }}
-      ></SubscriberNotification>
+      <CardCarousel></CardCarousel>
     </div>
   )
 }

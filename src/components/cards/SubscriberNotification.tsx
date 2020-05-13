@@ -78,7 +78,7 @@ export default function SubscriberNotification({
   style,
   data: { displayName, months, message }
 }: {
-  style: any
+  style?: any
   data: SubscriberNotificationData
 }) {
   const controlCardBack = useAnimation()

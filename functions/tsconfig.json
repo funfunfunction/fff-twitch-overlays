@@ -11,7 +11,8 @@
     "typeRoots" : ["./node_modules/typings"],
     
     "esModuleInterop": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "resolveJsonModule": true
   },
   "compileOnSave": true,
   "include": [
