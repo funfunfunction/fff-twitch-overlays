@@ -1,8 +1,8 @@
-import credentials from "../../firebase-credentials.json"
+//import credentials from "../../firebase-credentials.json"
 import * as admin from "firebase-admin"
 
 admin.initializeApp({
-  credential: admin.credential.cert(credentials as any),
+  //credential: admin.credential.cert(credentials as any),
   databaseURL: "https://fff-twitch-chat-log.firebaseio.com"
 })
 ;(async function() {
