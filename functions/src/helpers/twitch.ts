@@ -16,9 +16,9 @@ export async function createMarker(clientId, accessToken, userId, description) {
 }
 
 export function getStreams(
-  clientId,
-  accessToken,
-  userId
+  clientId: string,
+  accessToken: string,
+  userId: any
 ): Promise<{
   data: { id: string }[]
 }> {
@@ -46,7 +46,7 @@ function helixPost(clientId, accessToken, functionLabel, endpoint, params) {
       }
     }
   )
-    .then(createAssertResponseOK(functionLabel))
+    .then(createAssertResponseOK(functionLabel, { clientId, accessToken, endpoint, params }))
     .then(parseResponseJSON)
 }
 
@@ -60,7 +60,7 @@ function helixGet(clientId, accessToken, functionLabel, endpoint) {
       Authorization: "Bearer " + accessToken
     }
   })
-    .then(createAssertResponseOK(functionLabel))
+    .then(createAssertResponseOK(functionLabel, { clientId, accessToken, endpoint }))
     .then(parseResponseJSON)
 }
 
@@ -219,7 +219,7 @@ function tokenSetFromResponseBody(body) {
   }
 }
 
-function createAssertResponseOK(label) {
+function createAssertResponseOK(label, errorData?) {
   return function assertResponseOK(response) {
     if (response.status !== 200) {
       return response.text().then(responseText => {
@@ -228,7 +228,8 @@ function createAssertResponseOK(label) {
             ": Expected response status to have been 200 but was " +
             response.status +
             ": " +
-            responseText
+            responseText +
+            "errorData: " + JSON.stringify(errorData)
         )
       })
     }
