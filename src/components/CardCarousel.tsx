@@ -3,6 +3,7 @@ import SubscriberNotification from "./cards/SubscriberNotification"
 import { subscribeToSubscriberNotifications } from "./consumers/subcriber-notifications"
 import { SubscriberChatNotificationData } from "../../functions/src/views/subscriber-chat-notification/shared"
 import { subscribeToCurrentStreamId } from "./consumers/current-stream"
+import { SpotlightLabel } from "./cards/SpotlightLabel"
 
 export function CardCarousel() {
   const [
@@ -49,11 +50,19 @@ export function CardCarousel() {
     }
   }, [time, subscriberNotificationIndex, lastDisplay])
 
+  const timeSinceLastDisplay = time - lastDisplay
+  const nextIndex = subscriberNotificationIndex + 1
+  const nextItem = subscriberNotificationQueue[nextIndex]
+
   const subNotification =
     subscriberNotificationQueue.length &&
     subscriberNotificationQueue[subscriberNotificationIndex]
-  if (!subNotification) return null
-  return (
+  const isLastSubscriberNotificationStale =
+    !nextItem && timeSinceLastDisplay > 10000
+
+  return !subNotification || isLastSubscriberNotificationStale ? (
+    <SpotlightLabel label="Good morning! Coding, chatting, chilling! Come join us in chat! asdjhasdjkhasd jhdasj asdhdjash asddas jhdaskh askj" />
+  ) : (
     <SubscriberNotification
       data={{
         displayName: subNotification.displayName,

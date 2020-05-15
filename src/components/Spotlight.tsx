@@ -16,8 +16,6 @@ const boxShadowFrames = [
   "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
 ]
 
-
-
 function Spotlight() {
   const [waitingLabel, setWaitingLabel] = useState<string | null>(null)
   const [bigLabelText, setBigLabelText] = useState<string | null>(null)
@@ -97,10 +95,6 @@ function Spotlight() {
 
   return (
     <div className="scene-spotlight">
-      <motion.div animate={controls} className="big-topic">
-        {bigLabelText}
-      </motion.div>
-
       <CardCarousel></CardCarousel>
     </div>
   )
