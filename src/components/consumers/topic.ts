@@ -2,7 +2,7 @@ type SpotlightTopicData = { label: string }
 type TopicUpdateHandler = (topicData: SpotlightTopicData) => void
 
 function isSpotlightTopicData(data: any): data is SpotlightTopicData {
-  return typeof data.label === "string"
+  return data && typeof data.label === "string"
 }
 
 export function subscribeToTopic(callback: TopicUpdateHandler) {

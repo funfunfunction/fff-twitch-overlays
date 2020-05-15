@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React, { useEffect, useState } from "react"
+import React from "react"
 import CSS from "csstype"
 import { motion } from "framer-motion"
 
@@ -14,7 +13,7 @@ const styleHeading: CSS.Properties = {
   display: "inline-block",
   backgroundColor: "black",
   color: "white",
-  padding: "0.2rem 0.5rem 0.2rem 0.5rem",
+  padding: "0.2rem 0.5rem 0.3rem 0.5rem",
   fontSize: "1.2rem",
   position: "absolute",
   top: "-1rem",
@@ -27,7 +26,7 @@ const styleCardBack: CSS.Properties = {
   display: "flex",
   flexDirection: "column",
   backgroundColor: "yellow",
-  padding: "1rem 0.5rem 0.5rem 1rem",
+  padding: "1rem 0.9rem 0.5rem 1rem",
   justifyContent: "center",
   alignItems: "center",
   color: "black",
