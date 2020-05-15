@@ -61,7 +61,7 @@ const chatEventLogger = whileTwitchLive("tmi-raw", async function() {
 })
 
 async function logRawChatEvent(
-  type,
+  type: TMIRawEventType,
   userstate: tmi.CommonUserstate,
   message?: string
 ) {
@@ -115,19 +115,20 @@ interface LoggableUserstate {
 }
 
 interface TMIRawEvent {
-  type:
-    | "chat"
-    | "subscription"
-    | "resub"
-    | "subgift"
-    | "submysterygift"
-    | "cheer"
-    | "action"
+  type: TMIRawEventType
   ts: number
   userstate: tmi.CommonUserstate & LoggableUserstate
   message: string | null
 }
 
+type TMIRawEventType = 
+  | "chat"
+  | "subscription"
+  | "resub"
+  | "subgift"
+  | "submysterygift"
+  | "cheer"
+  | "action"
 export interface SubscriptionTMIRawEvent extends TMIRawEvent {
   type: "subscription" | "resub"
   userstate: tmi.SubUserstate & LoggableUserstate

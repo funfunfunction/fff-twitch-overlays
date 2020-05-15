@@ -61,7 +61,7 @@ const chatEventLogger = whileTwitchLive("chat-event-logger", async function() {
   )
 })
 
-async function logEvent(type, userstate, otherProps) {
+async function logEvent(type: string, userstate: any, otherProps: any) {
   console.log("logEvent triggered:", type, userstate, otherProps)
   try {
     // Use Twitch message id as key so that we can do idempotent updates, running multiple cloud functions

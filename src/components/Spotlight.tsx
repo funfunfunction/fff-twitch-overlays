@@ -15,13 +15,24 @@ const boxShadowFrames = [
   "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
 ]
 
-function subscribeToTopic(callback) {
+type SpotlightTopicData = { label: string }
+type TopicUpdateHandler = (topicData: SpotlightTopicData) => void
+
+function isSpotlightTopicData(data: any): data is SpotlightTopicData  {
+  return typeof data.label === 'string'
+}
+
+function subscribeToTopic(callback: TopicUpdateHandler) {
   window.firebase
     .firestore()
     .collection("spotlight")
     .doc("topic")
     .onSnapshot(async function(doc) {
-      const data: { label: string } = doc.data() as { label: string }
+      const data = doc.data()
+      if (!isSpotlightTopicData(data)) {
+        console.error('topic data did not conform', data)
+        return
+      } 
       callback(data)
     })
 }

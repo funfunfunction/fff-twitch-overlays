@@ -1,7 +1,7 @@
 const fetch = require("node-fetch")
 const queryString = require("query-string")
 
-export async function createMarker(clientId, accessToken, userId, description) {
+export async function createMarker(clientId: string, accessToken: string, userId: any, description: string) {
   const response = await helixPost(
     clientId,
     accessToken,
@@ -30,7 +30,7 @@ export function getStreams(
   )
 }
 
-function helixPost(clientId, accessToken, functionLabel, endpoint, params) {
+function helixPost(clientId: string, accessToken: string, functionLabel: string, endpoint: string, params: any) {
   return fetch(
     "https://api.twitch.tv/helix" +
       endpoint +
@@ -50,7 +50,7 @@ function helixPost(clientId, accessToken, functionLabel, endpoint, params) {
     .then(parseResponseJSON)
 }
 
-function helixGet(clientId, accessToken, functionLabel, endpoint) {
+function helixGet(clientId: string, accessToken: string, functionLabel: string, endpoint: string) {
   return fetch("https://api.twitch.tv/helix" + endpoint, {
     method: "GET",
     credentials: "include",
@@ -65,9 +65,9 @@ function helixGet(clientId, accessToken, functionLabel, endpoint) {
 }
 
 export function getTokensWithRefreshToken(
-  clientId,
-  clientSecret,
-  refreshToken
+  clientId: string,
+  clientSecret: string,
+  refreshToken: string
 ) {
   return fetch(
     "https://id.twitch.tv/oauth2/token?" +
@@ -85,9 +85,9 @@ export function getTokensWithRefreshToken(
 }
 
 export async function getEditors(
-  clientId,
-  accessToken,
-  channelId
+  clientId: string,
+  accessToken: string,
+  channelId: number
 ): Promise<SimpleUser[]> {
   // TODO: pagination!!
   const data = await krakenGet(
@@ -98,7 +98,7 @@ export async function getEditors(
   )
   const editors = data.users || []
 
-  return editors.map(function parseSimpleUser(data): SimpleUser {
+  return editors.map(function parseSimpleUser(data: any): SimpleUser {
     if (!isEditorUserData(data)) {
       throw new Error("Failed isEditorUserData:" + JSON.stringify(data))
     }
@@ -108,13 +108,13 @@ export async function getEditors(
     }
   })
   function isEditorUserData(
-    data
+    data: any
   ): data is { user_id: number; display_name: string } {
     return Number.isInteger(data._id) && typeof data.display_name === "string"
   }
 }
 
-export async function getUser(clientId, accessToken) {
+export async function getUser(clientId: string, accessToken: string) {
   const data = await krakenGet(clientId, accessToken, "getUser", "/user")
   return {
     id: parseInt(data._id),
@@ -128,9 +128,9 @@ type SimpleUser = {
 }
 
 export async function getModerators(
-  clientId,
-  accessToken,
-  broadcasterId
+  clientId: string,
+  accessToken: string,
+  broadcasterId: any
 ): Promise<SimpleUser[]> {
   // TODO: pagination!!
 
@@ -149,7 +149,7 @@ export async function getModerators(
   let cursor = null
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    const page = await getPage(cursor)
+    const page: any = await getPage(cursor)
     cursor = null
     if (!page.data) break
     items = items.concat(page.data)
@@ -158,7 +158,7 @@ export async function getModerators(
     break
   }
 
-  return items.map(function parseSimpleUser(data): SimpleUser {
+  return items.map(function parseSimpleUser(data: any): SimpleUser {
     if (!isModeratorUserData(data)) {
       throw new Error("isModeratorUserData failed:" + JSON.stringify(data))
     }
@@ -171,7 +171,7 @@ export async function getModerators(
   })
 
   function isModeratorUserData(
-    data
+    data: any
   ): data is { user_id: string; user_name: string } {
     return (
       typeof data.user_id === "string" && typeof data.user_name === "string"
@@ -181,7 +181,7 @@ export async function getModerators(
 
 // Not used generally, since we hardcode the FFF user id becuase it doesn't change
 // but let this be for future reference
-export async function getUserId(clientId, accessToken) {
+export async function getUserId(clientId: string, accessToken: string) {
   const responseData = await krakenGet(
     clientId,
     accessToken,
@@ -191,7 +191,7 @@ export async function getUserId(clientId, accessToken) {
   return responseData._id
 }
 
-function krakenGet(clientId, accessToken, functionLabel, endpoint) {
+function krakenGet(clientId: string, accessToken: string, functionLabel: string, endpoint: string) {
   return fetch("https://api.twitch.tv/kraken" + endpoint, {
     credentials: "include",
     headers: {
@@ -204,7 +204,7 @@ function krakenGet(clientId, accessToken, functionLabel, endpoint) {
     .then(parseResponseJSON)
 }
 
-function tokenSetFromResponseBody(body) {
+function tokenSetFromResponseBody(body: any) {
   if (
     !body.access_token ||
     !body.refresh_token ||
@@ -219,10 +219,10 @@ function tokenSetFromResponseBody(body) {
   }
 }
 
-function createAssertResponseOK(label, errorData?) {
-  return function assertResponseOK(response) {
+function createAssertResponseOK(label: string, errorData?: any) {
+  return function assertResponseOK(response: any) {
     if (response.status !== 200) {
-      return response.text().then(responseText => {
+      return response.text().then((responseText: string) => {
         throw new Error(
           label +
             ": Expected response status to have been 200 but was " +
@@ -237,6 +237,6 @@ function createAssertResponseOK(label, errorData?) {
   }
 }
 
-function parseResponseJSON(response) {
+function parseResponseJSON(response: any) {
   return response.json()
 }

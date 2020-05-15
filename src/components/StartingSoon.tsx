@@ -88,7 +88,7 @@ function StartingSoon() {
         querySnapshot.docChanges().forEach(async function(change) {
           if (change.type !== "added") return
 
-          setCheckins(checkins => checkins.concat(change.doc.data()))
+          setCheckins((checkins: any[]) => checkins.concat(change.doc.data()))
         })
       })
   }, [])
@@ -112,7 +112,7 @@ function StartingSoon() {
         </div>
       </div>
 
-      <PopNote visible="true" className="unique-chatters">
+      <PopNote visible={true} className="unique-chatters">
         Chatting today: <span className="counter">{uniqueChatters}</span>
       </PopNote>
 
