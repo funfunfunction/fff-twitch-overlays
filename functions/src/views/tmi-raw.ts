@@ -121,7 +121,7 @@ interface TMIRawEvent {
   message: string | null
 }
 
-type TMIRawEventType = 
+type TMIRawEventType =
   | "chat"
   | "subscription"
   | "resub"

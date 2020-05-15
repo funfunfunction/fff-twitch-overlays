@@ -18,8 +18,8 @@ const boxShadowFrames = [
 type SpotlightTopicData = { label: string }
 type TopicUpdateHandler = (topicData: SpotlightTopicData) => void
 
-function isSpotlightTopicData(data: any): data is SpotlightTopicData  {
-  return typeof data.label === 'string'
+function isSpotlightTopicData(data: any): data is SpotlightTopicData {
+  return typeof data.label === "string"
 }
 
 function subscribeToTopic(callback: TopicUpdateHandler) {
@@ -30,9 +30,9 @@ function subscribeToTopic(callback: TopicUpdateHandler) {
     .onSnapshot(async function(doc) {
       const data = doc.data()
       if (!isSpotlightTopicData(data)) {
-        console.error('topic data did not conform', data)
+        console.error("topic data did not conform", data)
         return
-      } 
+      }
       callback(data)
     })
 }

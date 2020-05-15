@@ -1,7 +1,12 @@
 const fetch = require("node-fetch")
 const queryString = require("query-string")
 
-export async function createMarker(clientId: string, accessToken: string, userId: any, description: string) {
+export async function createMarker(
+  clientId: string,
+  accessToken: string,
+  userId: any,
+  description: string
+) {
   const response = await helixPost(
     clientId,
     accessToken,
@@ -30,7 +35,13 @@ export function getStreams(
   )
 }
 
-function helixPost(clientId: string, accessToken: string, functionLabel: string, endpoint: string, params: any) {
+function helixPost(
+  clientId: string,
+  accessToken: string,
+  functionLabel: string,
+  endpoint: string,
+  params: any
+) {
   return fetch(
     "https://api.twitch.tv/helix" +
       endpoint +
@@ -46,11 +57,23 @@ function helixPost(clientId: string, accessToken: string, functionLabel: string,
       }
     }
   )
-    .then(createAssertResponseOK(functionLabel, { clientId, accessToken, endpoint, params }))
+    .then(
+      createAssertResponseOK(functionLabel, {
+        clientId,
+        accessToken,
+        endpoint,
+        params
+      })
+    )
     .then(parseResponseJSON)
 }
 
-function helixGet(clientId: string, accessToken: string, functionLabel: string, endpoint: string) {
+function helixGet(
+  clientId: string,
+  accessToken: string,
+  functionLabel: string,
+  endpoint: string
+) {
   return fetch("https://api.twitch.tv/helix" + endpoint, {
     method: "GET",
     credentials: "include",
@@ -60,7 +83,9 @@ function helixGet(clientId: string, accessToken: string, functionLabel: string, 
       Authorization: "Bearer " + accessToken
     }
   })
-    .then(createAssertResponseOK(functionLabel, { clientId, accessToken, endpoint }))
+    .then(
+      createAssertResponseOK(functionLabel, { clientId, accessToken, endpoint })
+    )
     .then(parseResponseJSON)
 }
 
@@ -191,7 +216,12 @@ export async function getUserId(clientId: string, accessToken: string) {
   return responseData._id
 }
 
-function krakenGet(clientId: string, accessToken: string, functionLabel: string, endpoint: string) {
+function krakenGet(
+  clientId: string,
+  accessToken: string,
+  functionLabel: string,
+  endpoint: string
+) {
   return fetch("https://api.twitch.tv/kraken" + endpoint, {
     credentials: "include",
     headers: {
@@ -229,7 +259,8 @@ function createAssertResponseOK(label: string, errorData?: any) {
             response.status +
             ": " +
             responseText +
-            "errorData: " + JSON.stringify(errorData)
+            "errorData: " +
+            JSON.stringify(errorData)
         )
       })
     }

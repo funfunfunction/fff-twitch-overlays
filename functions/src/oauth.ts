@@ -16,7 +16,7 @@ function isLocalDev(req: functions.https.Request) {
   const referrer = req.get("Referrer")
   return (
     process.env.GCLOUD_PROJECT === "fff-twitch-chat-log-dev" &&
-    referrer && 
+    referrer &&
     referrer.includes("http://localhost:3000/authenticate_popup.html")
   )
 }
