@@ -272,7 +272,7 @@ export default function SubscriberNotification({
   )
 }
 
-function isDiv(element): element is HTMLDivElement {
-  const isDiv = element && element.tagName === "DIV"
+function isDiv(element: HTMLDivElement | null): element is HTMLDivElement {
+  const isDiv = !!element && element.tagName === "DIV"
   return isDiv
 }

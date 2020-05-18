@@ -47,7 +47,7 @@ export function subscribeToMockSubscriberNotifications(
       userId: "25347823",
       message: "this is a message"
     })
-  }, 1000)
+  }, 2000)
 
   setTimeout(function() {
     callback({
@@ -58,7 +58,7 @@ export function subscribeToMockSubscriberNotifications(
       userId: "59888285",
       message: null
     })
-  }, 3000)
+  }, 20000)
 
   return () => {
     // im emptty

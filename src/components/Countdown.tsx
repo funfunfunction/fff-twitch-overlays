@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react"
 import moment from "moment"
-import setupDurationFormat from "moment-duration-format"
-setupDurationFormat(moment)
+import setupMomentDurationFormat from "moment-duration-format"
+setupMomentDurationFormat(moment as any)
 
-function Countdown(props) {
+function Countdown(props: { minutes: number; seconds: number }) {
   const [bootTime, setBootTime] = useState<any>(null)
   const [currentTime, setCurrentTime] = useState<any>(null)
   const [startTime, setStartTime] = useState<any>(null)

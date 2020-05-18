@@ -16,7 +16,15 @@ const animationVariants = {
   }
 }
 
-export default function PopNote({ visible, className, children }) {
+export default function PopNote({
+  visible,
+  className,
+  children
+}: {
+  visible: boolean
+  className: string
+  children: any
+}) {
   if (visible === undefined) visible = true
   return (
     <motion.div

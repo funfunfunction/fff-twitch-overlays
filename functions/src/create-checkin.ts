@@ -38,7 +38,7 @@ const createCheckin = functions.firestore
       })
   })
 
-async function getLatLonFromLocationString(locationString) {
+async function getLatLonFromLocationString(locationString: string) {
   const response = await fetch(
     "https://nominatim.openstreetmap.org/search?format=json&q=" + locationString
   )

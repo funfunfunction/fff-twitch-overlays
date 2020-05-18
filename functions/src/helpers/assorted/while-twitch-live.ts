@@ -94,7 +94,7 @@ export default function whileTwitchLive(
     })
 }
 
-async function isStreaming(ownerAccessToken) {
+async function isStreaming(ownerAccessToken: string) {
   const streams = await getStreams(
     getTwitchCredentials().clientId,
     ownerAccessToken,

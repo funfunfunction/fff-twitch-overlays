@@ -12,17 +12,16 @@ import getOwnerAccessToken from "./helpers/assorted/get-owner-access-token"
 const OAUTH_SCOPES =
   "user:edit:broadcast channel_read user_read moderation:read chat:read channel_subscriptions channel_check_subscription channel_editor"
 
-function isLocalDev(req) {
+function isLocalDev(req: functions.https.Request) {
+  const referrer = req.get("Referrer")
   return (
     process.env.GCLOUD_PROJECT === "fff-twitch-chat-log-dev" &&
-    req.get("Referrer") &&
-    req
-      .get("Referrer")
-      .includes("http://localhost:3000/authenticate_popup.html")
+    referrer &&
+    referrer.includes("http://localhost:3000/authenticate_popup.html")
   )
 }
 
-function makeRedirectFor(req) {
+function makeRedirectFor(req: functions.https.Request) {
   const AUTHORITY_DEPLOYED = `https://${process.env.GCLOUD_PROJECT}.web.app`
   const AUTHORITY_LOCAL_DEV = "http://localhost:3000"
   const PATH_POPUP = "/authenticate_popup.html"
@@ -175,12 +174,12 @@ function twitchOAuth2Client() {
  * @returns {Promise<string>} The Firebase custom auth token in a promise.
  */
 async function createFirebaseAccount(
-  twitchID,
-  displayName,
-  isOwner,
-  isModerator,
-  isEditor,
-  refreshToken
+  twitchID: number,
+  displayName: string,
+  isOwner: boolean,
+  isModerator: boolean,
+  isEditor: boolean,
+  refreshToken: string
 ) {
   const uid = `twitch:${twitchID}`
 

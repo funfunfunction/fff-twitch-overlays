@@ -8,7 +8,7 @@ export default async function getCurrentStream(): Promise<{
 } | null> {
   const streamsResponse = await getStreams(
     getTwitchCredentials().clientId,
-    getOwnerAccessToken(),
+    await getOwnerAccessToken(),
     getChannelOwnerUserId()
   )
   if (!streamsResponse.data) return null

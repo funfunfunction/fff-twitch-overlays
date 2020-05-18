@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react"
-import { motion, useAnimation } from "framer-motion"
+import { useAnimation } from "framer-motion"
 import delay from "delay"
 import { CardCarousel } from "./CardCarousel"
+import { subscribeToTopic } from "./consumers/topic"
 
 // This is the clipping box keyframes that causes the
 // tape-like reveal of the box
@@ -14,17 +15,6 @@ const boxShadowFrames = [
   "0 1px 1px -1px rgba(0, 0, 0, 0.0)",
   "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
 ]
-
-function subscribeToTopic(callback) {
-  window.firebase
-    .firestore()
-    .collection("spotlight")
-    .doc("topic")
-    .onSnapshot(async function(doc) {
-      const data: { label: string } = doc.data() as { label: string }
-      callback(data)
-    })
-}
 
 function Spotlight() {
   const [waitingLabel, setWaitingLabel] = useState<string | null>(null)
@@ -105,10 +95,6 @@ function Spotlight() {
 
   return (
     <div className="scene-spotlight">
-      <motion.div animate={controls} className="big-topic">
-        {bigLabelText}
-      </motion.div>
-
       <CardCarousel></CardCarousel>
     </div>
   )

@@ -2,7 +2,6 @@
   "compilerOptions": {
     "lib": [ "es2017" ],
     "module": "commonjs",
-    "noImplicitReturns": true,
     "noUnusedLocals": true,
     "outDir": "lib",
     "sourceMap": true,
@@ -11,7 +10,6 @@
     "typeRoots" : ["./node_modules/typings"],
     
     "esModuleInterop": true,
-    "noImplicitAny": false,
     "resolveJsonModule": true
   },
   "compileOnSave": true,
