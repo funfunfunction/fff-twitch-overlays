@@ -4,6 +4,7 @@ import { subscribeToSubscriberNotifications } from "./consumers/subcriber-notifi
 import { SubscriberChatNotificationData } from "../../functions/src/views/subscriber-chat-notification/shared"
 import { subscribeToCurrentStreamId } from "./consumers/current-stream"
 import { SpotlightLabel } from "./cards/SpotlightLabel"
+import { subscribeToTopic } from "./consumers/topic"
 
 export function CardCarousel() {
   const [
@@ -17,6 +18,14 @@ export function CardCarousel() {
     subscriberNotificationIndex,
     setSubscriberNotificationIndex
   ] = useState(-1)
+
+  const [topicLabel, setTopicLabel] = useState<string | null>(null)
+
+  useEffect(function startSubscribingToTopicLabel() {
+    subscribeToTopic(topic => {
+      setTopicLabel(topic.label)
+    })
+  }, [])
 
   useEffect(function tick() {
     setInterval(() => {
@@ -60,8 +69,11 @@ export function CardCarousel() {
   const isLastSubscriberNotificationStale =
     !nextItem && timeSinceLastDisplay > 10000
 
+  if (!topicLabel) {
+    return <div>Nothing to display</div>
+  }
   return !subNotification || isLastSubscriberNotificationStale ? (
-    <SpotlightLabel label="Good morning! Coding, chatting, chilling! Come join us in chat! asdjhasdjkhasd jhdasj asdhdjash asddas jhdaskh askj" />
+    <SpotlightLabel label={topicLabel} />
   ) : (
     <SubscriberNotification
       data={{
