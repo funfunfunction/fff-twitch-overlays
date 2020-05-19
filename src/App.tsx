@@ -9,6 +9,7 @@ import firebase from "firebase/app"
 import "firebase/firestore"
 import "firebase/auth"
 import Moderator from "./components/Moderator"
+import ScreenCapture from "./components/ScreenCapture"
 
 window.firebase = firebase
 
@@ -49,6 +50,7 @@ function App() {
 
   return (
     <div className="App">
+      {query.scene === "screen" && <ScreenCapture />}
       {query.scene === "soon" && <StartingSoon />}
       {query.scene === "spotlight" && <Spotlight />}
       {query.scene === "moderator" && <Moderator />}
