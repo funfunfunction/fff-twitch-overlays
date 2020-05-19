@@ -30,7 +30,8 @@ const styleCardBack: CSS.Properties = {
   justifyContent: "center",
   alignItems: "center",
   color: "black",
-  maxWidth: "18rem",
+  maxWidth: "12rem",
+  minWidth: "12rem",
   position: "relative",
   transform: "rotate(2deg)",
   zIndex: 100
@@ -63,11 +64,13 @@ const initialCard = {
 export function SpotlightLabel(props: SpotlightLabelProps) {
   return (
     <motion.div
+      className="sl-container"
       initial={initialCard}
       animate={animateCard}
       style={styleContainer}
     >
       <motion.div
+        className="sl-card"
         initial={initialCard}
         animate={{
           ...animateCard,
@@ -80,7 +83,7 @@ export function SpotlightLabel(props: SpotlightLabelProps) {
       >
         Current topic
       </motion.div>
-      <div style={styleCardBack}>
+      <div className="sl-card-back" style={styleCardBack}>
         <div className="label" style={styleLabel}>
           {props.label}
         </div>
