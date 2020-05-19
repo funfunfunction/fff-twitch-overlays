@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react"
 import { motion, useAnimation, AnimationControls } from "framer-motion"
 import delay from "delay"
 import CSS from "csstype"
+import { FFF_YELLOW } from "../helpers"
 
 const styleContainer: CSS.Properties = {
   display: "inline-block",
@@ -23,7 +24,7 @@ const styleCardBack: CSS.Properties = {
 }
 
 const styleDisplayName: CSS.Properties = {
-  color: "#FFF203",
+  color: FFF_YELLOW,
   fontSize: "1.5rem",
   position: "relative",
   top: "0.5rem"
