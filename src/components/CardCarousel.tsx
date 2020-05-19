@@ -6,7 +6,7 @@ import { subscribeToCurrentStreamId } from "./consumers/current-stream"
 import { SpotlightLabel } from "./cards/SpotlightLabel"
 import { subscribeToTopic } from "./consumers/topic"
 
-export function CardCarousel() {
+export function CardCarousel({ displayTopic = true }) {
   const [
     subscriberNotificationQueue,
     setSubscriberNotificationQueue
@@ -64,16 +64,21 @@ export function CardCarousel() {
   const nextItem = subscriberNotificationQueue[nextIndex]
 
   const subNotification =
-    subscriberNotificationQueue.length &&
-    subscriberNotificationQueue[subscriberNotificationIndex]
+    subscriberNotificationQueue.length === 0
+      ? null
+      : subscriberNotificationQueue[subscriberNotificationIndex]
   const isLastSubscriberNotificationStale =
     !nextItem && timeSinceLastDisplay > 10000
 
-  if (!topicLabel) {
-    return <div>Nothing to display</div>
-  }
-  return !subNotification || isLastSubscriberNotificationStale ? (
-    <SpotlightLabel label={topicLabel} />
+  return displayTopic &&
+    (!subNotification || isLastSubscriberNotificationStale) ? (
+    topicLabel ? (
+      <SpotlightLabel label={topicLabel} />
+    ) : (
+      <div>Nothing to display</div>
+    )
+  ) : !subNotification ? (
+    <div></div>
   ) : (
     <SubscriberNotification
       data={{

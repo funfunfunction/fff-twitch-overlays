@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import Countdown from "./Countdown"
 import PopNote from "./PopNote"
 import { Map, TileLayer, Marker } from "react-leaflet"
+import { CardCarousel } from "./CardCarousel"
 
 const oneHourMS = 60 * 60 * 1000
 
@@ -115,6 +116,17 @@ function StartingSoon() {
       <PopNote visible={true} className="unique-chatters">
         Chatting today: <span className="counter">{uniqueChatters}</span>
       </PopNote>
+
+      <div
+        style={{
+          position: "absolute",
+          left: "2.5rem",
+          top: "9rem",
+          zIndex: 100
+        }}
+      >
+        <CardCarousel displayTopic={false}></CardCarousel>
+      </div>
 
       <div className="area-map">
         <Map center={lastCheckin.coordinates} zoom={6}>
