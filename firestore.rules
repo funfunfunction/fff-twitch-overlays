@@ -13,9 +13,6 @@ service cloud.firestore {
     match /checkins/{document=**} {
       allow read;
     }
-    match /events3/{document=**} {
-      allow read;
-    }
     match /spotlight/{document=**} {
       allow read;
       allow write : if get(/databases/$(database)/documents/twitch-users/$(request.auth.uid)).data.isOwner == true
