@@ -172,16 +172,16 @@ html,body  {
   height: 100%;
 }
 
-.scene-moderator .topic-label {
+.scene-moderator .field-container {
   display: inline-block;
   padding: 0.5rem;
   border: 1px solid grey;
   margin: 0.5rem;
 }
-.scene-moderator .topic-label label {
+.scene-moderator .field-container label {
   display: block;
 }
-.scene-moderator .topic-label input {
+.scene-moderator .field-container input {
   font-size: 3rem;
   margin-right: 0.3rem;
   padding: 0.4rem;

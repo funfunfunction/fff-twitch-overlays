@@ -1,8 +1,9 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import CSS from "csstype"
 import { FFF_YELLOW, GREEN_SCREEN_COLOR } from "./helpers"
 
 import { CardCarousel } from "./CardCarousel"
+import { subscribeToGuestConfiguration, GuestConfiguration } from "./Moderator"
 
 const hdWidth = 1920
 const hdHeight = 1080
@@ -84,6 +85,13 @@ const styleLeanRight: CSS.Properties = {
 }
 
 export default function ScreenCapture() {
+  const [guestConfig, setGuestConfig] = useState<GuestConfiguration>({ name: null});
+
+  
+  useEffect(function() {
+    subscribeToGuestConfiguration(setGuestConfig)
+  }, [])
+
   return (
     <div className="sc-container" style={styleContainer}>
       <div
@@ -92,12 +100,15 @@ export default function ScreenCapture() {
       ></div>
 
       <div className="sc-cameras-list" style={styleCamerasList}>
-        <div className="carousel-row" style={styleCarouselRow}>
-          <Camera nameTagText="Oskar Henrikson" index={0}></Camera>
-        </div>
+        
         <div className="carousel-row" style={styleCarouselRow}>
           <Camera nameTagText="Mattias Petter Johansson" index={1}></Camera>
         </div>
+
+        {typeof guestConfig.name === 'string' &&
+          <div className="carousel-row" style={styleCarouselRow}>
+            <Camera nameTagText={guestConfig.name} index={0}></Camera>
+          </div>}
 
         <div
           className="carousel-row"
