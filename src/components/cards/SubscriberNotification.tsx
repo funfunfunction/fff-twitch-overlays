@@ -6,55 +6,61 @@ import { FFF_YELLOW } from "../helpers"
 
 const styleContainer = (scale: number) => ({
   display: "block",
-  position: 'relative',
-  fontSize: `${1.5 * scale}rem`,
+  position: "relative",
+  fontSize: `${1.5 * scale}rem`
 })
 
-const styleCardBack = (scale: number) => ({
-  display: "flex",
-  flexDirection: "column",
-  backgroundColor: "black",
-  padding: `5% ${0.8 * scale}rem 5% ${0.8 * scale}rem`,
-  justifyContent: "center",
-  alignItems: "center",
-  color: "white",
-  width: "90%",
-  position: "relative",
-  opacity: 0
-} as CSS.Properties)
- 
-const styleDisplayName = (scale: number) => ({
-  color: FFF_YELLOW,
-  fontSize: `${1.5 * scale}rem`,
-  position: "relative",
-  top: `${0.5 * scale}rem`
-} as CSS.Properties)
+const styleCardBack = (scale: number) =>
+  ({
+    display: "flex",
+    flexDirection: "column",
+    backgroundColor: "black",
+    padding: `5% ${0.8 * scale}rem 5% ${0.8 * scale}rem`,
+    justifyContent: "center",
+    alignItems: "center",
+    color: "white",
+    width: "90%",
+    position: "relative",
+    opacity: 0
+  } as CSS.Properties)
 
-const styleStreakText = (scale: number) => ({
-  display: "inline-block",
-  fontSize:  `${1.8 * scale}rem`,
-  lineHeight:  `1rem`,
-} as CSS.Properties)
+const styleDisplayName = (scale: number) =>
+  ({
+    color: FFF_YELLOW,
+    fontSize: `${1.5 * scale}rem`,
+    position: "relative",
+    top: `${0.5 * scale}rem`
+  } as CSS.Properties)
 
-const styleStreakTextSubscribed = (scale: number) => ({
-  ...styleStreakText(scale),
-  marginRight: `${0.4 * scale}rem`
-} as CSS.Properties)
+const styleStreakText = (scale: number) =>
+  ({
+    display: "inline-block",
+    fontSize: `${1.8 * scale}rem`,
+    lineHeight: `1rem`
+  } as CSS.Properties)
+
+const styleStreakTextSubscribed = (scale: number) =>
+  ({
+    ...styleStreakText(scale),
+    marginRight: `${0.4 * scale}rem`
+  } as CSS.Properties)
 
 const styleStreakTextFor = styleStreakTextSubscribed
 
-const styleStreakTextCounter = (scale: number) => ({
-  ...styleStreakText(scale),
-  fontSize: `${2.2 * scale}rem`,
-  color: "#FFF203",
-  marginRight: `${0.4 * scale}rem`,
-} as CSS.Properties)
+const styleStreakTextCounter = (scale: number) =>
+  ({
+    ...styleStreakText(scale),
+    fontSize: `${2.2 * scale}rem`,
+    color: "#FFF203",
+    marginRight: `${0.4 * scale}rem`
+  } as CSS.Properties)
 
-const messageStyle = (scale: number) => ({
-  fontSize: `${1.1 * scale}rem`,
-  marginTop:`${0.8 * scale}rem`,
-  textAlign: "center"
-} as CSS.Properties)
+const messageStyle = (scale: number) =>
+  ({
+    fontSize: `${1.1 * scale}rem`,
+    marginTop: `${0.8 * scale}rem`,
+    textAlign: "center"
+  } as CSS.Properties)
 
 function showStreakText(control: AnimationControls) {
   return control.start({

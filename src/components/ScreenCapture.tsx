@@ -6,18 +6,18 @@ import { CardCarousel } from "./CardCarousel"
 
 const hdWidth = 1920
 const hdHeight = 1080
-const cameraScale = 0.20
+const cameraScale = 0.2
 
 const styleContainer: CSS.Properties = {
-  position: 'relative',
-  backgroundColor: '#2D2A40',
+  position: "relative",
+  backgroundColor: "#2D2A40",
   width: `${hdWidth}px`,
-  height: `${hdHeight}px`,
+  height: `${hdHeight}px`
 }
 
 const styleScreenCaptureSample: CSS.Properties = {
   width: "1400px",
-  position: 'absolute',
+  position: "absolute",
   top: "1rem",
   left: "1.5rem"
 }
@@ -25,18 +25,18 @@ const styleScreenCaptureSample: CSS.Properties = {
 const styleScreenCaptureGreenScreen: CSS.Properties = {
   width: "1425px",
   height: "1025px",
-  position: 'absolute',
+  position: "absolute",
   top: "0.75rem",
   left: "1rem",
   backgroundColor: GREEN_SCREEN_COLOR
 }
 
 const styleCamerasList: CSS.Properties = {
-  display: 'grid',
-  gap: '2rem',
+  display: "grid",
+  gap: "2rem",
   position: "absolute",
-  right: '1.25rem',
-  top: '0.75rem',
+  right: "1.25rem",
+  top: "0.75rem"
 }
 
 const styleCarouselRow: CSS.Properties = {
@@ -45,17 +45,17 @@ const styleCarouselRow: CSS.Properties = {
 }
 
 const styleCamera: CSS.Properties = {
-  display: 'inline-block',
-  position: 'relative',
-  width: '100%',
-  height: '100%'
+  display: "inline-block",
+  position: "relative",
+  width: "100%",
+  height: "100%"
 }
 
 const styleCameraGreenScreen: CSS.Properties = {
-  position: 'absolute',
+  position: "absolute",
   width: "100%",
   height: "100%",
-  boxShadow: '7px 7px 6px rgba(0, 0, 0, 0.2)',
+  boxShadow: "7px 7px 6px rgba(0, 0, 0, 0.2)",
   backgroundColor: GREEN_SCREEN_COLOR,
   zIndex: 2
 }
@@ -63,84 +63,85 @@ const styleCameraGreenScreen: CSS.Properties = {
 const styleCameraBackground: CSS.Properties = {
   width: "104%",
   height: "104%",
-  backgroundColor: 'black',
+  backgroundColor: "black",
   position: "absolute",
-  display: 'inline-block',
-  left: '-1%',
-  top: '0',
-  transform: 'rotate(3deg)', 
+  display: "inline-block",
+  left: "-1%",
+  top: "0",
+  transform: "rotate(3deg)",
   zIndex: 1,
-  boxShadow: '7px 7px 6px rgba(0, 0, 0, 0.1)',
+  boxShadow: "7px 7px 6px rgba(0, 0, 0, 0.1)"
 }
 
 const styleNameTag: CSS.Properties = {
-  position: 'absolute',
-  right: '-0.4em',
-  bottom: '-0.6rem',
+  position: "absolute",
+  right: "-0.4em",
+  bottom: "-0.6rem",
   backgroundColor: FFF_YELLOW,
   zIndex: 3,
-  padding: '0.0rem 0.3rem 0.2rem 0.3rem',
-  fontSize: '0.7rem'
+  padding: "0.0rem 0.3rem 0.2rem 0.3rem",
+  fontSize: "0.7rem"
 }
 
 const styleLeanLeft: CSS.Properties = {
-  transform: 'rotate(-4deg)', 
+  transform: "rotate(-4deg)"
 }
 const styleLeanRight: CSS.Properties = {
-  transform: 'rotate(2deg)', 
+  transform: "rotate(2deg)"
 }
 
 export default function ScreenCapture() {
-  return <div className='sc-container' style={styleContainer}>
-    <div
-      className="sc-green-screen"
-      style={styleScreenCaptureGreenScreen}
-    ></div>
+  return (
+    <div className="sc-container" style={styleContainer}>
+      <div
+        className="sc-green-screen"
+        style={styleScreenCaptureGreenScreen}
+      ></div>
 
-    <div 
-      className="sc-cameras-list"
-      style={styleCamerasList}
-    >
-      <div 
-        className="carousel-row"
-        style={styleCarouselRow}
-      ><Camera nameTagText="Oskar Henrikson" index={0}></Camera></div>
-      <div 
-        className="carousel-row"
-        style={styleCarouselRow}
-      ><Camera nameTagText="Mattias Petter Johansson" index={1}></Camera></div>
-  
-      <div 
-        className="carousel-row"
-        style={{
-          ...styleCarouselRow,
-          marginTop: '0.2rem'
-        }}
-      >
-        <CardCarousel scale={.6}></CardCarousel>
+      <div className="sc-cameras-list" style={styleCamerasList}>
+        <div className="carousel-row" style={styleCarouselRow}>
+          <Camera nameTagText="Oskar Henrikson" index={0}></Camera>
+        </div>
+        <div className="carousel-row" style={styleCarouselRow}>
+          <Camera nameTagText="Mattias Petter Johansson" index={1}></Camera>
+        </div>
+
+        <div
+          className="carousel-row"
+          style={{
+            ...styleCarouselRow,
+            marginTop: "0.2rem"
+          }}
+        >
+          <CardCarousel scale={0.6}></CardCarousel>
+        </div>
       </div>
-      
     </div>
-  
-  </div>
+  )
 }
 
+function Camera({
+  nameTagText,
+  index
+}: {
+  nameTagText: string
+  index: number
+}) {
+  const isIndexEven = !!(index % 2)
+  return (
+    <div style={styleCamera}>
+      <div className="cam-green-screen" style={styleCameraGreenScreen}></div>
 
-function Camera({nameTagText, index}: {nameTagText: string; index: number}) {
- const isIndexEven = !!(index % 2)
- return <div style={styleCamera}>
-    <div
-      className="cam-green-screen"
-      style={styleCameraGreenScreen}
-    ></div>
+      <div style={styleCameraBackground}></div>
 
-    <div 
-      style={styleCameraBackground}>
+      <div
+        style={{
+          ...styleNameTag,
+          ...(isIndexEven ? styleLeanLeft : styleLeanRight)
+        }}
+      >
+        {nameTagText}
+      </div>
     </div>
-
-    <div style={{
-      ...styleNameTag,
-      ...(isIndexEven ? styleLeanLeft : styleLeanRight)
-    }}>{nameTagText}</div>
-  </div>
+  )
 }

@@ -61,10 +61,7 @@ const initialCard = {
 }
 export function SpotlightLabel(props: SpotlightLabelProps) {
   return (
-    <motion.div
-      className="sl-container"
-      style={styleContainer}
-    >
+    <motion.div className="sl-container" style={styleContainer}>
       <motion.div
         className="sl-card"
         style={styleHeading}
@@ -76,12 +73,11 @@ export function SpotlightLabel(props: SpotlightLabelProps) {
             delay: 0.5
           }
         }}
-        
       >
         Current topic
       </motion.div>
-      <motion.div 
-        className="sl-card-back" 
+      <motion.div
+        className="sl-card-back"
         style={styleCardBack}
         initial={initialCard}
         animate={animateCard}
@@ -89,7 +85,6 @@ export function SpotlightLabel(props: SpotlightLabelProps) {
         <div className="label" style={styleLabel}>
           {props.label}
         </div>
-        
       </motion.div>
     </motion.div>
   )
