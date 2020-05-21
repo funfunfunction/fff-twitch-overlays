@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react"
 import SubscriberNotification from "./cards/SubscriberNotification"
-import {
-  subscribeToSubscriberNotifications
-} from "./consumers/subcriber-notifications"
+import { subscribeToSubscriberNotifications } from "./consumers/subcriber-notifications"
 import { SubscriberChatNotificationData } from "../../functions/src/views/subscriber-chat-notification/shared"
 import { subscribeToCurrentStreamId } from "./consumers/current-stream"
 import { SpotlightLabel } from "./cards/SpotlightLabel"
