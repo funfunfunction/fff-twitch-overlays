@@ -34,9 +34,9 @@ function Moderator() {
       })
 
     subscribeToGuestConfiguration(guest => {
-      setGuestNameInputValue(guest.name || '')
+      setGuestNameInputValue(guest.name || "")
     })
-  
+
     auth.onAuthStateChanged(async function(user) {
       if (!user) return
       const doc = await db
@@ -71,15 +71,15 @@ function Moderator() {
   async function saveGuestName() {
     setLastGuestNameUpdate(Date.now())
     const guest: GuestConfiguration = {
-      name: (guestNameInputValue && guestNameInputValue.length > 0)
-        ? guestNameInputValue
-        : null
-    } 
+      name:
+        guestNameInputValue && guestNameInputValue.length > 0
+          ? guestNameInputValue
+          : null
+    }
     db.collection("spotlight")
       .doc("guest")
       .set(guest, { merge: true })
   }
-
 
   return (
     <div className="scene-moderator">
@@ -128,7 +128,6 @@ function Moderator() {
       )}
       {isAllowed && (
         <div className="gui">
-          
           <div className="topic-label field-container">
             <label htmlFor="topic-label">Topic label</label>
             <input
@@ -152,7 +151,7 @@ function Moderator() {
 
           <div className="guest field-container">
             <label htmlFor="guest-name">Guest name</label>
-            <input 
+            <input
               name="guest-name"
               type="text"
               value={guestNameInputValue}
@@ -181,27 +180,24 @@ export interface GuestConfiguration {
 }
 
 function isGuestConfiguration(obj: any): obj is GuestConfiguration {
-  return obj && (
-    typeof obj.name === 'string' 
-    ||
-    obj.name === null
-  )
+  return obj && (typeof obj.name === "string" || obj.name === null)
 }
 
-export function subscribeToGuestConfiguration(callback: (guest: GuestConfiguration) => void) {
-  window
-    .firebase
+export function subscribeToGuestConfiguration(
+  callback: (guest: GuestConfiguration) => void
+) {
+  window.firebase
     .firestore()
     .collection("spotlight")
     .doc("guest")
     .onSnapshot(function(doc) {
       if (!doc.exists) {
-        console.error('guest config does not exist yet')
+        console.error("guest config does not exist yet")
         return
       }
       const guest: any = doc.data()
       if (!isGuestConfiguration(guest)) {
-        console.error('Expected doc data to be guest configuration:', guest)
+        console.error("Expected doc data to be guest configuration:", guest)
         return
       }
       callback(guest)

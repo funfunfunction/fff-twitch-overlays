@@ -85,9 +85,10 @@ const styleLeanRight: CSS.Properties = {
 }
 
 export default function ScreenCapture() {
-  const [guestConfig, setGuestConfig] = useState<GuestConfiguration>({ name: null});
+  const [guestConfig, setGuestConfig] = useState<GuestConfiguration>({
+    name: null
+  })
 
-  
   useEffect(function() {
     subscribeToGuestConfiguration(setGuestConfig)
   }, [])
@@ -100,15 +101,15 @@ export default function ScreenCapture() {
       ></div>
 
       <div className="sc-cameras-list" style={styleCamerasList}>
-        
         <div className="carousel-row" style={styleCarouselRow}>
           <Camera nameTagText="Mattias Petter Johansson" index={1}></Camera>
         </div>
 
-        {typeof guestConfig.name === 'string' &&
+        {typeof guestConfig.name === "string" && (
           <div className="carousel-row" style={styleCarouselRow}>
             <Camera nameTagText={guestConfig.name} index={0}></Camera>
-          </div>}
+          </div>
+        )}
 
         <div
           className="carousel-row"
