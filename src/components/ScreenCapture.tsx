@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react"
 import CSS from "csstype"
-import { FFF_YELLOW } from "./helpers"
+import { FFF_YELLOW, GREEN_SCREEN_COLOR } from "./helpers"
+
 import { CardCarousel } from "./CardCarousel"
-import SubscriberNotification from "./cards/SubscriberNotification"
 
 const hdWidth = 1920
 const hdHeight = 1080
@@ -22,12 +22,21 @@ const styleScreenCaptureSample: CSS.Properties = {
   left: "1.5rem"
 }
 
+const styleScreenCaptureGreenScreen: CSS.Properties = {
+  width: "1425px",
+  height: "1025px",
+  position: 'absolute',
+  top: "0.75rem",
+  left: "1rem",
+  backgroundColor: GREEN_SCREEN_COLOR
+}
+
 const styleCamerasList: CSS.Properties = {
   display: 'grid',
   gap: '2rem',
   position: "absolute",
-  right: '1.5rem',
-  top: '1.1rem',
+  right: '1.25rem',
+  top: '0.75rem',
 }
 
 const styleCarouselRow: CSS.Properties = {
@@ -42,11 +51,12 @@ const styleCamera: CSS.Properties = {
   height: '100%'
 }
 
-const styleCameraSample: CSS.Properties = {
+const styleCameraGreenScreen: CSS.Properties = {
   position: 'absolute',
   width: "100%",
   height: "100%",
   boxShadow: '7px 7px 6px rgba(0, 0, 0, 0.2)',
+  backgroundColor: GREEN_SCREEN_COLOR,
   zIndex: 2
 }
 
@@ -82,10 +92,11 @@ const styleLeanRight: CSS.Properties = {
 
 export default function ScreenCapture() {
   return <div className='sc-container' style={styleContainer}>
-    <img
-      style={styleScreenCaptureSample}
-      src="/screen-sample.png"></img>
-    
+    <div
+      className="sc-green-screen"
+      style={styleScreenCaptureGreenScreen}
+    ></div>
+
     <div 
       className="sc-cameras-list"
       style={styleCamerasList}
@@ -118,9 +129,10 @@ export default function ScreenCapture() {
 function Camera({nameTagText, index}: {nameTagText: string; index: number}) {
  const isIndexEven = !!(index % 2)
  return <div style={styleCamera}>
-    <img 
-      style={styleCameraSample}
-      src="/camera-sample.jpg" />
+    <div
+      className="cam-green-screen"
+      style={styleCameraGreenScreen}
+    ></div>
 
     <div 
       style={styleCameraBackground}>
