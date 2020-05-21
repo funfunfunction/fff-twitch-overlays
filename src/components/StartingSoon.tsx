@@ -122,10 +122,11 @@ function StartingSoon() {
           position: "absolute",
           left: "2.5rem",
           top: "9rem",
-          zIndex: 100
+          zIndex: 100,
+          width: "17rem"
         }}
       >
-        <CardCarousel displayTopic={false}></CardCarousel>
+        <CardCarousel scale={0.9} displayTopic={false}></CardCarousel>
       </div>
 
       <div className="area-map">

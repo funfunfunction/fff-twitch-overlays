@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react"
 import SubscriberNotification from "./cards/SubscriberNotification"
-import { subscribeToSubscriberNotifications } from "./consumers/subcriber-notifications"
+import { subscribeToSubscriberNotifications, subscribeToMockSubscriberNotifications } from "./consumers/subcriber-notifications"
 import { SubscriberChatNotificationData } from "../../functions/src/views/subscriber-chat-notification/shared"
 import { subscribeToCurrentStreamId } from "./consumers/current-stream"
 import { SpotlightLabel } from "./cards/SpotlightLabel"
 import { subscribeToTopic } from "./consumers/topic"
 
-export function CardCarousel({ displayTopic = true }) {
+export function CardCarousel({ displayTopic = true, scale = 1 }) {
   const [
     subscriberNotificationQueue,
     setSubscriberNotificationQueue
@@ -34,13 +34,14 @@ export function CardCarousel({ displayTopic = true }) {
   }, [])
 
   useEffect(() => {
-    subscribeToCurrentStreamId(setCurrentStreamId)
+    setCurrentStreamId(123)
+    //subscribeToCurrentStreamId(setCurrentStreamId)
   }, [])
 
   useEffect(
     function queueSubscriberNotifications() {
       if (currentStreamId == null) return
-      subscribeToSubscriberNotifications(currentStreamId, notification => {
+      subscribeToMockSubscriberNotifications(currentStreamId, notification => {
         setSubscriberNotificationQueue(x => x.concat(notification))
       })
     },
@@ -81,6 +82,7 @@ export function CardCarousel({ displayTopic = true }) {
     <div></div>
   ) : (
     <SubscriberNotification
+      scale={scale}
       data={{
         displayName: subNotification.displayName,
         months: subNotification.cumulativeMonths,

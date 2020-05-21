@@ -4,57 +4,57 @@ import delay from "delay"
 import CSS from "csstype"
 import { FFF_YELLOW } from "../helpers"
 
-const styleContainer: CSS.Properties = {
-  display: "inline-block",
-  position: "absolute",
-  bottom: "1rem",
-  left: "1.5rem"
-}
-const styleCardBack: CSS.Properties = {
+const styleContainer = (scale: number) => ({
+  display: "block",
+  position: 'relative',
+  fontSize: `${1.5 * scale}rem`,
+})
+
+const styleCardBack = (scale: number) => ({
   display: "flex",
   flexDirection: "column",
   backgroundColor: "black",
-  padding: "0.8rem 0.8rem 0.8rem 0.8rem",
+  padding: `5% ${0.8 * scale}rem 5% ${0.8 * scale}rem`,
   justifyContent: "center",
   alignItems: "center",
   color: "white",
-  maxWidth: "18rem",
+  width: "90%",
   position: "relative",
   opacity: 0
-}
-
-const styleDisplayName: CSS.Properties = {
+} as CSS.Properties)
+ 
+const styleDisplayName = (scale: number) => ({
   color: FFF_YELLOW,
-  fontSize: "1.5rem",
+  fontSize: `${1.5 * scale}rem`,
   position: "relative",
-  top: "0.5rem"
-}
+  top: `${0.5 * scale}rem`
+} as CSS.Properties)
 
-const styleStreakText: CSS.Properties = {
+const styleStreakText = (scale: number) => ({
   display: "inline-block",
-  fontSize: "1.8rem",
-  lineHeight: "2rem"
-}
-const styleStreakTextSubscribed: CSS.Properties = {
-  ...styleStreakText,
-  marginRight: "0.4rem"
-}
-const styleStreakTextFor: CSS.Properties = {
-  ...styleStreakText,
-  marginRight: "0.4rem"
-}
-const styleStreakTextCounter: CSS.Properties = {
-  ...styleStreakText,
-  fontSize: "2.2rem",
-  color: "#FFF203",
-  marginRight: "0.4rem"
-}
+  fontSize:  `${1.8 * scale}rem`,
+  lineHeight:  `1rem`,
+} as CSS.Properties)
 
-const messageStyle: CSS.Properties = {
-  fontSize: "1.1rem",
-  marginTop: "0.8rem",
+const styleStreakTextSubscribed = (scale: number) => ({
+  ...styleStreakText(scale),
+  marginRight: `${0.4 * scale}rem`
+} as CSS.Properties)
+
+const styleStreakTextFor = styleStreakTextSubscribed
+
+const styleStreakTextCounter = (scale: number) => ({
+  ...styleStreakText(scale),
+  fontSize: `${2.2 * scale}rem`,
+  color: "#FFF203",
+  marginRight: `${0.4 * scale}rem`,
+} as CSS.Properties)
+
+const messageStyle = (scale: number) => ({
+  fontSize: `${1.1 * scale}rem`,
+  marginTop:`${0.8 * scale}rem`,
   textAlign: "center"
-}
+} as CSS.Properties)
 
 function showStreakText(control: AnimationControls) {
   return control.start({
@@ -76,9 +76,11 @@ interface SubscriberNotificationData {
 }
 
 export default function SubscriberNotification({
+  scale = 1,
   style,
   data: { displayName, months, message }
 }: {
+  scale: number
   style?: any
   data: SubscriberNotificationData
 }) {
@@ -102,8 +104,8 @@ export default function SubscriberNotification({
       })
 
       controlDisplayName.set({
-        scale: 1.3,
-        top: "2rem"
+        scale: 15,
+        top: `${2 * scale}rem`
       })
       ;[
         controlStreakTextMonths,
@@ -211,20 +213,20 @@ export default function SubscriberNotification({
 
   return (
     <div
-      className="subscriber-notification"
+      className="sn-container"
       style={{
-        styleContainer,
+        ...styleContainer(scale),
         ...style
       }}
     >
       <motion.div
         className="card-back"
-        style={styleCardBack}
+        style={styleCardBack(scale)}
         animate={controlCardBack}
       >
         <motion.div
           className="display-name"
-          style={styleDisplayName}
+          style={styleDisplayName(scale)}
           animate={controlDisplayName}
         >
           {displayName}
@@ -233,21 +235,21 @@ export default function SubscriberNotification({
         <motion.div className="streak">
           <motion.div
             className="text-subscribed"
-            style={styleStreakTextSubscribed}
+            style={styleStreakTextSubscribed(scale)}
             animate={controlStreakTextSubcribed}
           >
             subscribed
           </motion.div>
           <motion.div
             className="text-for"
-            style={styleStreakTextFor}
+            style={styleStreakTextFor(scale)}
             animate={controlStreakTextFor}
           >
             for
           </motion.div>
           <motion.div
             className="text-counter"
-            style={styleStreakTextCounter}
+            style={styleStreakTextCounter(scale)}
             animate={controlStreakTextCounter}
             ref={refStreakTextCounter}
           >
@@ -255,7 +257,7 @@ export default function SubscriberNotification({
           </motion.div>
           <motion.div
             className="text-months"
-            style={styleStreakText}
+            style={styleStreakText(scale)}
             animate={controlStreakTextMonths}
           >
             months!
@@ -263,7 +265,7 @@ export default function SubscriberNotification({
         </motion.div>
         <motion.div
           className="message"
-          style={messageStyle}
+          style={messageStyle(scale)}
           animate={controlMessage}
         >
           {message.substring(0, 125)}

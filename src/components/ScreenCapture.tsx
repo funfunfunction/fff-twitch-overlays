@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import CSS from "csstype"
 import { FFF_YELLOW } from "./helpers"
 import { CardCarousel } from "./CardCarousel"
+import SubscriberNotification from "./cards/SubscriberNotification"
 
 const hdWidth = 1920
 const hdHeight = 1080
@@ -23,18 +24,22 @@ const styleScreenCaptureSample: CSS.Properties = {
 
 const styleCamerasList: CSS.Properties = {
   display: 'grid',
-  gap: '1.5rem',
+  gap: '2rem',
   position: "absolute",
   right: '1.5rem',
   top: '1.1rem',
-  
+}
+
+const styleCarouselRow: CSS.Properties = {
+  width: `${hdWidth * cameraScale}px`,
+  height: `${hdHeight * cameraScale}px`
 }
 
 const styleCamera: CSS.Properties = {
   display: 'inline-block',
   position: 'relative',
-  width: `${hdWidth * cameraScale}px`,
-  height: `${hdHeight * cameraScale}px`,
+  width: '100%',
+  height: '100%'
 }
 
 const styleCameraSample: CSS.Properties = {
@@ -85,18 +90,32 @@ export default function ScreenCapture() {
       className="sc-cameras-list"
       style={styleCamerasList}
     >
-      <Camera nameTagText="Mattias Petter Johansson" index={0}></Camera>
-      <Camera nameTagText="Oskar Henrikson" index={1}></Camera>
-
-      <CardCarousel></CardCarousel>
+      <div 
+        className="carousel-row"
+        style={styleCarouselRow}
+      ><Camera nameTagText="Oskar Henrikson" index={0}></Camera></div>
+      <div 
+        className="carousel-row"
+        style={styleCarouselRow}
+      ><Camera nameTagText="Mattias Petter Johansson" index={1}></Camera></div>
+  
+      <div 
+        className="carousel-row"
+        style={{
+          ...styleCarouselRow,
+          marginTop: '0.2rem'
+        }}
+      >
+        <CardCarousel scale={.6}></CardCarousel>
+      </div>
+      
     </div>
-    
   
   </div>
 }
 
 
-function Camera({nameTagText, index}: {nameTagText: string, index: number}) {
+function Camera({nameTagText, index}: {nameTagText: string; index: number}) {
  const isIndexEven = !!(index % 2)
  return <div style={styleCamera}>
     <img 
