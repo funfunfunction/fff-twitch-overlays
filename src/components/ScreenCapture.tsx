@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import CSS from "csstype"
 import { FFF_YELLOW, GREEN_SCREEN_COLOR } from "./helpers"
 
@@ -13,13 +13,6 @@ const styleContainer: CSS.Properties = {
   backgroundColor: "#2D2A40",
   width: `${hdWidth}px`,
   height: `${hdHeight}px`
-}
-
-const styleScreenCaptureSample: CSS.Properties = {
-  width: "1400px",
-  position: "absolute",
-  top: "1rem",
-  left: "1.5rem"
 }
 
 const styleScreenCaptureGreenScreen: CSS.Properties = {

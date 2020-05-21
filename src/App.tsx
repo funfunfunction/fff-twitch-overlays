@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react"
 import "./App.css"
 
 import StartingSoon from "./components/StartingSoon"
-import Spotlight from "./components/Spotlight"
 import queryString from "query-string"
 
 import firebase from "firebase/app"

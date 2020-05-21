@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react"
 import SubscriberNotification from "./cards/SubscriberNotification"
 import {
-  subscribeToSubscriberNotifications,
-  subscribeToMockSubscriberNotifications
+  subscribeToSubscriberNotifications
 } from "./consumers/subcriber-notifications"
 import { SubscriberChatNotificationData } from "../../functions/src/views/subscriber-chat-notification/shared"
 import { subscribeToCurrentStreamId } from "./consumers/current-stream"
@@ -37,14 +36,13 @@ export function CardCarousel({ displayTopic = true, scale = 1 }) {
   }, [])
 
   useEffect(() => {
-    setCurrentStreamId(123)
-    //subscribeToCurrentStreamId(setCurrentStreamId)
+    subscribeToCurrentStreamId(setCurrentStreamId)
   }, [])
 
   useEffect(
     function queueSubscriberNotifications() {
       if (currentStreamId == null) return
-      subscribeToMockSubscriberNotifications(currentStreamId, notification => {
+      subscribeToSubscriberNotifications(currentStreamId, notification => {
         setSubscriberNotificationQueue(x => x.concat(notification))
       })
     },
