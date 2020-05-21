@@ -4,9 +4,7 @@ html,body  {
   margin: 0;
   padding: 0;
 }
-.area-subscribers .streak {
-  color: yellow;
-}
+
 .header {
   font-size: 4rem;
 }
@@ -174,26 +172,6 @@ html,body  {
   height: 100%;
 }
 
-.scene-spotlight {
-  width: 1920px;
-  height: 1080px;
-  position: absolute;
-}
-
-.scene-spotlight .big-topic {
-  background-color: yellow;
-  color: black;
-  font-size: 3rem;
-  position: absolute;
-  left: -2rem;
-  top: 2.10rem;
-  padding-left: 3.2rem;
-  padding-right: 1rem;
-  clip-path: polygon(0 0, 1% 0, 1% 100%, 0% 100%);
-  transform-origin: 0%;
-  white-space: nowrap;
-}
-
 .scene-moderator .topic-label {
   display: inline-block;
   padding: 0.5rem;
@@ -210,46 +188,6 @@ html,body  {
 }
 .scene-moderator .display-name {
   font-size: 1rem;
-}
-
-.scene-spotlight .message-body {
-  font-size: 1.5rem;
-}
-
-.scene-spotlight .top-boxes {
-  padding: 1rem;
-}
-
-.scene-spotlight .box {
-  background-color: white;
-  border-radius: .3em;
-  padding: 0.4rem 0.8rem 0.4rem 0.8rem;
-  box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
-  float: left;
-  margin-right: 1rem;
-  max-width: 20rem;
-  max-height: 4rem;
-}
-.scene-spotlight .box .box-header {
-  font-size: 1rem;
-  color: grey;
-}
-.scene-spotlight .box .box-body {
-  font-size: 2rem;
-}
-.scene-spotlight .box.message {
-  min-width: 10rem;
-  max-width: 30rem;
-}
-
-.scene-spotlight .box.message .box-body {
-  font-size: 0.65rem;
-}
-
-.scene-spotlight .subscriber-notification {
-  position: absolute;
-  bottom: 1.5rem;
-  left: 2rem;
 }
 
 .scene-moderator .message.active{

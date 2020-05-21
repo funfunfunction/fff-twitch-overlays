@@ -51,11 +51,10 @@ function App() {
 
   return (
     <div className="App">
-      {query.scene === "screen" && <ScreenCapture />}
       {query.scene === "soon" && <StartingSoon />}
-      {query.scene === "spotlight" && <Spotlight />}
-      {query.scene === "moderator" && <Moderator />}
       {query.scene === "carousel" && <StandaloneCarousel />}
+      {query.scene === "screen" && <ScreenCapture />}
+      {query.scene === "moderator" && <Moderator />}
     </div>
   )
 }
