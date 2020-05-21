@@ -10,6 +10,7 @@ import "firebase/firestore"
 import "firebase/auth"
 import Moderator from "./components/Moderator"
 import ScreenCapture from "./components/ScreenCapture"
+import StandaloneCarousel from "./components/StandaloneCarousel"
 
 window.firebase = firebase
 
@@ -54,6 +55,7 @@ function App() {
       {query.scene === "soon" && <StartingSoon />}
       {query.scene === "spotlight" && <Spotlight />}
       {query.scene === "moderator" && <Moderator />}
+      {query.scene === "carousel" && <StandaloneCarousel />}
     </div>
   )
 }

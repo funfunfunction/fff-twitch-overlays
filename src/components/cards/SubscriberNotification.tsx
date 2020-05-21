@@ -104,7 +104,7 @@ export default function SubscriberNotification({
       })
 
       controlDisplayName.set({
-        scale: 15,
+        scale: 5,
         top: `${2 * scale}rem`
       })
       ;[

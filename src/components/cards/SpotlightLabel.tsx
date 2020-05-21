@@ -29,7 +29,7 @@ const styleCardBack: CSS.Properties = {
   alignItems: "center",
   color: "black",
   width: "90%",
-
+  height: "5.5rem",
   position: "relative",
   transform: "rotate(0deg)",
   zIndex: 100
