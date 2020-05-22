@@ -11,8 +11,8 @@ const styleHeading: CSS.Properties = {
   display: "inline-block",
   backgroundColor: "black",
   color: "white",
-  padding: "0.2rem 0.5rem 0.3rem 0.5rem",
-  fontSize: "1rem",
+  padding: "0.2rem 0.3rem 0.3rem 0.3rem",
+  fontSize: "1.2rem",
   position: "absolute",
   top: "-20%",
   left: "-3%",
@@ -41,7 +41,8 @@ type SpotlightLabelProps = {
 
 const styleLabel = {
   overflow: "hidden",
-  maxHeight: "7rem"
+  maxHeight: "7rem",
+  fontSize: '1.6rem'
 }
 const animateCard = {
   opacity: 1,
