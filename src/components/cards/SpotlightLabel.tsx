@@ -42,7 +42,7 @@ type SpotlightLabelProps = {
 const styleLabel = {
   overflow: "hidden",
   maxHeight: "7rem",
-  fontSize: '1.6rem'
+  fontSize: "1.6rem"
 }
 const animateCard = {
   opacity: 1,
@@ -84,7 +84,7 @@ export function SpotlightLabel(props: SpotlightLabelProps) {
         animate={animateCard}
       >
         <div className="label" style={styleLabel}>
-          {props.label}
+          {props.label && props.label.substring(0, 49)}
         </div>
       </motion.div>
     </motion.div>

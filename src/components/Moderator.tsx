@@ -134,6 +134,7 @@ function Moderator() {
               name="topic-label"
               type="text"
               value={topicInputValue}
+              maxLength={49}
               onKeyUp={evt => {
                 const isEnter = evt.keyCode === 13
                 if (isEnter) saveLabel()
