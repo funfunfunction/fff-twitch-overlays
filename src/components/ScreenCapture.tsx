@@ -23,7 +23,7 @@ const styleScreenCaptureGreenScreen: CSS.Properties = {
   top: "0.75rem",
   left: "1rem",
   backgroundColor: GREEN_SCREEN_COLOR,
-  boxShadow: "7px 7px 6px rgba(0, 0, 0, 0.35)",
+  boxShadow: "7px 7px 6px rgba(0, 0, 0, 0.35)"
 }
 
 const styleCamerasList: CSS.Properties = {
