@@ -12,7 +12,7 @@ const styleHeading: CSS.Properties = {
   backgroundColor: "black",
   color: "white",
   padding: "0.2rem 0.3rem 0.3rem 0.3rem",
-  fontSize: "1.2rem",
+  fontSize: "0.8rem",
   position: "absolute",
   top: "-20%",
   left: "-3%",
@@ -28,9 +28,10 @@ const styleCardBack: CSS.Properties = {
   justifyContent: "center",
   alignItems: "center",
   color: "black",
-  width: "90%",
+  width: "89%",
   height: "5.5rem",
   position: "relative",
+  left: "-1%",
   transform: "rotate(0deg)",
   zIndex: 100
 }
@@ -47,7 +48,7 @@ const styleLabel = {
 const animateCard = {
   opacity: 1,
   scale: 1,
-  rotate: 2,
+  rotate: 1,
   transition: {
     type: "spring",
     stiffness: 200,
