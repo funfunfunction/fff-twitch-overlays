@@ -80,7 +80,7 @@ export function CardCarousel({ displayTopic = true, scale = 1 }) {
     topicLabel ? (
       <SpotlightLabel label={topicLabel} />
     ) : (
-      <div>Nothing to display</div>
+      <div></div>
     )
   ) : !subNotification ? (
     <div></div>
