@@ -215,7 +215,19 @@ export default function SubscriberNotification({
       })
     }
     animateSubscriberBox()
-  }, [message, displayName, months])
+  }, [
+    message,
+    displayName,
+    months,
+    controlStreakTextMonths,
+    controlCardBack,
+    controlMessage,
+    controlStreakTextCounter,
+    controlStreakTextSubcribed,
+    scale,
+    controlDisplayName,
+    controlStreakTextFor
+  ])
 
   return (
     <div
