@@ -6,7 +6,7 @@ import { subscribeToCurrentStreamId } from "./consumers/current-stream"
 import { SpotlightLabel } from "./cards/SpotlightLabel"
 import { subscribeToTopic } from "./consumers/topic"
 
-export function CardCarousel() {
+export function CardCarousel({ displayTopic = true, scale = 1 }) {
   const [
     subscriberNotificationQueue,
     setSubscriberNotificationQueue
@@ -57,25 +57,36 @@ export function CardCarousel() {
         setLastDisplay(Date.now())
       }
     }
-  }, [time, subscriberNotificationIndex, lastDisplay])
+  }, [
+    time,
+    subscriberNotificationIndex,
+    lastDisplay,
+    subscriberNotificationQueue
+  ])
 
   const timeSinceLastDisplay = time - lastDisplay
   const nextIndex = subscriberNotificationIndex + 1
   const nextItem = subscriberNotificationQueue[nextIndex]
 
   const subNotification =
-    subscriberNotificationQueue.length &&
-    subscriberNotificationQueue[subscriberNotificationIndex]
+    subscriberNotificationQueue.length === 0
+      ? null
+      : subscriberNotificationQueue[subscriberNotificationIndex]
   const isLastSubscriberNotificationStale =
     !nextItem && timeSinceLastDisplay > 10000
 
-  if (!topicLabel) {
-    return <div>Nothing to display</div>
-  }
-  return !subNotification || isLastSubscriberNotificationStale ? (
-    <SpotlightLabel label={topicLabel} />
+  return displayTopic &&
+    (!subNotification || isLastSubscriberNotificationStale) ? (
+    topicLabel ? (
+      <SpotlightLabel label={topicLabel} />
+    ) : (
+      <div></div>
+    )
+  ) : !subNotification ? (
+    <div></div>
   ) : (
     <SubscriberNotification
+      scale={scale}
       data={{
         displayName: subNotification.displayName,
         months: subNotification.cumulativeMonths,

@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react"
 import "./App.css"
 
 import StartingSoon from "./components/StartingSoon"
-import Spotlight from "./components/Spotlight"
 import queryString from "query-string"
 
 import firebase from "firebase/app"
 import "firebase/firestore"
 import "firebase/auth"
 import Moderator from "./components/Moderator"
+import ScreenCapture from "./components/ScreenCapture"
+import StandaloneCarousel from "./components/StandaloneCarousel"
 
 window.firebase = firebase
 
@@ -50,7 +51,8 @@ function App() {
   return (
     <div className="App">
       {query.scene === "soon" && <StartingSoon />}
-      {query.scene === "spotlight" && <Spotlight />}
+      {query.scene === "carousel" && <StandaloneCarousel />}
+      {query.scene === "screen" && <ScreenCapture />}
       {query.scene === "moderator" && <Moderator />}
     </div>
   )

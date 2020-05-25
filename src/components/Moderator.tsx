@@ -4,8 +4,10 @@ function Moderator() {
   const db = window.firebase.firestore()
   const auth = window.firebase.auth()
   const [topicInputValue, setTopicInputValue] = useState("")
+  const [guestNameInputValue, setGuestNameInputValue] = useState("")
   const [authenticatedUser, setAuthenticatedUser] = useState<any>(null)
   const [lastLabelUpdate, setLastLabelUpdate] = useState<number>(0)
+  const [lastGuestNameUpdate, setLastGuestNameUpdate] = useState<number>(0)
   const [time, setTime] = useState<number>(0)
 
   useEffect(() => {
@@ -16,6 +18,9 @@ function Moderator() {
 
   const wasLabelUpdateRecent =
     lastLabelUpdate > 0 && lastLabelUpdate + 3000 > time
+  const wasGuestNameUpdateRecent =
+    lastGuestNameUpdate > 0 && lastGuestNameUpdate + 3000 > time
+
   useEffect(() => {
     db.collection("spotlight")
       .doc("topic")
@@ -27,6 +32,10 @@ function Moderator() {
           setTopicInputValue("")
         }
       })
+
+    subscribeToGuestConfiguration(guest => {
+      setGuestNameInputValue(guest.name || "")
+    })
 
     auth.onAuthStateChanged(async function(user) {
       if (!user) return
@@ -48,7 +57,7 @@ function Moderator() {
       authenticatedUser.isOwner)
 
   async function saveLabel() {
-    setLastLabelUpdate(Number(Date.now()))
+    setLastLabelUpdate(Date.now())
     db.collection("spotlight")
       .doc("topic")
       .set(
@@ -57,6 +66,19 @@ function Moderator() {
         },
         { merge: true }
       )
+  }
+
+  async function saveGuestName() {
+    setLastGuestNameUpdate(Date.now())
+    const guest: GuestConfiguration = {
+      name:
+        guestNameInputValue && guestNameInputValue.length > 0
+          ? guestNameInputValue
+          : null
+    }
+    db.collection("spotlight")
+      .doc("guest")
+      .set(guest, { merge: true })
   }
 
   return (
@@ -106,12 +128,13 @@ function Moderator() {
       )}
       {isAllowed && (
         <div className="gui">
-          <div className="topic-label">
+          <div className="topic-label field-container">
             <label htmlFor="topic-label">Topic label</label>
             <input
               name="topic-label"
               type="text"
               value={topicInputValue}
+              maxLength={49}
               onKeyUp={evt => {
                 const isEnter = evt.keyCode === 13
                 if (isEnter) saveLabel()
@@ -126,10 +149,60 @@ function Moderator() {
               onClick={saveLabel}
             ></input>
           </div>
+
+          <div className="guest field-container">
+            <label htmlFor="guest-name">Guest name</label>
+            <input
+              name="guest-name"
+              type="text"
+              value={guestNameInputValue}
+              onKeyUp={evt => {
+                const isEnter = evt.keyCode === 13
+                if (isEnter) saveGuestName()
+              }}
+              onChange={evt => {
+                setGuestNameInputValue(evt.target.value)
+              }}
+            ></input>
+            <input
+              type="button"
+              value={wasGuestNameUpdateRecent ? "UPDATED!" : "Update"}
+              onClick={saveGuestName}
+            ></input>
+          </div>
         </div>
       )}
     </div>
   )
+}
+
+export interface GuestConfiguration {
+  name: string | null
+}
+
+function isGuestConfiguration(obj: any): obj is GuestConfiguration {
+  return obj && (typeof obj.name === "string" || obj.name === null)
+}
+
+export function subscribeToGuestConfiguration(
+  callback: (guest: GuestConfiguration) => void
+) {
+  window.firebase
+    .firestore()
+    .collection("spotlight")
+    .doc("guest")
+    .onSnapshot(function(doc) {
+      if (!doc.exists) {
+        console.error("guest config does not exist yet")
+        return
+      }
+      const guest: any = doc.data()
+      if (!isGuestConfiguration(guest)) {
+        console.error("Expected doc data to be guest configuration:", guest)
+        return
+      }
+      callback(guest)
+    })
 }
 
 export default Moderator

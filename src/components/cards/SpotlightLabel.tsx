@@ -3,21 +3,19 @@ import CSS from "csstype"
 import { motion } from "framer-motion"
 
 const styleContainer: CSS.Properties = {
-  display: "inline-block",
-  position: "absolute",
-  bottom: "1rem",
-  left: "1.5rem"
+  display: "block",
+  position: "relative"
 }
 
 const styleHeading: CSS.Properties = {
   display: "inline-block",
   backgroundColor: "black",
   color: "white",
-  padding: "0.2rem 0.5rem 0.3rem 0.5rem",
-  fontSize: "1.2rem",
+  padding: "0.2rem 0.3rem 0.3rem 0.3rem",
+  fontSize: "0.8rem",
   position: "absolute",
-  top: "-1rem",
-  left: "-0.2rem",
+  top: "-20%",
+  left: "-3%",
   zIndex: 200,
   transform: "rotate(-4deg)"
 }
@@ -26,13 +24,15 @@ const styleCardBack: CSS.Properties = {
   display: "flex",
   flexDirection: "column",
   backgroundColor: "yellow",
-  padding: "1rem 0.9rem 0.5rem 1rem",
+  padding: "5% 0.9rem 0.5rem 5%",
   justifyContent: "center",
   alignItems: "center",
   color: "black",
-  maxWidth: "18rem",
+  width: "89%",
+  height: "5.5rem",
   position: "relative",
-  transform: "rotate(2deg)",
+  left: "-1%",
+  transform: "rotate(0deg)",
   zIndex: 100
 }
 
@@ -42,12 +42,13 @@ type SpotlightLabelProps = {
 
 const styleLabel = {
   overflow: "hidden",
-  maxHeight: "7rem"
+  maxHeight: "7rem",
+  fontSize: "1.6rem"
 }
 const animateCard = {
   opacity: 1,
   scale: 1,
-  rotate: 2,
+  rotate: 1,
   transition: {
     type: "spring",
     stiffness: 200,
@@ -62,12 +63,10 @@ const initialCard = {
 }
 export function SpotlightLabel(props: SpotlightLabelProps) {
   return (
-    <motion.div
-      initial={initialCard}
-      animate={animateCard}
-      style={styleContainer}
-    >
+    <motion.div className="sl-container" style={styleContainer}>
       <motion.div
+        className="sl-card"
+        style={styleHeading}
         initial={initialCard}
         animate={{
           ...animateCard,
@@ -76,15 +75,19 @@ export function SpotlightLabel(props: SpotlightLabelProps) {
             delay: 0.5
           }
         }}
-        style={styleHeading}
       >
         Current topic
       </motion.div>
-      <div style={styleCardBack}>
+      <motion.div
+        className="sl-card-back"
+        style={styleCardBack}
+        initial={initialCard}
+        animate={animateCard}
+      >
         <div className="label" style={styleLabel}>
-          {props.label}
+          {props.label && props.label.substring(0, 49)}
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   )
 }
