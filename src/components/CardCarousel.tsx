@@ -57,7 +57,12 @@ export function CardCarousel({ displayTopic = true, scale = 1 }) {
         setLastDisplay(Date.now())
       }
     }
-  }, [time, subscriberNotificationIndex, lastDisplay])
+  }, [
+    time,
+    subscriberNotificationIndex,
+    lastDisplay,
+    subscriberNotificationQueue
+  ])
 
   const timeSinceLastDisplay = time - lastDisplay
   const nextIndex = subscriberNotificationIndex + 1
