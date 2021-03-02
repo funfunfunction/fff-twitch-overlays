@@ -1,41 +1,68 @@
 import * as functions from "firebase-functions"
 import { BigQuery } from "@google-cloud/bigquery"
 
+const makeKeyValuePairs = function(obj) {
+  if (!obj) return null
+
+  const pairs = [] as any[]
+
+  for (const key in obj) {
+    let value = obj[key]
+    // Stringify if object
+    if (!!value && value.constructor === Object) {
+      value = JSON.stringify(value)
+    }
+    // Stringify if array
+    if (Array.isArray(value)) {
+      value = JSON.stringify(value)
+    }
+    // Stringify if boolean
+    if (value === true || value === false) {
+      value = value.toString()
+    }
+    pairs.push({ key, value })
+  }
+  return pairs
+}
+
 const streamIntoBigQuery = functions.firestore
-  .document("events3/{eventId}")
+  .document("views/tmi-raw/events/{eventId}")
   .onCreate(async snap => {
     const bigquery = new BigQuery()
     const bqDatasetId = "collections"
-    const bqTableId = "events3"
+    const bqTableId = "tmi_events"
 
     const data = snap.data() as any
     if (!data) throw new Error("event document did not contain any data")
 
     // Save userstate as key-value repeated records.
-    const { message, ts, type, userstate } = data
-    const userstates = [] as any[]
-    for (const key in userstate) {
-      let value = userstate[key]
-      // Stringify if object
-      if (!!value && value.constructor === Object) {
-        value = JSON.stringify(value)
-      }
-      // Stringify if array
-      if (Array.isArray(value)) {
-        value = JSON.stringify(value)
-      }
-      // Stringify if boolean
-      if (value === true || value === false) {
-        value = value.toString()
-      }
-      userstates.push({ key, value })
-    }
+    const {
+      message,
+      ts,
+      type,
+      userstate,
+      method,
+      methods,
+      recipient,
+      numbOfSubs,
+      months,
+      streakMonths
+    } = data
     const rows = [
       {
-        message: message,
+        date: new Date(parseInt(ts, 10)).toISOString().substr(0, 10),
         ts: parseInt(ts, 10),
+        display_name: userstate["display-name"],
         type: type,
-        userstate: userstates
+        message: message,
+        userstate: makeKeyValuePairs(userstate),
+        badges: makeKeyValuePairs(userstate.badges),
+        method: makeKeyValuePairs(method),
+        methods: makeKeyValuePairs(methods),
+        recipient: recipient,
+        numb_of_subs: parseInt(numbOfSubs, 10),
+        months: parseInt(months, 10),
+        streak_months: parseInt(streakMonths, 10)
       }
     ]
 
